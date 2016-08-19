@@ -25,6 +25,12 @@
     <Filter Include="Header Files\Maze">
       <UniqueIdentifier>{69c3ed9d-755a-40c7-8a9c-d04fca6dd578}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\StartMenu">
+      <UniqueIdentifier>{c531023d-df41-4abe-90d9-b00b28918ba2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\StartMenu">
+      <UniqueIdentifier>{5524784b-3971-40b6-bfb9-7460e4878309}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -42,6 +48,9 @@
     <ClCompile Include="Maze\maze.cpp">
       <Filter>Source Files\Maze</Filter>
     </ClCompile>
+    <ClCompile Include="StartMenu\startMenu.cpp">
+      <Filter>Source Files\StartMenu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\console.h">
@@ -55,6 +64,9 @@
     </ClInclude>
     <ClInclude Include="Maze\maze.h">
       <Filter>Header Files\Maze</Filter>
+    </ClInclude>
+    <ClInclude Include="StartMenu\startMenu.h">
+      <Filter>Header Files\StartMenu</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
