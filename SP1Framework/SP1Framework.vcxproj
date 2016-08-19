@@ -82,12 +82,14 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Maze\maze.cpp" />
+    <ClCompile Include="StartMenu\startMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\console.h" />
     <ClInclude Include="Framework\timer.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="Maze\maze.h" />
+    <ClInclude Include="StartMenu\startMenu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
