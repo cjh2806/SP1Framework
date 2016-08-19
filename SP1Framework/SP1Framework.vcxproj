@@ -80,15 +80,21 @@
     <ClCompile Include="Framework\console.cpp" />
     <ClCompile Include="Framework\timer.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="Highscore.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Maze\maze.cpp" />
+    <ClCompile Include="Pictures.cpp" />
+    <ClCompile Include="Puzzle.cpp" />
     <ClCompile Include="StartMenu\startMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\console.h" />
     <ClInclude Include="Framework\timer.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="Highscore.h" />
     <ClInclude Include="Maze\maze.h" />
+    <ClInclude Include="Pictures.h" />
+    <ClInclude Include="Puzzle.h" />
     <ClInclude Include="StartMenu\startMenu.h" />
   </ItemGroup>
   <ItemGroup>

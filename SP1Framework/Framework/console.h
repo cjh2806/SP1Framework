@@ -58,6 +58,7 @@ class Console
         void setConsoleFont(SHORT width, SHORT height, LPCWSTR lpcwFontName); // sets the console font
         void flushBufferToConsole(); // writes the contents of the buffer to the screen
         void clearBuffer(WORD attribute = 0x0F); // clears the screen with this colour
+		void initConsole(COORD consoleSize, LPCSTR lpConsoleTitle = 0);
 
         // writeToBuffer takes in a c-style string, c++ string, or a char
         // You will need to provide the coordinate to place the leftmost character
@@ -82,7 +83,7 @@ class Console
         // There is a certain size limitation to how big a console can be set.
         void setConsoleWindowSize();
         // Initializes the console for this size
-        void initConsole(COORD consoleSize, LPCSTR lpConsoleTitle = 0);
+        //void initConsole(COORD consoleSize, LPCSTR lpConsoleTitle = 0);
         void writeToConsole(const CHAR_INFO* lpBuffer);
 
         void shutDownConsole();

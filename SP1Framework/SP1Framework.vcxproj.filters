@@ -51,6 +51,15 @@
     <ClCompile Include="StartMenu\startMenu.cpp">
       <Filter>Source Files\StartMenu</Filter>
     </ClCompile>
+    <ClCompile Include="Highscore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pictures.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Puzzle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\console.h">
@@ -67,6 +76,15 @@
     </ClInclude>
     <ClInclude Include="StartMenu\startMenu.h">
       <Filter>Header Files\StartMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="Puzzle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pictures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Highscore.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

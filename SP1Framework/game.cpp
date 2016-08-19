@@ -1,14 +1,20 @@
 // This is the main file for the game logic and function
 //
 //
+#include "Highscore.h"
+#include "Pictures.h"
+#include "Puzzle.h"
 #include "game.h"
 #include <iostream>
 #include <iomanip>
 #include <sstream>
 
+int highscore;
+int Score;
 double  g_dElapsedTime;
 double  g_dDeltaTime;
 bool    g_abKeyPressed[K_COUNT];
+int x = 3;
 
 // Game specific variables here
 SGameChar   g_sChar;
@@ -30,7 +36,8 @@ void init( void )
     // Set precision for floating point output
     g_dElapsedTime = 0.0;
     g_dBounceTime = 0.0;
-
+	Score = 0;
+	highscore = Highscore(Score);
     // sets the initial state for the game
     g_eGameState = S_SPLASHSCREEN;
 
@@ -38,7 +45,7 @@ void init( void )
     g_sChar.m_cLocation.Y = g_Console.getConsoleSize().Y / 2;
     g_sChar.m_bActive = true;
     // sets the width, height and the font name to use in the console
-    g_Console.setConsoleFont(0, 16, L"Consolas");
+    g_Console.setConsoleFont(0, 16, L"Raster Consolas");
 }
 
 //--------------------------------------------------------------
@@ -103,6 +110,10 @@ void update(double dt)
             break;
         case S_GAME: gameplay(); // gameplay logic when we are in the game
             break;
+		case S_PUZZLE: RunPuzzle();
+			break;
+		case S_PICTURES: RunPictures();
+			break;
     }
 }
 //--------------------------------------------------------------
@@ -122,9 +133,12 @@ void render()
             break;
         case S_GAME: renderGame();
             break;
-    }
-    renderFramerate();  // renders debug information, frame rate, elapsed time, etc
-    renderToScreen();   // dump the contents of the buffer to the screen, one frame worth of game
+	}
+	if (Backtogame == true)
+	{
+		renderFramerate();  // renders debug information, frame rate, elapsed time, etc
+		renderToScreen();   // dump the contents of the buffer to the screen, one frame worth of game
+	}
 }
 
 void splashScreen()
@@ -282,14 +296,40 @@ void renderFramerate()
     ss << 1.0 / g_dDeltaTime << "fps";
     c.X = g_Console.getConsoleSize().X - 9;
     c.Y = 0;
-    g_Console.writeToBuffer(c, ss.str());
+    g_Console.writeToBuffer(c, ss.str(),0x09);
 
-    // displays the elapsed time
+	ss.str("");
+	ss << x << " Lives";
+	c.X = 15;
+	c.Y = 0;
+	g_Console.writeToBuffer(c, ss.str(), 0x09);
+	
+	if (g_dElapsedTime > 5 && g_dElapsedTime < 5.01)
+	{
+		x--;
+	}
+
+	// displays the elapsed time
     ss.str("");
     ss << g_dElapsedTime << "secs";
     c.X = 0;
     c.Y = 0;
-    g_Console.writeToBuffer(c, ss.str(), 0x59);
+	g_Console.writeToBuffer(c, ss.str(), 0x09);
+
+	ss.str("");
+	ss << "Score: " << Score;
+	c.X = 112;
+	c.Y = 1;
+	g_Console.writeToBuffer(c, ss.str(), 0x09);
+
+	if (Score > highscore)
+		highscore = Highscore(Score);
+	
+	ss.str("");
+	ss << "Highscore:" << highscore;
+	c.X = 0;
+	c.Y = 1;
+	g_Console.writeToBuffer(c, ss.str(), 0x09);
 }
 void renderToScreen()
 {
@@ -300,5 +340,53 @@ void renderToScreen()
 void detectMazeEnd()
 {
 	if (getMazeData(g_sChar.m_cLocation.X - 1, g_sChar.m_cLocation.Y - 1).display == 'E')
+	{
 		IsMazeGenerated(false);
+		TriggerMiniGames();
+		Score += 50;
+	}
+}
+void TriggerMiniGames()
+{
+	srand(time(NULL));
+	int i = rand();
+	if (i % 2 == 1)
+	{
+		g_eGameState = S_PUZZLE;
+	}
+	else
+	{
+		g_eGameState = S_PICTURES;
+	}
+}
+void RunPuzzle()
+{
+	Backtogame = false;
+	g_Console.~Console();
+	Score += Puzzle();
+	g_eGameState = S_GAME;
+	processUserInput();
+	COORD c = { 80, 25 };
+	g_Console.initConsole(c, "test");
+}
+
+void RunPictures()
+{
+	Backtogame = false;
+	g_Console.~Console();
+	Score += Picture_Puzzle();
+	g_eGameState = S_GAME;
+	processUserInput();
+	COORD c = { 80, 25 };
+	g_Console.initConsole(c, "test");
+}
+
+void ScoreDisplay()
+{
+	COORD c;
+	std::ostringstream ss;
+	ss << Score << " points";
+	c.X = g_Console.getConsoleSize().X - 9;
+	c.Y = 5;
+	g_Console.writeToBuffer(c, ss.str(), 0x59);
 }
