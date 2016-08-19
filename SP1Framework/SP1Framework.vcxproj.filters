@@ -69,4 +69,9 @@
       <Filter>Header Files\StartMenu</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Resources\MenuTitle.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+  </ItemGroup>
 </Project>
