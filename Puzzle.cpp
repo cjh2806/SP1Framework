@@ -635,28 +635,6 @@ void Riddles(int a)
 		}
 		cout << "Correct! It only took you " << Tries << "tries!" << endl;
 	}
-	else if (a == 11)
-	{
-		cout << "Which word, if pronounced right, is wrong, but if pronounced wrong is right?" << endl;
-		while (x != 0)
-		{
-			cin >> Answer;
-			if (Tries == 5)
-			{
-				cout << "Hint: The word is in the riddle" << endl;
-			}
-			if (Answer == "Wrong" || Answer == "wrong")
-			{
-				break;
-			}
-			else
-			{
-				cout << "Wrong Answer! Try Again" << endl;
-				Tries++;
-			}
-		}
-		cout << "Correct! It only took you " << Tries << "tries!" << endl;
-	}
 	else if (a == 12)
 	{
 		cout << "Which word is the odd one out : First Second Third Forth Fifth Sixth Seventh Eighth" << endl;

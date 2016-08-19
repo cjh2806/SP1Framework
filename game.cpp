@@ -1,19 +1,16 @@
 // This is the main file for the game logic and function
 //
 //
-#include "Pictures.h"
-#include "Puzzle.h"
 #include "game.h"
 #include "Framework\console.h"
 #include <iostream>
 #include <iomanip>
 #include <sstream>
-#include <ctime>
 
 double  g_dElapsedTime;
 double  g_dDeltaTime;
 bool    g_abKeyPressed[K_COUNT];
-
+int x = 3;
 
 // Game specific variables here
 SGameChar   g_sChar;
@@ -43,7 +40,7 @@ void init( void )
     g_sChar.m_cLocation.Y = g_Console.getConsoleSize().Y / 2;
     g_sChar.m_bActive = true;
     // sets the width, height and the font name to use in the console
-    g_Console.setConsoleFont(0, 16, L"Consolas");
+    g_Console.setConsoleFont(0, 16, L"Raster Console");
 }
 
 //--------------------------------------------------------------
@@ -108,9 +105,7 @@ void update(double dt)
             break;
         case S_GAME: gameplay(); // gameplay logic when we are in the game
             break;
-		case S_PUZZLE: RunPuzzle();
-			break;
-		case S_PICTURES: RunPictures();
+		case S_PUZZLE: runPuzzle();
 			break;
     }
 }
@@ -132,25 +127,21 @@ void render()
         case S_GAME: renderGame();
             break;
     }
-	if (BacktoGame == true)
-	{
-		renderFramerate();  // renders debug information, frame rate, elapsed time, etc
-		renderToScreen();   // dump the contents of the buffer to the screen, one frame worth of game
-	}
+    renderFramerate();  // renders debug information, frame rate, elapsed time, etc
+    renderToScreen();   // dump the contents of the buffer to the screen, one frame worth of game
 }
 
 void splashScreenWait()    // waits for time to pass in splash screen
 {
-    if (g_abKeyPressed[K_SPACE]) // wait for 3 seconds to switch to game mode, else do nothing
+    if (g_dElapsedTime > 3.0) // wait for 3 seconds to switch to game mode, else do nothing
         g_eGameState = S_GAME;
-	
 }
 
 void gameplay()            // gameplay logic
 {
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     moveCharacter();    // moves the character, collision detection, physics, etc
-	TriggerMiniGames();                    // sound can be played here too.
+	TriggerPuzzle();                    // sound can be played here too.
 }
 
 void moveCharacter()
@@ -207,7 +198,7 @@ void processUserInput()
 void clearScreen()
 {
     // Clears the buffer with this colour attribute
-    g_Console.clearBuffer(0x1F);
+    g_Console.clearBuffer(0xff);
 }
 
 void renderSplashScreen()  // renders the splash screen
@@ -234,8 +225,8 @@ void renderMap()
 {
     // Set up sample colours, and output shadings
     const WORD colors[] = {
-        0x1A, 0x2B, 0x3C, 0x4D, 0x5E, 0x6F,
-        0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6
+		0xf, 0xf, 0xf, 0xf, 0x0, 0x6F,
+		0xA1, 0xf, 0xC3, 0x0, 0xE5, 0xF6
     };
 
     COORD c;
@@ -256,35 +247,23 @@ void renderCharacter()
     {
         charColor = 0x0A;
     }
-    g_Console.writeToBuffer(g_sChar.m_cLocation, (char)32, charColor);
-}
-void TriggerMiniGames()
-{
-	srand(time(NULL));
-	if (g_abKeyPressed[K_SPACE])
-	{
-		int i = rand();
-		if (i % 2 == 1)
-		{
-			g_eGameState = S_PUZZLE;
-		}
-		else
-		{
-			g_eGameState = S_PICTURES;
-		}
-	}
+    g_Console.writeToBuffer(g_sChar.m_cLocation, (char)1, charColor);
 }
 
 void renderFramerate()
 {
     COORD c;
     // displays the framerate
-    std::ostringstream ss;
-    ss << std::fixed << std::setprecision(3);
-    ss << 1.0 / g_dDeltaTime << "fps";
+    ostringstream ss;
+    ss << x  << " Lives";
     c.X = g_Console.getConsoleSize().X - 9;
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str());
+
+	if (g_dElapsedTime > 5 && g_dElapsedTime < 5.01)
+	{
+		x--;
+	}
 
     // displays the elapsed time
     ss.str("");
@@ -299,24 +278,15 @@ void renderToScreen()
     g_Console.flushBufferToConsole();
 }
 
-void RunPuzzle()
+void TriggerPuzzle()
 {
-	BacktoGame = false;
-	g_Console.~Console();
-	Puzzle();
-	g_eGameState = S_GAME;
-	processUserInput();
-	COORD c = { 80, 25 };
-	g_Console.initConsole(c, "test");
+	if (g_dElapsedTime > 20)
+		g_eGameState = S_PUZZLE;
 }
 
-void RunPictures()
+void runPuzzle()
 {
-	BacktoGame = false;
 	g_Console.~Console();
-	Picture_Puzzle();
-	g_eGameState = S_GAME;
-	processUserInput();
-	COORD c = { 80, 25 };
-	g_Console.initConsole(c, "test");
+	Puzzle();
 }
+
