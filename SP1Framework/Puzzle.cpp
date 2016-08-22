@@ -2,70 +2,57 @@
 #include <iomanip>
 #include <sstream>
 #include "Puzzle.h"
+
 using namespace std;
 
 int Puzzle()
 {
 	srand(time(NULL));
-	int Score;
-	int i = rand();
-
-	if (i % GAME_TOTAL == GAME_ONE)
+	int Score = 0;
+	int Minigames = rand();
+	Minigames %= 5;
+	switch (Minigames)
 	{
-		int Q = rand() % 500 + 1;
-		Score = random_number_game(Q);
-	}
-	else if (i % GAME_TOTAL == GAME_TWO)
-	{
-		int B = rand() % 26 + 97;
-		Score = random_alphabet(B);
-	}
-	else if (i % 5 == 2)
-	{
-
-		int S = rand() % 10 + 1;
-		int Z = rand() % 100;
-		Score = random_pattern(S, Z);
-	}
-	else if (i % 5 == 3)
-	{
-		int A = rand() % 20 + 1;
-		Score = logic_game(A);
-	}
-	else if (i % 5 == 4)
-	{
-		int a = rand() % 14;
-		Score = Riddles(a);
+	case eGame::GAME_ONE: Score = random_number_game();
+		break;
+	case eGame::GAME_TWO: Score = random_alphabet();
+		break;
+	case eGame::GAME_THREE: Score = random_pattern();
+		break;
+	case eGame::GAME_FOUR: Score = logic_game();
+		break;
+	case eGame::GAME_FIVE: Score = Riddles();
+		break;
 	}
 	return Score;
 }
 
-int random_number_game(int a)
+int random_number_game()
 {
+	int Variable = rand() % LIMIT + ONE;
 	int Score;
-	int c = rand() % a;
-	int b;
+	int UserAnswer;
 	int guesses = 1;
 	int x = 1;
-	cout << "From 1 to " << a << ", guess the number" << endl;
+	cout << "From 1 to " << LIMIT << ", guess the number" << endl;
 	while (x != 0)
 	{
-		cin >> b;
-		if (b > a)
+		cin >> UserAnswer;
+		if (UserAnswer > LIMIT || UserAnswer < ONE)
 		{
 			cout << "Number over the range" << endl;
 		}
-		if (b < c)
+		if (UserAnswer < Variable)
 		{
 			cout << "Wrong, gimme a bigger number" << endl;
 			guesses++;
 		}
-		else if (b > c)
+		else if (UserAnswer > Variable)
 		{
 			cout << "Wrong, gimme a smaller number" << endl;
 			guesses++;
 		}
-		else if (b == c)
+		else if (UserAnswer == Variable)
 		{
 			break;
 		}
@@ -79,38 +66,40 @@ int random_number_game(int a)
 	{
 		Score = 0;
 	}
+	cin.clear();
 	return Score;
 }
 
-int random_alphabet(int a)
+int random_alphabet()
 {
+	int AsciiCharacter = rand() % RANGE + ASCII;
 	int Score;
-	char b;
+	char UserAnswer;
 	int guesses = 1;
 	int x = 1;
 	cout << "From a to z , guess the letter" << endl;
 	while (x != 0)
 	{
-		cin >> b;
-		if (b >= 65 && b <= 90)
+		cin >> UserAnswer;
+		if (UserAnswer >= 65 && UserAnswer <= 90)
 		{
-			b += 32;
+			UserAnswer += 32;
 		}
-		else if (b < 65 || b > 90 && b < 97 || b >122)
+		else if (UserAnswer < 65 || UserAnswer > 90 && UserAnswer < 97 || UserAnswer >122)
 		{
 			cout << "Invalid Character" << endl;
 		}
-		if ((int)b > a)
+		if ((int)UserAnswer > AsciiCharacter)
 		{
 			cout << "Wrong, gimme an alphabet nearer to a" << endl;
 			guesses++;
 		}
-		else if ((int)b < a)
+		else if ((int)UserAnswer < AsciiCharacter)
 		{
 			cout << "Wrong, gimme an alphabet nearer to z" << endl;
 			guesses++;
 		}
-		else if ((int)b == a)
+		else if ((int)UserAnswer == AsciiCharacter)
 		{
 			break;
 		}
@@ -124,21 +113,25 @@ int random_alphabet(int a)
 	{
 		Score = 0;
 	}
+	cin.clear();
 	return Score;
 }
-int random_pattern(int a, int b)
+int random_pattern()
 {
-	int c;
+	srand(time(NULL));
+	int Variable = rand() % LIMIT;
+	int Pattern = rand();
+	int UserAnswer;
 	int Score;
 	int guesses = 1;
 	cout << "Enter the next number in the pattern" << endl;
 	while (true)
 	{
-		if (a == 1)
+		if (Pattern % TOTALPATTERNS == PatternONE)
 		{
-			cout << b << " " << b + 2 << " " << b + 4 << " " << b + 6 << " " << b + 8 << endl;
-			cin >> c;
-			if (c == b + 10)
+			cout << Variable << " " << Variable + 2 << " " << Variable + 4 << " " << Variable + 6 << " " << Variable + 8 << endl;
+			cin >> UserAnswer;
+			if (UserAnswer == Variable + 10)
 			{
 				break;
 			}
@@ -148,11 +141,11 @@ int random_pattern(int a, int b)
 				guesses++;
 			}
 		}
-		else if (a == 2)
+		else if (Pattern % TOTALPATTERNS == PatternTWO)
 		{
-			cout << b << ", " << b * 2 << ", " << b * 4 << ", " << b * 6 << ", " << b * 8 << endl;
-			cin >> c;
-			if (c == b * 10)
+			cout << Variable << ", " << Variable * 2 << ", " << Variable * 4 << ", " << Variable * 6 << ", " << Variable * 8 << endl;
+			cin >> UserAnswer;
+			if (UserAnswer == Variable * 10)
 			{
 				break;
 			}
@@ -162,11 +155,11 @@ int random_pattern(int a, int b)
 				guesses++;
 			}
 		}
-		else if (a == 3)
+		else if (Pattern % TOTALPATTERNS == PatternTHREE)
 		{
-			cout << b << ", " << b + 2 << ", " << b + 6 << ", " << b + 12 << ", " << b + 20 << endl;
-			cin >> c;
-			if (c == b + 30)
+			cout << Variable << ", " << Variable + 2 << ", " << Variable + 6 << ", " << Variable + 12 << ", " << Variable + 20 << endl;
+			cin >> UserAnswer;
+			if (UserAnswer == Variable + 30)
 			{
 				break;
 			}
@@ -176,11 +169,11 @@ int random_pattern(int a, int b)
 				guesses++;
 			}
 		}
-		else if (a == 4)
+		else if (Pattern % TOTALPATTERNS == PatternFOUR)
 		{
-			cout << b << ", " << b + 1 << ", " << b - 2 << ", " << b + 3 << ", " << b - 4 << ", " << b + 5 << endl;
-			cin >> c;
-			if (c == b - 6)
+			cout << Variable << ", " << Variable + 1 << ", " << Variable - 2 << ", " << Variable + 3 << ", " << Variable - 4 << ", " << Variable + 5 << endl;
+			cin >> UserAnswer;
+			if (UserAnswer == Variable - 6)
 			{
 				break;
 			}
@@ -190,11 +183,11 @@ int random_pattern(int a, int b)
 				guesses++;
 			}
 		}
-		else if (a == 5)
+		else if (Pattern % TOTALPATTERNS == PatternFIVE)
 		{
-			cout << b << ", " << b - 1 << ", " << b - 2 << ", " << b - 3 << ", " << b - 4 << endl;
-			cin >> c;
-			if (c == b - 5)
+			cout << Variable << ", " << Variable - 1 << ", " << Variable - 2 << ", " << Variable - 3 << ", " << Variable - 4 << endl;
+			cin >> UserAnswer;
+			if (UserAnswer == Variable - 5)
 			{
 				break;
 			}
@@ -204,11 +197,11 @@ int random_pattern(int a, int b)
 				guesses++;
 			}
 		}
-		else if (a == 6)
+		else if (Pattern % TOTALPATTERNS == PatternSIX)
 		{
-			cout << b << ", " << b * 2 << ", " << (b * 2) + 1 << ", " << ((b * 2) + 1) * 2 << ", " << (((b * 2) + 1) * 2) + 2 << ", " << ((((b * 2) + 1) * 2) + 2) * 2 << ", " << (((((b * 2) + 1) * 2) + 2) * 2) + 3 << ", " << ((((((b * 2) + 1) * 2) + 2) * 2) + 3) * 2 << endl;
-			cin >> c;
-			if (c == (((((((b * 2) + 1) * 2) + 2) * 2) + 3) * 2) + 4)
+			cout << Variable << ", " << Variable * 2 << ", " << (Variable * 2) + 1 << ", " << ((Variable * 2) + 1) * 2 << ", " << (((Variable * 2) + 1) * 2) + 2 << ", " << ((((Variable * 2) + 1) * 2) + 2) * 2 << ", " << (((((Variable * 2) + 1) * 2) + 2) * 2) + 3 << ", " << ((((((Variable * 2) + 1) * 2) + 2) * 2) + 3) * 2 << endl;
+			cin >> UserAnswer;
+			if (UserAnswer == (((((((Variable * 2) + 1) * 2) + 2) * 2) + 3) * 2) + 4)
 			{
 				break;
 			}
@@ -218,11 +211,11 @@ int random_pattern(int a, int b)
 				guesses++;
 			}
 		}
-		else if (a == 7)
+		else if (Pattern % TOTALPATTERNS == PatternSEVEN)
 		{
-			cout << b << ", " << b + 8 << ", " << (b + 8) - 3 << ", " << ((b + 8) - 3) + 9 << ", " << (((b + 8) - 3) + 9) - 2 << endl;
-			cin >> c;
-			if (c == ((((b + 8) - 3) + 9) - 2) + 10)
+			cout << Variable << ", " << Variable + 8 << ", " << (Variable + 8) - 3 << ", " << ((Variable + 8) - 3) + 9 << ", " << (((Variable + 8) - 3) + 9) - 2 << endl;
+			cin >> UserAnswer;
+			if (UserAnswer == ((((Variable + 8) - 3) + 9) - 2) + 10)
 			{
 				break;
 			}
@@ -232,11 +225,11 @@ int random_pattern(int a, int b)
 				guesses++;
 			}
 		}
-		else if (a == 8)
+		else if (Pattern % TOTALPATTERNS == PatternEIGHT)
 		{
-			cout << b << ", " << b + 10 << ", " << (b + 10) - 5 << ", " << ((b + 10) - 5) + 20 << ", " << (((b + 10) - 5) + 20) - 10 << endl;
-			cin >> c;
-			if (c == ((((b + 10) - 5) + 20) - 10) + 30)
+			cout << Variable << ", " << Variable + 10 << ", " << (Variable + 10) - 5 << ", " << ((Variable + 10) - 5) + 20 << ", " << (((Variable + 10) - 5) + 20) - 10 << endl;
+			cin >> UserAnswer;
+			if (UserAnswer == ((((Variable + 10) - 5) + 20) - 10) + 30)
 			{
 				break;
 			}
@@ -246,11 +239,11 @@ int random_pattern(int a, int b)
 				guesses++;
 			}
 		}
-		else if (a == 9)
+		else if (Pattern % TOTALPATTERNS == PatternNINE)
 		{
-			cout << b << ", " << b * 2 << ", " << (b * 2) / 2 << ", " << ((b * 2) / 2) * 4 << ", " << (((b * 2) / 2) * 4) / 2 << ", " << ((((b * 2) / 2) * 4) / 2) * 6 << endl;
-			cin >> c;
-			if (c == (((((b * 2) / 2) * 4) / 2) * 6) / 2)
+			cout << Variable << ", " << Variable * 2 << ", " << (Variable * 2) / 2 << ", " << ((Variable * 2) / 2) * 4 << ", " << (((Variable * 2) / 2) * 4) / 2 << ", " << ((((Variable * 2) / 2) * 4) / 2) * 6 << endl;
+			cin >> UserAnswer;
+			if (UserAnswer == (((((Variable * 2) / 2) * 4) / 2) * 6) / 2)
 			{
 				break;
 			}
@@ -260,11 +253,11 @@ int random_pattern(int a, int b)
 				guesses++;
 			}
 		}
-		else if (a == 10)
+		else if (Pattern % TOTALPATTERNS == PatternTEN)
 		{
-			cout << b << ", " << b + 10 << ", " << (b + 10) - 5 << ", " << ((b + 10) - 5) + 20 << ", " << (((b + 10) - 5) + 20) - 4 << ", " << ((((b + 10) - 5) + 20) - 4) + 30 << ", " << (((((b + 10) - 5) + 20) - 4) + 30) - 3 << endl;
-			cin >> c;
-			if (c == ((((((b + 10) - 5) + 20) - 4) + 30) - 3) + 40)
+			cout << Variable << ", " << Variable + 10 << ", " << (Variable + 10) - 5 << ", " << ((Variable + 10) - 5) + 20 << ", " << (((Variable + 10) - 5) + 20) - 4 << ", " << ((((Variable + 10) - 5) + 20) - 4) + 30 << ", " << (((((Variable + 10) - 5) + 20) - 4) + 30) - 3 << endl;
+			cin >> UserAnswer;
+			if (UserAnswer == ((((((Variable + 10) - 5) + 20) - 4) + 30) - 3) + 40)
 			{
 				break;
 			}
@@ -284,12 +277,13 @@ int random_pattern(int a, int b)
 	{
 		Score = 0;
 	}
+	cin.clear();
 	return Score;
 }
-int logic_game(int a)
+int logic_game()
 {
 	int score;
-	int x;
+	int UserAnswer;
 	int correct = 0;
 	cout << "There are 12 pens on the table, you took 3, how many do you have?" << endl;
 	cout << "1) 12" << endl;
@@ -297,8 +291,8 @@ int logic_game(int a)
 	cout << "3) 0" << endl;
 	cout << "4) 3" << endl;
 
-	cin >> x;
-	if (x != 4)
+	cin >> UserAnswer;
+	if (UserAnswer != 4)
 	{
 		cout << "Wrong, you took 3 pens so you have 3 pens" << endl;
 	}
@@ -314,8 +308,8 @@ int logic_game(int a)
 	cout << "3) Up" << endl;
 	cout << "4) None of the above" << endl;
 
-	cin >> x;
-	if (x != 4)
+	cin >> UserAnswer;
+	if (UserAnswer != 4)
 	{
 		cout << "Wrong, an electric train does not produse smoke" << endl;
 	}
@@ -334,8 +328,8 @@ int logic_game(int a)
 	cout << "3) 99" << endl;
 	cout << "4) 1" << endl;
 
-	cin >> x;
-	if (x != 1)
+	cin >> UserAnswer;
+	if (UserAnswer != 1)
 	{
 		cout << "Wrong, if you fired a gun and killed a bird the other birds will fly away" << endl;
 	}
@@ -351,8 +345,8 @@ int logic_game(int a)
 	cout << "3) Third" << endl;
 	cout << "4) Last" << endl;
 
-	cin >> x;
-	if (x != 2)
+	cin >> UserAnswer;
+	if (UserAnswer != 2)
 	{
 		cout << "Wrong! If you overtake second, you are now second" << endl;
 	}
@@ -367,8 +361,8 @@ int logic_game(int a)
 	cout << "3) 6" << endl;
 	cout << "4) 3" << endl;
 
-	cin >> x;
-	if (x != 2)
+	cin >> UserAnswer;
+	if (UserAnswer != 2)
 	{
 		cout << "Wrong! 9 is 4 as there are 4 letters in nine" << endl;
 	}
@@ -393,16 +387,18 @@ int logic_game(int a)
 		cout << "YOU SIR, are a genius!" << endl;
 		score = 100;
 	}
+	cin.clear();
 	return score;
 }
 
-int Riddles(int a)
+int Riddles()
 {
 	int Score;
+	int Riddle = rand();
 	int Tries = 1;
 	int x = 1;
 	string Answer;
-	if (a == 0)
+	if (Riddle % RIDDLES == RiddleONE)
 	{
 		cout << "What is black when you buy it, red when you use it, and gray when you throw it away?" << endl;
 		while (x != 0)
@@ -429,8 +425,7 @@ int Riddles(int a)
 			}
 
 		}
-		cout << "Correct! It only took you " << Tries << " tries!" << endl;
-		if (Tries < 5)
+		if (Tries < 10)
 		{
 			Score = 50;
 		}
@@ -440,7 +435,7 @@ int Riddles(int a)
 		}
 		return Score;
 	}
-	else if (a == 1)
+	else if (Riddle % RIDDLES == RiddleTWO)
 	{
 		cout << "If I drink, I die. If I eat, I am fine. What am I?" << endl;
 		while (x != 0)
@@ -467,8 +462,7 @@ int Riddles(int a)
 			}
 
 		}
-		cout << "Correct! It only took you " << Tries << " tries!" << endl;
-		if (Tries < 5)
+		if (Tries < 10)
 		{
 			Score = 50;
 		}
@@ -478,7 +472,7 @@ int Riddles(int a)
 		}
 		return Score;
 	}
-	else if (a == 2)
+	else if (Riddle % RIDDLES == RiddleTHREE)
 	{
 		cout << "I'm the part of the bird that's not in the sky. I can swim in the ocean and yet remain dry. What am I?" << endl;
 		while (x != 0)
@@ -509,8 +503,7 @@ int Riddles(int a)
 				Tries++;
 			}
 		}
-		cout << "Correct! It only took you " << Tries << " tries!" << endl;
-		if (Tries < 5)
+		if (Tries < 10)
 		{
 			Score = 50;
 		}
@@ -520,7 +513,7 @@ int Riddles(int a)
 		}
 		return Score;
 	}
-	else if (a == 3)
+	else if (Riddle % RIDDLES == RiddleFOUR)
 	{
 		cout << "I never was, am always to be, No one ever saw me, nor ever will, And yet I am the confidence of all To live and breathe on this terrestrial ball. What am I?" << endl;
 		while (x != 0)
@@ -546,8 +539,7 @@ int Riddles(int a)
 				Tries++;
 			}
 		}
-		cout << "Correct! It only took you " << Tries << " tries!" << endl;
-		if (Tries < 5)
+		if (Tries < 10)
 		{
 			Score = 50;
 		}
@@ -557,7 +549,7 @@ int Riddles(int a)
 		}
 		return Score;
 	}
-	else if (a == 4)
+	else if (Riddle % RIDDLES == RiddleFIVE)
 	{
 		cout << "I have many feathers to help me fly. I have a body and head, but I'm not alive. It is your strength which determines how far I go. You can hold me in your hand, but I'm never thrown. What am I?" << endl;
 		while (x != 0)
@@ -583,8 +575,7 @@ int Riddles(int a)
 				Tries++;
 			}
 		}
-		cout << "Correct! It only took you " << Tries << " tries!" << endl;
-		if (Tries < 5)
+		if (Tries < 10)
 		{
 			Score = 50;
 		}
@@ -594,7 +585,7 @@ int Riddles(int a)
 		}
 		return Score;
 	}
-	else if (a == 5)
+	else if (Riddle % RIDDLES == RiddleSIX)
 	{
 		cout << "If I have it, I don't share it. If I share it, I don't have it. What is it?" << endl;
 		while (x != 0)
@@ -620,8 +611,7 @@ int Riddles(int a)
 				Tries++;
 			}
 		}
-		cout << "Correct! It only took you " << Tries << " tries!" << endl;
-		if (Tries < 5)
+		if (Tries < 10)
 		{
 			Score = 50;
 		}
@@ -631,7 +621,7 @@ int Riddles(int a)
 		}
 		return Score;
 	}
-	else if (a == 6)
+	else if (Riddle % RIDDLES == RiddleSEVEN)
 	{
 		cout << "A little pool with two layers of wall around it. One white and soft and the other dark and hard, amidst a light brown grassy lawn with an outline of a green grass. What am I?" << endl;
 		while (x != 0)
@@ -657,8 +647,7 @@ int Riddles(int a)
 				Tries++;
 			}
 		}
-		cout << "Correct! It only took you " << Tries << " tries!" << endl;
-		if (Tries < 5)
+		if (Tries < 10)
 		{
 			Score = 50;
 		}
@@ -668,7 +657,7 @@ int Riddles(int a)
 		}
 		return Score;
 	}
-	else if (a == 7)
+	else if (Riddle % RIDDLES == RiddleEIGHT)
 	{
 		cout << "They come out at night without being called, and are lost in the day without being stolen. What are they?" << endl;
 		while (x != 0)
@@ -694,8 +683,7 @@ int Riddles(int a)
 				Tries++;
 			}
 		}
-		cout << "Correct! It only took you " << Tries << " tries!" << endl;
-		if (Tries < 5)
+		if (Tries < 10)
 		{
 			Score = 50;
 		}
@@ -705,7 +693,7 @@ int Riddles(int a)
 		}
 		return Score;
 	}
-	else if (a == 8)
+	else if (Riddle % RIDDLES == RiddleNINE)
 	{
 		cout << "All about, but cannot be seen, Can be captured, cannot be held, No throat, but can be heard. What am I?" << endl;
 		while (x != 0)
@@ -731,9 +719,9 @@ int Riddles(int a)
 				Tries++;
 			}
 		}
-		if (Tries < 5)
+		if (Tries < 10)
 		{
-			Score = 50;
+			Score = 100;
 		}
 		else
 		{
@@ -741,13 +729,13 @@ int Riddles(int a)
 		}
 		return Score;
 	}
-	else if (a == 9)
+	else if (Riddle % RIDDLES == RiddleTEN)
 	{
 		cout << "I am a box that holds keys without locks, yet they can unlock your soul. What am I?" << endl;
 		while (x != 0)
 		{
 			cin >> Answer;
-			if (Tries == 5)
+			if (Tries == 10)
 			{
 				cout << "Hint: It's related to music" << endl;
 			}
@@ -767,10 +755,9 @@ int Riddles(int a)
 				Tries++;
 			}
 		}
-		cout << "Correct! It only took you " << Tries << " tries!" << endl;
-		if (Tries < 5)
+		if (Tries < 10)
 		{
-			Score = 50;
+			Score = 100;
 		}
 		else
 		{
@@ -778,13 +765,13 @@ int Riddles(int a)
 		}
 		return Score;
 	}
-	else if (a == 10)
+	else if (Riddle % RIDDLES == RiddleELEVEN)
 	{
 		cout << "You are in a cabin and it is pitch black. You have one match on you. Which do you light first, the newspaper, the lamp, the candle or the fire?" << endl;
 		while (x != 0)
 		{
 			cin >> Answer;
-			if (Tries == 5)
+			if (Tries == 10)
 			{
 				cout << "Hint: What starts the fire" << endl;
 			}
@@ -804,10 +791,9 @@ int Riddles(int a)
 				Tries++;
 			}
 		}
-		cout << "Correct! It only took you " << Tries << " tries!" << endl;
-		if (Tries < 5)
+		if (Tries < 10)
 		{
-			Score = 50;
+			Score = 100;
 		}
 		else
 		{
@@ -815,13 +801,13 @@ int Riddles(int a)
 		}
 		return Score;
 	}
-	else if (a == 11)
+	else if (Riddle % RIDDLES == RiddleTWELVE)
 	{
 		cout << "Which word, if pronounced right, is wrong, but if pronounced wrong is right?" << endl;
 		while (x != 0)
 		{
 			cin >> Answer;
-			if (Tries == 5)
+			if (Tries == 10)
 			{
 				cout << "Hint: The word is in the riddle" << endl;
 			}
@@ -841,10 +827,9 @@ int Riddles(int a)
 				Tries++;
 			}
 		}
-		cout << "Correct! It only took you " << Tries << " tries!" << endl;
-		if (Tries < 5)
+		if (Tries < 10)
 		{
-			Score = 50;
+			Score = 100;
 		}
 		else
 		{
@@ -852,13 +837,13 @@ int Riddles(int a)
 		}
 		return Score;
 	}
-	else if (a == 12)
+	else if (Riddle % RIDDLES == RiddleTHIRTEEN)
 	{
 		cout << "Which word is the odd one out : First Second Third Forth Fifth Sixth Seventh Eighth" << endl;
 		while (x != 0)
 		{
 			cin >> Answer;
-			if (Tries == 5)
+			if (Tries == 10)
 			{
 				cout << "Hint: 4" << endl;
 			}
@@ -878,10 +863,9 @@ int Riddles(int a)
 				Tries++;
 			}
 		}
-		cout << "Correct! It only took you " << Tries << " tries!" << endl;
-		if (Tries < 5)
+		if (Tries < 10)
 		{
-			Score = 50;
+			Score = 100;
 		}
 		else
 		{
@@ -889,13 +873,13 @@ int Riddles(int a)
 		}
 		return Score;
 	}
-	else if (a == 13)
+	else if (Riddle % RIDDLES == RiddleFOURTEEN)
 	{
 		cout << "A farmer has 17 sheep and all but 9 die. How many are left?" << endl;
 		while (x != 0)
 		{
 			cin >> Answer;
-			if (Tries == 5)
+			if (Tries == 10)
 			{
 				cout << "Hint: All died except 9" << endl;
 			}
@@ -915,8 +899,7 @@ int Riddles(int a)
 				Tries++;
 			}
 		}
-		cout << "Correct! It only took you " << Tries << " tries!" << endl;
-		if (Tries < 5)
+		if (Tries < 10)
 		{
 			Score = 50;
 		}
@@ -926,5 +909,41 @@ int Riddles(int a)
 		}
 		return Score;
 	}
-
+	else if (Riddle % RIDDLES == RiddleFIFTEEN)
+	{
+		cout << "You will always find me in the past. I can be created in the present, But the future can never taint me. What am I?" << endl;
+		while (x != 0)
+		{
+			cin >> Answer;
+			if (Tries == 5)
+			{
+				cout << "Hint: It 'was' a phase in time." << endl;
+			}
+			if (Answer == "history" || Answer == "History")
+			{
+				cout << "Correct! It only took you " << Tries << " tries!" << endl;
+				break;
+			}
+			else if (Tries == 10)
+			{
+				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
+				break;
+			}
+			else
+			{
+				cout << "Wrong Answer! Try Again" << endl;
+				Tries++;
+			}
+		}
+		if (Tries < 10)
+		{
+			Score = 50;
+		}
+		else
+		{
+			Score = 0;
+		}
+		return Score;
+	}
+	cin.clear();
 }

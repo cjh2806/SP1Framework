@@ -9,16 +9,16 @@ int Picture_Puzzle()
 {
 	srand(time(NULL));
 	int Score;
-	int i = rand() % 5;
-	if (i == 0)
+	int Picture = rand();
+	if (Picture % PICTURES == PictureONE)
 	{
 		ifstream Reader("Transport.txt");
 		string Art = getFileContents(Reader);
 		cout << Art << endl;
 		Reader.close();
-		int x;
-		cin >> x;
-		if (x == 4)
+		int Answer;
+		cin >> Answer;
+		if (Answer == 4)
 		{
 			cout << "Correct!" << endl;
 			Score = 50;
@@ -29,15 +29,15 @@ int Picture_Puzzle()
 			Score = 0;
 		}
 	}
-	else if (i == 1)
+	else if (Picture % PICTURES == PictureTWO)
 	{
 		ifstream Reader("car.txt");
 		string Art = getFileContents(Reader);
 		cout << Art << endl;
 		Reader.close();
-		int x;
-		cin >> x;
-		if (x == 3)
+		int Answer;
+		cin >> Answer;
+		if (Answer == 3)
 		{
 			cout << "Correct!" << endl;
 			Score = 50;
@@ -48,15 +48,15 @@ int Picture_Puzzle()
 			Score = 0;
 		}
 	}
-	else if (i == 2)
+	else if (Picture % PICTURES == PictureTHREE)
 	{
 		ifstream Reader("Football.txt");
 		string Art = getFileContents(Reader);
 		cout << Art << endl;
 		Reader.close();
-		int x;
-		cin >> x;
-		if (x == 2)
+		int Answer;
+		cin >> Answer;
+		if (Answer == 2)
 		{
 			cout << "Correct!" << endl;
 			Score = 50;
@@ -67,15 +67,15 @@ int Picture_Puzzle()
 			Score = 0;
 		}
 	}
-	else if (i == 3)
+	else if (Picture % PICTURES == PictureFOUR)
 	{
 		ifstream Reader("Flag.txt");
 		string Art = getFileContents(Reader);
 		cout << Art << endl;
 		Reader.close();
-		int x;
-		cin >> x;
-		if (x == 1)
+		int Answer;
+		cin >> Answer;
+		if (Answer == 1)
 		{
 			cout << "Correct!" << endl;
 			Score = 50;
@@ -86,15 +86,15 @@ int Picture_Puzzle()
 			Score = 0;
 		}
 	}
-	else if (i == 4)
+	else if (Picture % PICTURES == PictureFIVE)
 	{
 		ifstream Reader("Food.txt");
 		string Art = getFileContents(Reader);
 		cout << Art << endl;
 		Reader.close();
-		int x;
-		cin >> x;
-		if (x == 4)
+		int Answer;
+		cin >> Answer;
+		if (Answer == 4)
 		{
 			cout << "Correct!" << endl;
 			Score = 50;
@@ -105,6 +105,7 @@ int Picture_Puzzle()
 			Score = 0;
 		}
 	}
+	cin.clear();
 	return Score;
 }
 
