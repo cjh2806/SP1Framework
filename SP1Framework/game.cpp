@@ -22,7 +22,7 @@ EGAMESTATES g_eGameState = S_SPLASHSCREEN;
 double  g_dBounceTime; // this is to prevent key bouncing, so we won't trigger keypresses more than once
 
 // Console object
-Console g_Console(120, 25, "SP1 Framework");
+Console g_Console(ScreenResoX, ScreenResoY, "SP1 Framework");
 
 //--------------------------------------------------------------
 // Purpose  : Initialisation function
@@ -258,9 +258,9 @@ void renderMap()
 	{
 		generateMaze();
 
-		for (int i = 0; i < SIZE; i++)
+		for (int i = 0; i < YSIZE; i++)
 		{
-			for (int j = 0; j < CSIZE; j++)
+			for (int j = 0; j < XSIZE; j++)
 			{
 				if (getMazeData(i, j).display == 'S')
 				{
@@ -366,7 +366,7 @@ void RunPuzzle()
 	Score += Puzzle();
 	g_eGameState = S_GAME;
 	processUserInput();
-	COORD c = { 80, 25 };
+	COORD c = { ScreenResoX, ScreenResoY };
 	g_Console.initConsole(c, "test");
 }
 
@@ -377,7 +377,7 @@ void RunPictures()
 	Score += Picture_Puzzle();
 	g_eGameState = S_GAME;
 	processUserInput();
-	COORD c = { 80, 25 };
+	COORD c = { ScreenResoX, ScreenResoY };
 	g_Console.initConsole(c, "test");
 }
 

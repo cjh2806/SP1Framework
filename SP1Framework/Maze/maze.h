@@ -6,8 +6,10 @@
 using std::time;
 using std::stack;
 
-#define SIZE 53
-#define CSIZE 23
+#define YSIZE 53
+#define XSIZE 23
+
+static unsigned int coordOffset = 1;
 
 struct Cell
 {
@@ -24,5 +26,5 @@ void IsMazeGenerated(bool input);
 Cell getMazeData(int a, int b);
 void bufferMaze(Console &refCon);
 void generateMaze();
-void Initialize(Cell Level[][CSIZE]);
-void GenerateMaze(Cell Level[][CSIZE], int &posX, int &posY, int &goalX, int &goalY);
+void Initialize(Cell Level[][XSIZE]);
+void GenerateMaze(Cell Level[][XSIZE], int &posX, int &posY, int &goalX, int &goalY);
