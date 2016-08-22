@@ -5,13 +5,13 @@ int Highscore(int Score)
 {
 	int Highscore;
 	ifstream InputFile;
-	InputFile.open("highscore.text");
+	InputFile.open("highscore.txt");
 	InputFile >> Highscore;
 	InputFile.close();
 	if (Score > Highscore)
 	{
 		ofstream OutputFile;
-		OutputFile.open("highscore.text");
+		OutputFile.open("highscore.txt");
 		OutputFile << Score << endl;
 		OutputFile.close();
 
