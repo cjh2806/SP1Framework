@@ -5,6 +5,9 @@
 
 #include "StartMenu\startMenu.h"
 #include "Maze\maze.h"
+#include "Highscore.h"
+#include "Pictures.h"
+#include "Puzzle.h"
 
 extern CStopWatch g_swTimer;
 extern bool Backtogame;

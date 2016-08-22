@@ -1,9 +1,6 @@
 // This is the main file for the game logic and function
 //
 //
-#include "Highscore.h"
-#include "Pictures.h"
-#include "Puzzle.h"
 #include "game.h"
 #include <iostream>
 #include <iomanip>
