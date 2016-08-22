@@ -1,9 +1,6 @@
 // This is the main file for the game logic and function
 //
 //
-#include "Highscore.h"
-#include "Pictures.h"
-#include "Puzzle.h"
 #include "game.h"
 #include <iostream>
 #include <iomanip>
@@ -14,7 +11,7 @@ int Score;
 double  g_dElapsedTime;
 double  g_dDeltaTime;
 bool    g_abKeyPressed[K_COUNT];
-int x = 3;
+int PlayerHealth = 3;
 
 // Game specific variables here
 SGameChar   g_sChar;
@@ -22,7 +19,7 @@ EGAMESTATES g_eGameState = S_SPLASHSCREEN;
 double  g_dBounceTime; // this is to prevent key bouncing, so we won't trigger keypresses more than once
 
 // Console object
-Console g_Console(120, 25, "SP1 Framework");
+Console g_Console(ScreenResoX, ScreenResoY, "SP1 Framework");
 
 //--------------------------------------------------------------
 // Purpose  : Initialisation function
@@ -153,11 +150,9 @@ void splashScreenWait()    // waits for time to pass in splash screen
 	{
 		switch (IsCurrentState())
 		{
-		case STARTGAME:
-			g_eGameState = S_GAME;
+		case STARTGAME: g_eGameState = S_GAME;
 			break;
-		case QUITGAME:
-			g_bQuitGame = true;
+		case QUITGAME: g_bQuitGame = true;
 			break;
 		}
 	}
@@ -186,12 +181,12 @@ void moveCharacter()
 			IsCurrentState(STARTGAME);
 
         //Beep(1440, 30);
-		if (g_sChar.m_cLocation.Y > 1 && getMazeData(g_sChar.m_cLocation.X - 1, g_sChar.m_cLocation.Y - 2).display != '*')
+		if (g_sChar.m_cLocation.Y > OffsetBuffer && getMazeData(g_sChar.m_cLocation.X - OffsetBuffer, g_sChar.m_cLocation.Y - 2).display != '*')
 			g_sChar.m_cLocation.Y--;
 
 		bSomethingHappened = true;
     }
-	if (g_abKeyPressed[K_LEFT] && g_sChar.m_cLocation.X > 1 && getMazeData(g_sChar.m_cLocation.X - 2, g_sChar.m_cLocation.Y - 1).display != '*')
+	if (g_abKeyPressed[K_LEFT] && g_sChar.m_cLocation.X > OffsetBuffer && getMazeData(g_sChar.m_cLocation.X - 2, g_sChar.m_cLocation.Y - OffsetBuffer).display != '*')
 	{
         //Beep(1440, 30);
         g_sChar.m_cLocation.X--;
@@ -203,12 +198,12 @@ void moveCharacter()
 			IsCurrentState(QUITGAME);
 
 		//Beep(1440, 30);
-		if (g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 2 && getMazeData(g_sChar.m_cLocation.X - 1, g_sChar.m_cLocation.Y).display != '*')
+		if (g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 2 && getMazeData(g_sChar.m_cLocation.X - OffsetBuffer, g_sChar.m_cLocation.Y).display != '*')
 			g_sChar.m_cLocation.Y++;
 
 		bSomethingHappened = true;
     }
-	if (g_abKeyPressed[K_RIGHT] && g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 2 && getMazeData(g_sChar.m_cLocation.X, g_sChar.m_cLocation.Y - 1).display != '*')
+	if (g_abKeyPressed[K_RIGHT] && g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 2 && getMazeData(g_sChar.m_cLocation.X, g_sChar.m_cLocation.Y - OffsetBuffer).display != '*')
 	{
 		//Beep(1440, 30);
 		g_sChar.m_cLocation.X++;
@@ -258,14 +253,14 @@ void renderMap()
 	{
 		generateMaze();
 
-		for (int i = 0; i < SIZE; i++)
+		for (int i = 0; i < YSIZE; i++)
 		{
-			for (int j = 0; j < CSIZE; j++)
+			for (int j = 0; j < XSIZE; j++)
 			{
 				if (getMazeData(i, j).display == 'S')
 				{
-					g_sChar.m_cLocation.X = i + 1;
-					g_sChar.m_cLocation.Y = j + 1;
+					g_sChar.m_cLocation.X = i + OffsetBuffer;
+					g_sChar.m_cLocation.Y = j + OffsetBuffer;
 				}
 			}
 		}
@@ -299,14 +294,14 @@ void renderFramerate()
     g_Console.writeToBuffer(c, ss.str(),0x09);
 
 	ss.str("");
-	ss << x << " Lives";
+	ss << PlayerHealth << " Lives";
 	c.X = 15;
 	c.Y = 0;
 	g_Console.writeToBuffer(c, ss.str(), 0x09);
 	
 	if (g_dElapsedTime > 5 && g_dElapsedTime < 5.01)
 	{
-		x--;
+		PlayerHealth--;
 	}
 
 	// displays the elapsed time
@@ -316,20 +311,7 @@ void renderFramerate()
     c.Y = 0;
 	g_Console.writeToBuffer(c, ss.str(), 0x09);
 
-	ss.str("");
-	ss << "Score: " << Score;
-	c.X = 112;
-	c.Y = 1;
-	g_Console.writeToBuffer(c, ss.str(), 0x09);
-
-	if (Score > highscore)
-		highscore = Highscore(Score);
-	
-	ss.str("");
-	ss << "Highscore:" << highscore;
-	c.X = 0;
-	c.Y = 1;
-	g_Console.writeToBuffer(c, ss.str(), 0x09);
+	ScoreDisplay();
 }
 void renderToScreen()
 {
@@ -339,7 +321,7 @@ void renderToScreen()
 
 void detectMazeEnd()
 {
-	if (getMazeData(g_sChar.m_cLocation.X - 1, g_sChar.m_cLocation.Y - 1).display == 'E')
+	if (getMazeData(g_sChar.m_cLocation.X - OffsetBuffer, g_sChar.m_cLocation.Y - OffsetBuffer).display == 'E')
 	{
 		IsMazeGenerated(false);
 		TriggerMiniGames();
@@ -366,7 +348,7 @@ void RunPuzzle()
 	Score += Puzzle();
 	g_eGameState = S_GAME;
 	processUserInput();
-	COORD c = { 80, 25 };
+	COORD c = { ScreenResoX, ScreenResoY };
 	g_Console.initConsole(c, "test");
 }
 
@@ -377,7 +359,7 @@ void RunPictures()
 	Score += Picture_Puzzle();
 	g_eGameState = S_GAME;
 	processUserInput();
-	COORD c = { 80, 25 };
+	COORD c = { ScreenResoX, ScreenResoY };
 	g_Console.initConsole(c, "test");
 }
 
@@ -385,8 +367,18 @@ void ScoreDisplay()
 {
 	COORD c;
 	std::ostringstream ss;
-	ss << Score << " points";
-	c.X = g_Console.getConsoleSize().X - 9;
-	c.Y = 5;
-	g_Console.writeToBuffer(c, ss.str(), 0x59);
+	ss.str("");
+	ss << "Score: " << Score;
+	c.X = g_Console.getConsoleSize().X - ss.str().length();
+	c.Y = 2;
+	g_Console.writeToBuffer(c, ss.str(), 0x0A);
+
+	if (Score > highscore)
+		highscore = Highscore(Score);
+
+	ss.str("");
+	ss << "Highscore:" << highscore;
+	c.X = g_Console.getConsoleSize().X - ss.str().length();;
+	c.Y = 1;
+	g_Console.writeToBuffer(c, ss.str(), 0x0A);
 }

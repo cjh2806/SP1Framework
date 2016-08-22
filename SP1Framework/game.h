@@ -5,6 +5,9 @@
 
 #include "StartMenu\startMenu.h"
 #include "Maze\maze.h"
+#include "Highscore.h"
+#include "Pictures.h"
+#include "Puzzle.h"
 
 extern CStopWatch g_swTimer;
 extern bool Backtogame;
@@ -38,6 +41,9 @@ struct SGameChar
     COORD m_cLocation;
     bool  m_bActive;
 };
+
+static unsigned int ScreenResoX = 120;
+static unsigned int ScreenResoY = 25;
 
 void init        ( void );      // initialize your variables, allocate memory, etc
 void getInput    ( void );      // get input from player

@@ -1,7 +1,7 @@
 #include "maze.h"
 
 bool isMazeGenerated = false;
-Cell Level[SIZE][CSIZE];
+Cell Level[YSIZE][XSIZE];
 
 bool IsMazeGenerated()
 {
@@ -22,12 +22,12 @@ void bufferMaze(Console &refCon)
 {
 	COORD c;
 
-	for (int i = 0; i < SIZE; i++)
+	for (int i = 0; i < YSIZE; i++)
 	{
-		for (int j = 0; j < CSIZE; j++)
+		for (int j = 0; j < XSIZE; j++)
 		{
-			c.X = i + 1;
-			c.Y = j + 1;
+			c.X = i + OffsetCoord;
+			c.Y = j + OffsetCoord;
 
 			if (Level[i][j].display == '*')
 				refCon.writeToBuffer(c, Level[i][j].display, 0xFF);
@@ -48,11 +48,11 @@ void generateMaze()
 	GenerateMaze(Level, posX, posY, goalX, goalY);
 }
 
-void Initialize(Cell Level[][CSIZE])
+void Initialize(Cell Level[][XSIZE])
 {
-	for (int i = 0; i < SIZE; i++)
+	for (int i = 0; i < YSIZE; i++)
 	{
-		for (int j = 0; j < CSIZE; j++)
+		for (int j = 0; j < XSIZE; j++)
 		{
 			Level[i][j].display = '*';
 			Level[i][j].visited = false;
@@ -63,29 +63,29 @@ void Initialize(Cell Level[][CSIZE])
 		}
 	}
 
-	for (int i = 1; i < SIZE - 1; i++)
+	for (int i = 1; i < YSIZE - 1; i++)
 	{
-		for (int j = 1; j < CSIZE - 1; j++)
+		for (int j = 1; j < XSIZE - 1; j++)
 		{
 			// Border Cells have fewer accessible walls
 			Level[1][j].top_wall = false;
-			Level[SIZE - 2][j].bot_wall = false;
+			Level[YSIZE - 2][j].bot_wall = false;
 			Level[i][1].left_wall = false;
-			Level[i][CSIZE - 2].right_wall = false;
+			Level[i][XSIZE - 2].right_wall = false;
 		}
 	}
 }
 
-void GenerateMaze(Cell Level[][CSIZE], int &posX, int &posY, int &goalX, int &goalY)
+void GenerateMaze(Cell Level[][XSIZE], int &posX, int &posY, int &goalX, int &goalY)
 {
 	srand((unsigned)time(NULL));				        					// Pick random start cell
 	int random = 0;
-	int randomX = ((2 * rand()) + 1) % (CSIZE - 1);						// Generate a random odd number between 1 and SIZE
-	int randomY = ((2 * rand()) + 1) % (SIZE - 1);						// Generate a random odd number between 1 and SIZE
+	int randomX = ((2 * rand()) + 1) % (XSIZE - 1);						// Generate a random odd number between 1 and YSIZE
+	int randomY = ((2 * rand()) + 1) % (YSIZE - 1);						// Generate a random odd number between 1 and YSIZE
 	posX = randomY;                       						// Save player's initial X position
 	posY = randomX;                      						// Save player's initial Y position
 	int visitedCells = 1;
-	int totalCells = ((SIZE - 1) / 2)*((CSIZE - 1) / 2);
+	int totalCells = ((YSIZE - 1) / 2)*((XSIZE - 1) / 2);
 	int percent = 0;
 	stack<int> back_trackX, back_trackY; 						// Stack is used to trace the reverse path
 
@@ -101,7 +101,7 @@ void GenerateMaze(Cell Level[][CSIZE], int &posX, int &posY, int &goalX, int &go
 		{
 			random = (rand() % 4) + 1;		// Pick a random wall 1-4 to knock down
 
-											// GO UP
+			// GO UP
 			if ((random == 1) && (randomY > 1)) {
 				if (Level[randomY - 2][randomX].visited == false) {	// If not visited
 					Level[randomY - 1][randomX].display = ' ';	// Delete display
@@ -122,7 +122,7 @@ void GenerateMaze(Cell Level[][CSIZE], int &posX, int &posY, int &goalX, int &go
 			}
 
 			// GO DOWN
-			else if ((random == 2) && (randomY < SIZE - 2)) {
+			else if ((random == 2) && (randomY < YSIZE - 2)) {
 				if (Level[randomY + 2][randomX].visited == false) {	// If not visited
 					Level[randomY + 1][randomX].display = ' ';	// Delete display
 					Level[randomY + 1][randomX].visited = true;	// Mark cell as visited
@@ -141,28 +141,8 @@ void GenerateMaze(Cell Level[][CSIZE], int &posX, int &posY, int &goalX, int &go
 					continue;
 			}
 
-			// GO LEFT
-			else if ((random == 3) && (randomX > 1)) {
-				if (Level[randomY][randomX - 2].visited == false) {	// If not visited
-					Level[randomY][randomX - 1].display = ' ';	// Delete display
-					Level[randomY][randomX - 1].visited = true;	// Mark cell as visited
-					Level[randomY][randomX].left_wall = false;	// Knock down wall
-
-					back_trackX.push(randomX); 			// Push X for back track
-					back_trackY.push(randomY);			// Push Y for back track
-
-					randomX -= 2;					// Move to next cell
-					Level[randomY][randomX].visited = true;		// Mark cell moved to as visited
-					Level[randomY][randomX].display = ' ';		// Update path
-					Level[randomY][randomX].right_wall = false;	// Knock down wall
-					visitedCells++;					// Increase visitedCells counter
-				}
-				else
-					continue;
-			}
-
 			// GO RIGHT
-			else if ((random == 4) && (randomX < CSIZE - 2)) {
+			else if ((random == 3) && (randomX < XSIZE - 2)) {
 				if (Level[randomY][randomX + 2].visited == false) {	// If not visited
 					Level[randomY][randomX + 1].display = ' ';	// Delete display
 					Level[randomY][randomX + 1].visited = true;	// Mark cell as visited
@@ -175,6 +155,26 @@ void GenerateMaze(Cell Level[][CSIZE], int &posX, int &posY, int &goalX, int &go
 					Level[randomY][randomX].visited = true;		// Mark cell moved to as visited
 					Level[randomY][randomX].display = ' ';		// Update path
 					Level[randomY][randomX].left_wall = false;	// Knock down wall
+					visitedCells++;					// Increase visitedCells counter
+				}
+				else
+					continue;
+			}
+
+			// GO LEFT
+			else if ((random == 4) && (randomX > 1)) {
+				if (Level[randomY][randomX - 2].visited == false) {	// If not visited
+					Level[randomY][randomX - 1].display = ' ';	// Delete display
+					Level[randomY][randomX - 1].visited = true;	// Mark cell as visited
+					Level[randomY][randomX].left_wall = false;	// Knock down wall
+
+					back_trackX.push(randomX); 			// Push X for back track
+					back_trackY.push(randomY);			// Push Y for back track
+
+					randomX -= 2;					// Move to next cell
+					Level[randomY][randomX].visited = true;		// Mark cell moved to as visited
+					Level[randomY][randomX].display = ' ';		// Update path
+					Level[randomY][randomX].right_wall = false;	// Knock down wall
 					visitedCells++;					// Increase visitedCells counter
 				}
 				else
