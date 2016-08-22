@@ -4,15 +4,6 @@
 #include "Puzzle.h"
 using namespace std;
 
-enum EGAME {
-	GAME_ONE,
-	GAME_TWO,
-	GAME_TOTAL
-};
-
-#define ASCII 97
-
-
 int Puzzle()
 {
 	srand(time(NULL));
@@ -26,7 +17,7 @@ int Puzzle()
 	}
 	else if (i % GAME_TOTAL == GAME_TWO)
 	{
-		int B = rand() % 26 + ASCII;
+		int B = rand() % 26 + 97;
 		Score = random_alphabet(B);
 	}
 	else if (i % 5 == 2)
@@ -850,7 +841,7 @@ int Riddles(int a)
 				Tries++;
 			}
 		}
-		cout << "Correct! It only took you " << Tries << " tries!" << endl;		
+		cout << "Correct! It only took you " << Tries << " tries!" << endl;
 		if (Tries < 5)
 		{
 			Score = 50;
