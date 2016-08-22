@@ -1,44 +1,57 @@
+#include "game.h"
+#include <iomanip>
+#include <sstream>
 #include "Puzzle.h"
-#include <iostream>
-#include <ctime>
+using namespace std;
 
-void Puzzle()
+enum EGAME {
+	GAME_ONE,
+	GAME_TWO,
+	GAME_TOTAL
+};
+
+#define ASCII 97
+
+
+int Puzzle()
 {
 	srand(time(NULL));
+	int Score;
+	int i = rand();
 
-	int i = rand() % 5;
-
-	if (i == 0)
+	if (i % GAME_TOTAL == GAME_ONE)
 	{
-		int Q = rand() % 1000 + 1;
-		random_number_game(Q);
+		int Q = rand() % 500 + 1;
+		Score = random_number_game(Q);
 	}
-	else if (i == 1)
+	else if (i % GAME_TOTAL == GAME_TWO)
 	{
-		int B = rand() % 26 + 97;
-		random_alphabet(B);
+		int B = rand() % 26 + ASCII;
+		Score = random_alphabet(B);
 	}
-	else if (i == 2)
+	else if (i % 5 == 2)
 	{
 
 		int S = rand() % 10 + 1;
 		int Z = rand() % 100;
-		random_pattern(S, Z);
+		Score = random_pattern(S, Z);
 	}
-	else if (i == 3)
+	else if (i % 5 == 3)
 	{
 		int A = rand() % 20 + 1;
-		logic_game(A);
+		Score = logic_game(A);
 	}
-	else if (i == 4)
+	else if (i % 5 == 4)
 	{
 		int a = rand() % 14;
-		Riddles(a);
+		Score = Riddles(a);
 	}
+	return Score;
 }
 
-void random_number_game(int a)
+int random_number_game(int a)
 {
+	int Score;
 	int c = rand() % a;
 	int b;
 	int guesses = 1;
@@ -67,10 +80,20 @@ void random_number_game(int a)
 		}
 	}
 	cout << "Correct! It only took you " << guesses << " times to guess!" << endl;
+	if (guesses < 10)
+	{
+		Score = 50;
+	}
+	else
+	{
+		Score = 0;
+	}
+	return Score;
 }
 
-void random_alphabet(int a)
+int random_alphabet(int a)
 {
+	int Score;
 	char b;
 	int guesses = 1;
 	int x = 1;
@@ -102,11 +125,20 @@ void random_alphabet(int a)
 		}
 	}
 	cout << "Correct! It only took you " << guesses << " times to guess!" << endl;
+	if (guesses < 10)
+	{
+		Score = 100;
+	}
+	else
+	{
+		Score = 0;
+	}
+	return Score;
 }
-void random_pattern(int a, int b)
+int random_pattern(int a, int b)
 {
 	int c;
-
+	int Score;
 	int guesses = 1;
 	cout << "Enter the next number in the pattern" << endl;
 	while (true)
@@ -253,9 +285,19 @@ void random_pattern(int a, int b)
 		}
 	}
 	cout << "Correct! It only took " << guesses << " guesses" << endl;
+	if (guesses < 5)
+	{
+		Score = 50;
+	}
+	else
+	{
+		Score = 0;
+	}
+	return Score;
 }
-void logic_game(int a)
+int logic_game(int a)
 {
+	int score;
 	int x;
 	int correct = 0;
 	cout << "There are 12 pens on the table, you took 3, how many do you have?" << endl;
@@ -348,19 +390,24 @@ void logic_game(int a)
 	if (correct == 0 || correct == 1)
 	{
 		cout << "You aren't that great with this are you?" << endl;
+		score = 0;
 	}
 	else if (correct == 2 || correct == 3)
 	{
 		cout << "You are pretttttty average at this." << endl;
+		score = 50;
 	}
 	else
 	{
 		cout << "YOU SIR, are a genius!" << endl;
+		score = 100;
 	}
+	return score;
 }
 
-void Riddles(int a)
+int Riddles(int a)
 {
+	int Score;
 	int Tries = 1;
 	int x = 1;
 	string Answer;
@@ -376,6 +423,12 @@ void Riddles(int a)
 			}
 			if (Answer == "Charcoal" || Answer == "charcoal")
 			{
+				cout << "Correct! It only took you " << Tries << " tries!" << endl;
+				break;
+			}
+			else if (Tries == 10)
+			{
+				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
 				break;
 			}
 			else
@@ -386,6 +439,15 @@ void Riddles(int a)
 
 		}
 		cout << "Correct! It only took you " << Tries << " tries!" << endl;
+		if (Tries < 5)
+		{
+			Score = 50;
+		}
+		else
+		{
+			Score = 0;
+		}
+		return Score;
 	}
 	else if (a == 1)
 	{
@@ -399,6 +461,12 @@ void Riddles(int a)
 			}
 			if (Answer == "Fire" || Answer == "fire")
 			{
+				cout << "Correct! It only took you " << Tries << " tries!" << endl;
+				break;
+			}
+			else if (Tries == 10)
+			{
+				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
 				break;
 			}
 			else
@@ -409,6 +477,15 @@ void Riddles(int a)
 
 		}
 		cout << "Correct! It only took you " << Tries << " tries!" << endl;
+		if (Tries < 5)
+		{
+			Score = 50;
+		}
+		else
+		{
+			Score = 0;
+		}
+		return Score;
 	}
 	else if (a == 2)
 	{
@@ -422,6 +499,12 @@ void Riddles(int a)
 			}
 			if (Answer == "Shadow" || Answer == "shadow")
 			{
+				cout << "Correct! It only took you " << Tries << " tries!" << endl;
+				break;
+			}
+			else if (Tries == 10)
+			{
+				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
 				break;
 			}
 			else if (Answer == "Shishanth")
@@ -436,6 +519,15 @@ void Riddles(int a)
 			}
 		}
 		cout << "Correct! It only took you " << Tries << " tries!" << endl;
+		if (Tries < 5)
+		{
+			Score = 50;
+		}
+		else
+		{
+			Score = 0;
+		}
+		return Score;
 	}
 	else if (a == 3)
 	{
@@ -449,6 +541,12 @@ void Riddles(int a)
 			}
 			if (Answer == "Tomorrow" || Answer == "tomorrow")
 			{
+				cout << "Correct! It only took you " << Tries << " tries!" << endl;
+				break;
+			}
+			else if (Tries == 10)
+			{
+				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
 				break;
 			}
 			else
@@ -458,6 +556,15 @@ void Riddles(int a)
 			}
 		}
 		cout << "Correct! It only took you " << Tries << " tries!" << endl;
+		if (Tries < 5)
+		{
+			Score = 50;
+		}
+		else
+		{
+			Score = 0;
+		}
+		return Score;
 	}
 	else if (a == 4)
 	{
@@ -471,6 +578,12 @@ void Riddles(int a)
 			}
 			if (Answer == "Arrow" || Answer == "arrow")
 			{
+				cout << "Correct! It only took you " << Tries << " tries!" << endl;
+				break;
+			}
+			else if (Tries == 10)
+			{
+				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
 				break;
 			}
 			else
@@ -480,6 +593,15 @@ void Riddles(int a)
 			}
 		}
 		cout << "Correct! It only took you " << Tries << " tries!" << endl;
+		if (Tries < 5)
+		{
+			Score = 50;
+		}
+		else
+		{
+			Score = 0;
+		}
+		return Score;
 	}
 	else if (a == 5)
 	{
@@ -493,6 +615,12 @@ void Riddles(int a)
 			}
 			if (Answer == "Secret" || Answer == "secret")
 			{
+				cout << "Correct! It only took you " << Tries << " tries!" << endl;
+				break;
+			}
+			else if (Tries == 10)
+			{
+				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
 				break;
 			}
 			else
@@ -502,6 +630,15 @@ void Riddles(int a)
 			}
 		}
 		cout << "Correct! It only took you " << Tries << " tries!" << endl;
+		if (Tries < 5)
+		{
+			Score = 50;
+		}
+		else
+		{
+			Score = 0;
+		}
+		return Score;
 	}
 	else if (a == 6)
 	{
@@ -515,15 +652,30 @@ void Riddles(int a)
 			}
 			if (Answer == "Coconut" || Answer == "coconut")
 			{
+				cout << "Correct! It only took you " << Tries << " tries!" << endl;
+				break;
+			}
+			else if (Tries == 10)
+			{
+				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
 				break;
 			}
 			else
 			{
 				cout << "Wrong Answer! Try Again" << endl;
 				Tries++;
-			}			
+			}
 		}
 		cout << "Correct! It only took you " << Tries << " tries!" << endl;
+		if (Tries < 5)
+		{
+			Score = 50;
+		}
+		else
+		{
+			Score = 0;
+		}
+		return Score;
 	}
 	else if (a == 7)
 	{
@@ -537,6 +689,12 @@ void Riddles(int a)
 			}
 			if (Answer == "Stars" || Answer == "stars")
 			{
+				cout << "Correct! It only took you " << Tries << " tries!" << endl;
+				break;
+			}
+			else if (Tries == 10)
+			{
+				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
 				break;
 			}
 			else
@@ -545,7 +703,16 @@ void Riddles(int a)
 				Tries++;
 			}
 		}
-		cout << "Correct! It only took you " << Tries << "tries!" << endl;
+		cout << "Correct! It only took you " << Tries << " tries!" << endl;
+		if (Tries < 5)
+		{
+			Score = 50;
+		}
+		else
+		{
+			Score = 0;
+		}
+		return Score;
 	}
 	else if (a == 8)
 	{
@@ -559,6 +726,12 @@ void Riddles(int a)
 			}
 			if (Answer == "Wind" || Answer == "wind")
 			{
+				cout << "Correct! It only took you " << Tries << " tries!" << endl;
+				break;
+			}
+			else if (Tries == 10)
+			{
+				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
 				break;
 			}
 			else
@@ -567,7 +740,15 @@ void Riddles(int a)
 				Tries++;
 			}
 		}
-		cout << "Correct! It only took you " << Tries << "tries!" << endl;
+		if (Tries < 5)
+		{
+			Score = 50;
+		}
+		else
+		{
+			Score = 0;
+		}
+		return Score;
 	}
 	else if (a == 9)
 	{
@@ -581,6 +762,12 @@ void Riddles(int a)
 			}
 			if (Answer == "Piano" || Answer == "piano")
 			{
+				cout << "Correct! It only took you " << Tries << " tries!" << endl;
+				break;
+			}
+			else if (Tries == 10)
+			{
+				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
 				break;
 			}
 			else
@@ -589,7 +776,16 @@ void Riddles(int a)
 				Tries++;
 			}
 		}
-		cout << "Correct! It only took you " << Tries << "tries!" << endl;
+		cout << "Correct! It only took you " << Tries << " tries!" << endl;
+		if (Tries < 5)
+		{
+			Score = 50;
+		}
+		else
+		{
+			Score = 0;
+		}
+		return Score;
 	}
 	else if (a == 10)
 	{
@@ -603,6 +799,12 @@ void Riddles(int a)
 			}
 			if (Answer == "Match" || Answer == "match")
 			{
+				cout << "Correct! It only took you " << Tries << " tries!" << endl;
+				break;
+			}
+			else if (Tries == 10)
+			{
+				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
 				break;
 			}
 			else
@@ -611,7 +813,16 @@ void Riddles(int a)
 				Tries++;
 			}
 		}
-		cout << "Correct! It only took you " << Tries << "tries!" << endl;
+		cout << "Correct! It only took you " << Tries << " tries!" << endl;
+		if (Tries < 5)
+		{
+			Score = 50;
+		}
+		else
+		{
+			Score = 0;
+		}
+		return Score;
 	}
 	else if (a == 11)
 	{
@@ -625,6 +836,12 @@ void Riddles(int a)
 			}
 			if (Answer == "Wrong" || Answer == "wrong")
 			{
+				cout << "Correct! It only took you " << Tries << " tries!" << endl;
+				break;
+			}
+			else if (Tries == 10)
+			{
+				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
 				break;
 			}
 			else
@@ -633,7 +850,16 @@ void Riddles(int a)
 				Tries++;
 			}
 		}
-		cout << "Correct! It only took you " << Tries << "tries!" << endl;
+		cout << "Correct! It only took you " << Tries << " tries!" << endl;		
+		if (Tries < 5)
+		{
+			Score = 50;
+		}
+		else
+		{
+			Score = 0;
+		}
+		return Score;
 	}
 	else if (a == 12)
 	{
@@ -647,6 +873,12 @@ void Riddles(int a)
 			}
 			if (Answer == "Forth" || Answer == "forth")
 			{
+				cout << "Correct! It only took you " << Tries << " tries!" << endl;
+				break;
+			}
+			else if (Tries == 10)
+			{
+				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
 				break;
 			}
 			else
@@ -655,7 +887,16 @@ void Riddles(int a)
 				Tries++;
 			}
 		}
-		cout << "Correct! It only took you " << Tries << "tries!" << endl;
+		cout << "Correct! It only took you " << Tries << " tries!" << endl;
+		if (Tries < 5)
+		{
+			Score = 50;
+		}
+		else
+		{
+			Score = 0;
+		}
+		return Score;
 	}
 	else if (a == 13)
 	{
@@ -669,6 +910,12 @@ void Riddles(int a)
 			}
 			if (Answer == "Nine" || Answer == "nine" || Answer == "9")
 			{
+				cout << "Correct! It only took you " << Tries << " tries!" << endl;
+				break;
+			}
+			else if (Tries == 10)
+			{
+				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
 				break;
 			}
 			else
@@ -677,7 +924,16 @@ void Riddles(int a)
 				Tries++;
 			}
 		}
-		cout << "Correct! It only took you " << Tries << "tries!" << endl;
+		cout << "Correct! It only took you " << Tries << " tries!" << endl;
+		if (Tries < 5)
+		{
+			Score = 50;
+		}
+		else
+		{
+			Score = 0;
+		}
+		return Score;
 	}
-	
+
 }

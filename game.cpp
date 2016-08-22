@@ -1,16 +1,23 @@
 // This is the main file for the game logic and function
 //
 //
+#include "Highscore.h"
+#include "Pictures.h"
+#include "Puzzle.h"
 #include "game.h"
-#include "Framework\console.h"
 #include <iostream>
 #include <iomanip>
 #include <sstream>
 
+using namespace std;
+
+int highscore;
+int Score;
 double  g_dElapsedTime;
 double  g_dDeltaTime;
 bool    g_abKeyPressed[K_COUNT];
-int x = 3;
+int lives = 3;
+int timer;
 
 // Game specific variables here
 SGameChar   g_sChar;
@@ -18,7 +25,7 @@ EGAMESTATES g_eGameState = S_SPLASHSCREEN;
 double  g_dBounceTime; // this is to prevent key bouncing, so we won't trigger keypresses more than once
 
 // Console object
-Console g_Console(80, 25, "SP1 Framework");
+Console g_Console(120, 25, "SP1 Framework");
 
 //--------------------------------------------------------------
 // Purpose  : Initialisation function
@@ -32,7 +39,8 @@ void init( void )
     // Set precision for floating point output
     g_dElapsedTime = 0.0;
     g_dBounceTime = 0.0;
-
+	Score = 0;
+	highscore = Highscore(Score);
     // sets the initial state for the game
     g_eGameState = S_SPLASHSCREEN;
 
@@ -40,7 +48,7 @@ void init( void )
     g_sChar.m_cLocation.Y = g_Console.getConsoleSize().Y / 2;
     g_sChar.m_bActive = true;
     // sets the width, height and the font name to use in the console
-    g_Console.setConsoleFont(0, 16, L"Raster Console");
+    g_Console.setConsoleFont(0, 16, L"Raster Consolas");
 }
 
 //--------------------------------------------------------------
@@ -101,11 +109,13 @@ void update(double dt)
 
     switch (g_eGameState)
     {
-        case S_SPLASHSCREEN : splashScreenWait(); // game logic for the splash screen
+		case S_SPLASHSCREEN: splashScreen(); // game logic for the splash screen
             break;
         case S_GAME: gameplay(); // gameplay logic when we are in the game
             break;
-		case S_PUZZLE: runPuzzle();
+		case S_PUZZLE: RunPuzzle();
+			break;
+		case S_PICTURES: RunPictures();
 			break;
     }
 }
@@ -126,22 +136,45 @@ void render()
             break;
         case S_GAME: renderGame();
             break;
-    }
-    renderFramerate();  // renders debug information, frame rate, elapsed time, etc
-    renderToScreen();   // dump the contents of the buffer to the screen, one frame worth of game
+		case S_ENDMENU: endScreen();
+			break;
+	}
+	if (Backtogame == true)
+	{
+		renderFramerate();  // renders debug information, frame rate, elapsed time, etc
+		renderToScreen();   // dump the contents of the buffer to the screen, one frame worth of game
+	}
+}
+
+void splashScreen()
+{
+	splashScreenWait();
+	moveCharacter();
 }
 
 void splashScreenWait()    // waits for time to pass in splash screen
 {
-    if (g_dElapsedTime > 3.0) // wait for 3 seconds to switch to game mode, else do nothing
-        g_eGameState = S_GAME;
+	if (IsSelectionMade())
+	{
+		switch (IsCurrentState())
+		{
+		case STARTGAME:
+			g_eGameState = S_GAME;
+			break;
+		case QUITGAME:
+			g_bQuitGame = true;
+			break;
+		}
+	}
 }
 
 void gameplay()            // gameplay logic
 {
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     moveCharacter();    // moves the character, collision detection, physics, etc
-	TriggerPuzzle();                    // sound can be played here too.
+                        // sound can be played here too.
+
+	detectMazeEnd();
 }
 
 void moveCharacter()
@@ -152,35 +185,47 @@ void moveCharacter()
 
     // Updating the location of the character based on the key press
     // providing a beep sound whenver we shift the character
-    if (g_abKeyPressed[K_UP] && g_sChar.m_cLocation.Y > 0)
+    if (g_abKeyPressed[K_UP])
     {
+		if (IsCurrentState() == QUITGAME)
+			IsCurrentState(STARTGAME);
+
         //Beep(1440, 30);
-        g_sChar.m_cLocation.Y--;
-        bSomethingHappened = true;
+		if (g_sChar.m_cLocation.Y > 1 && getMazeData(g_sChar.m_cLocation.X - 1, g_sChar.m_cLocation.Y - 2).display != '*')
+			g_sChar.m_cLocation.Y--;
+
+		bSomethingHappened = true;
     }
-    if (g_abKeyPressed[K_LEFT] && g_sChar.m_cLocation.X > 0)
-    {
+	if (g_abKeyPressed[K_LEFT] && g_sChar.m_cLocation.X > 1 && getMazeData(g_sChar.m_cLocation.X - 2, g_sChar.m_cLocation.Y - 1).display != '*')
+	{
         //Beep(1440, 30);
         g_sChar.m_cLocation.X--;
         bSomethingHappened = true;
     }
-    if (g_abKeyPressed[K_DOWN] && g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 1)
-    {
-        //Beep(1440, 30);
-        g_sChar.m_cLocation.Y++;
-        bSomethingHappened = true;
+	if (g_abKeyPressed[K_DOWN])
+	{
+		if (IsCurrentState() == STARTGAME)
+			IsCurrentState(QUITGAME);
+
+		//Beep(1440, 30);
+		if (g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 2 && getMazeData(g_sChar.m_cLocation.X - 1, g_sChar.m_cLocation.Y).display != '*')
+			g_sChar.m_cLocation.Y++;
+
+		bSomethingHappened = true;
     }
-    if (g_abKeyPressed[K_RIGHT] && g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 1)
-    {
-        //Beep(1440, 30);
-        g_sChar.m_cLocation.X++;
-        bSomethingHappened = true;
+	if (g_abKeyPressed[K_RIGHT] && g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 2 && getMazeData(g_sChar.m_cLocation.X, g_sChar.m_cLocation.Y - 1).display != '*')
+	{
+		//Beep(1440, 30);
+		g_sChar.m_cLocation.X++;
+		bSomethingHappened = true;
     }
-    if (g_abKeyPressed[K_SPACE])
-    {
-        g_sChar.m_bActive = !g_sChar.m_bActive;
-        bSomethingHappened = true;
-    }
+	if (g_abKeyPressed[K_SPACE])
+	{
+		IsSelectionMade(true);
+
+		//g_sChar.m_bActive = !g_sChar.m_bActive;
+		bSomethingHappened = true;
+	}
 
     if (bSomethingHappened)
     {
@@ -198,21 +243,12 @@ void processUserInput()
 void clearScreen()
 {
     // Clears the buffer with this colour attribute
-    g_Console.clearBuffer(0xff);
+    g_Console.clearBuffer(0x1F);
 }
 
 void renderSplashScreen()  // renders the splash screen
 {
-    COORD c = g_Console.getConsoleSize();
-    c.Y /= 3;
-    c.X = c.X / 2 - 9;
-    g_Console.writeToBuffer(c, "A game in 3 seconds", 0x03);
-    c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 2 - 20;
-    g_Console.writeToBuffer(c, "Press <Space> to change character colour", 0x09);
-    c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 2 - 9;
-    g_Console.writeToBuffer(c, "Press 'Esc' to quit", 0x09);
+	startMenu(g_Console);
 }
 
 void renderGame()
@@ -223,20 +259,26 @@ void renderGame()
 
 void renderMap()
 {
-    // Set up sample colours, and output shadings
-    const WORD colors[] = {
-		0xf, 0xf, 0xf, 0xf, 0x0, 0x6F,
-		0xA1, 0xf, 0xC3, 0x0, 0xE5, 0xF6
-    };
+	if (!IsMazeGenerated())
+	{
+		generateMaze();
 
-    COORD c;
-    for (int i = 0; i < 12; ++i)
-    {
-        c.X = 5 * i;
-        c.Y = i + 1;
-        colour(colors[i]);
-        g_Console.writeToBuffer(c, " °±²Û", colors[i]);
-    }
+		for (int i = 0; i < SIZE; i++)
+		{
+			for (int j = 0; j < CSIZE; j++)
+			{
+				if (getMazeData(i, j).display == 'S')
+				{
+					g_sChar.m_cLocation.X = i + 1;
+					g_sChar.m_cLocation.Y = j + 1;
+				}
+			}
+		}
+
+		IsMazeGenerated(true);
+	}
+
+	bufferMaze(g_Console);
 }
 
 void renderCharacter()
@@ -247,7 +289,7 @@ void renderCharacter()
     {
         charColor = 0x0A;
     }
-    g_Console.writeToBuffer(g_sChar.m_cLocation, (char)1, charColor);
+    g_Console.writeToBuffer(g_sChar.m_cLocation, (char)64, charColor);
 }
 
 void renderFramerate()
@@ -255,22 +297,49 @@ void renderFramerate()
     COORD c;
     // displays the framerate
     ostringstream ss;
-    ss << x  << " Lives";
+    ss << fixed << setprecision(3);
+    ss << 1.0 / g_dDeltaTime << "fps";
     c.X = g_Console.getConsoleSize().X - 9;
     c.Y = 0;
-    g_Console.writeToBuffer(c, ss.str());
+    g_Console.writeToBuffer(c, ss.str(),0x09);
 
-	if (g_dElapsedTime > 5 && g_dElapsedTime < 5.01)
+	ss.str("");
+	ss << lives << " Lives";
+	c.X = 20;
+	c.Y = 0;
+	g_Console.writeToBuffer(c, ss.str(), 0x09);
+	
+	if (g_dElapsedTime > (2 + timer) && g_dElapsedTime < (2.01 + timer) && lives > 0)
 	{
-		x--;
+		timer = timer + 2;
+		lives--;
+	}
+	if (lives <= 0)
+	{
+		g_eGameState = S_ENDMENU;
 	}
 
-    // displays the elapsed time
+	// displays the elapsed time
     ss.str("");
     ss << g_dElapsedTime << "secs";
     c.X = 0;
     c.Y = 0;
-    g_Console.writeToBuffer(c, ss.str(), 0x59);
+	g_Console.writeToBuffer(c, ss.str(), 0x09);
+
+	ss.str("");
+	ss << "Score: " << Score;
+	c.X = 20;
+	c.Y = 24;
+	g_Console.writeToBuffer(c, ss.str(), 0x09);
+
+	if (Score > highscore)
+		highscore = Highscore(Score);
+	
+	ss.str("");
+	ss << "Highscore:" << highscore;
+	c.X = 0;
+	c.Y = 24;
+	g_Console.writeToBuffer(c, ss.str(), 0x09);
 }
 void renderToScreen()
 {
@@ -278,15 +347,62 @@ void renderToScreen()
     g_Console.flushBufferToConsole();
 }
 
-void TriggerPuzzle()
+void detectMazeEnd()
 {
-	if (g_dElapsedTime > 5)
+	if (getMazeData(g_sChar.m_cLocation.X - 1, g_sChar.m_cLocation.Y - 1).display == 'E')
+	{
+		IsMazeGenerated(false);
+		TriggerMiniGames();
+		Score += 50;
+	}
+}
+void TriggerMiniGames()
+{
+	srand(time(NULL));
+	int i = rand();
+	if (i % 2 == 1)
+	{
 		g_eGameState = S_PUZZLE;
+	}
+	else
+	{
+		g_eGameState = S_PICTURES;
+	}
 }
-
-void runPuzzle()
+void RunPuzzle()
 {
+	Backtogame = false;
 	g_Console.~Console();
-	Puzzle();
+	Score += Puzzle();
+	g_eGameState = S_GAME;
+	processUserInput();
+	COORD c = { 80, 25 };
+	g_Console.initConsole(c, "test");
 }
 
+void RunPictures()
+{
+	Backtogame = false;
+	g_Console.~Console();
+	Score += Picture_Puzzle();
+	g_eGameState = S_GAME;
+	processUserInput();
+	COORD c = { 80, 25 };
+	g_Console.initConsole(c, "test");
+}
+
+void ScoreDisplay()
+{
+	COORD c;
+	ostringstream ss;
+	ss << Score << " points";
+	c.X = g_Console.getConsoleSize().X - 9;
+	c.Y = 5;
+	g_Console.writeToBuffer(c, ss.str(), 0x59);
+}
+
+void endScreen()
+{
+	processUserInput();
+	endMenu(g_Console);
+}
