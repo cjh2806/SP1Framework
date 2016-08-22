@@ -14,7 +14,7 @@ int Score;
 double  g_dElapsedTime;
 double  g_dDeltaTime;
 bool    g_abKeyPressed[K_COUNT];
-int x = 3;
+int PlayerHealth = 3;
 
 // Game specific variables here
 SGameChar   g_sChar;
@@ -299,14 +299,14 @@ void renderFramerate()
     g_Console.writeToBuffer(c, ss.str(),0x09);
 
 	ss.str("");
-	ss << x << " Lives";
+	ss << PlayerHealth << " Lives";
 	c.X = 15;
 	c.Y = 0;
 	g_Console.writeToBuffer(c, ss.str(), 0x09);
 	
 	if (g_dElapsedTime > 5 && g_dElapsedTime < 5.01)
 	{
-		x--;
+		PlayerHealth--;
 	}
 
 	// displays the elapsed time
@@ -318,7 +318,7 @@ void renderFramerate()
 
 	ss.str("");
 	ss << "Score: " << Score;
-	c.X = 112;
+	c.X = g_Console.getConsoleSize().X - ss.str().length();
 	c.Y = 1;
 	g_Console.writeToBuffer(c, ss.str(), 0x09);
 
