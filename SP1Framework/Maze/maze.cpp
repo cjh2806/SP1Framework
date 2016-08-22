@@ -31,6 +31,8 @@ void bufferMaze(Console &refCon)
 
 			if (Level[i][j].display == '*')
 				refCon.writeToBuffer(c, Level[i][j].display, 0xFF);
+			else if (Level[i][j].display == 'E')
+				refCon.writeToBuffer(c, Level[i][j].display, 0xDD);
 			else
 				refCon.writeToBuffer(c, Level[i][j].display, 0x0F);
 		}

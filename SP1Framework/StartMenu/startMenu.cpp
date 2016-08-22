@@ -1,8 +1,14 @@
 #include "startMenu.h"
 
+const WORD color[] = { 0x0F, 0xF0 };
+const unsigned int TitlePosition[] = { 3, 6 };
+const unsigned int OffsetMenuPosition[] = { 10, 6 };
+const unsigned int OffsetMenu = 2;
+
 MENUSELECT currentState = STARTGAME;
 
 bool selectionMade = false;
+vector<string> menuTitle;
 
 MENUSELECT IsCurrentState()
 {
@@ -24,17 +30,24 @@ void IsSelectionMade(bool input)
 	selectionMade = input;
 }
 
+void initMenuTitle()
+{
+	ifstream file("Resources/MenuTitle.txt");
+	string line;
+
+	while (getline(file, line))
+		menuTitle.push_back(line);
+}
+
 void startMenu(Console &refCon)
 {
-	COORD c = { 3, 6 };
+	COORD c = { TitlePosition[0], TitlePosition[1] };
 
-	ifstream file("Resources/MenuTitle.txt");
-	string menuTitle;
 
-	while (getline(file, menuTitle))
+	for (int i = 0; i < menuTitle.size(); i++, c.Y++)
 	{
-		refCon.writeToBuffer(c, menuTitle, 0x0F);
-		c.Y += 1;
+		colour(color[0]);
+		refCon.writeToBuffer(c, menuTitle[i], color[0]);
 	}
 
 	c = refCon.getConsoleSize();
@@ -42,19 +55,42 @@ void startMenu(Console &refCon)
 	switch (currentState)
 	{
 	case STARTGAME:
-		c.X = c.X / 2 - 10;
-		c.Y = c.Y / 2 + 6;
-		refCon.writeToBuffer(c, " - Start  Game - ", 0xF0);
-		c.Y += 2;
-		refCon.writeToBuffer(c, "    Quit Game    ", 0x0F);
+		c.X = c.X / 2 - OffsetMenuPosition[0];
+		c.Y = c.Y / 2 + OffsetMenuPosition[1];
+		colour(color[1]);
+		refCon.writeToBuffer(c, "  - Start Game -  ", color[1]);
+		c.Y += OffsetMenu;
+		colour(color[0]);
+		refCon.writeToBuffer(c, "   Instructions   ", color[0]);
+		c.Y += OffsetMenu;
+		colour(color[0]);
+		refCon.writeToBuffer(c, "    Quit  Game    ", color[0]);
+		break;
+
+	case INSTRUCTION:
+		c.X = c.X / 2 - OffsetMenuPosition[0];
+		c.Y = c.Y / 2 + OffsetMenuPosition[1];
+		colour(color[0]);
+		refCon.writeToBuffer(c, "    Start Game    ", color[0]);
+		c.Y += OffsetMenu;
+		colour(color[1]);
+		refCon.writeToBuffer(c, " - Instructions - ", color[1]);
+		c.Y += OffsetMenu;
+		colour(color[0]);
+		refCon.writeToBuffer(c, "    Quit  Game    ", color[0]);
 		break;
 
 	case QUITGAME:
-		c.X = c.X / 2 - 10;
-		c.Y = c.Y / 2 + 6;
-		refCon.writeToBuffer(c, "   Start  Game   ", 0x0F);
-		c.Y += 2;
-		refCon.writeToBuffer(c, " -  Quit Game  - ", 0xF0);
+		c.X = c.X / 2 - OffsetMenuPosition[0];
+		c.Y = c.Y / 2 + OffsetMenuPosition[1];
+		colour(color[0]);
+		refCon.writeToBuffer(c, "    Start Game    ", color[0]);
+		c.Y += OffsetMenu;
+		colour(color[0]);
+		refCon.writeToBuffer(c, "   Instructions   ", color[0]);
+		c.Y += OffsetMenu;
+		colour(color[1]);
+		refCon.writeToBuffer(c, "  - Quit  Game -  ", color[1]);
 		break;
 	}
 }

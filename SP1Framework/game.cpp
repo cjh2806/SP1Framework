@@ -6,12 +6,19 @@
 #include <iomanip>
 #include <sstream>
 
+const double DelayCharBlink = 0.5;
+const unsigned int PlayerHealth = 3;
+
+CharState charState;
+
+double t_charBlink;
+int playerHealth;
 int highscore;
 int Score;
+
 double  g_dElapsedTime;
 double  g_dDeltaTime;
 bool    g_abKeyPressed[K_COUNT];
-int PlayerHealth = 3;
 
 // Game specific variables here
 SGameChar   g_sChar;
@@ -33,8 +40,6 @@ void init( void )
     // Set precision for floating point output
     g_dElapsedTime = 0.0;
     g_dBounceTime = 0.0;
-	Score = 0;
-	highscore = Highscore(Score);
     // sets the initial state for the game
     g_eGameState = S_SPLASHSCREEN;
 
@@ -43,6 +48,15 @@ void init( void )
     g_sChar.m_bActive = true;
     // sets the width, height and the font name to use in the console
     g_Console.setConsoleFont(0, 16, L"Raster Consolas");
+
+	initMenuTitle();
+
+	charState = C_LIT;
+
+	t_charBlink = 0.0;
+	playerHealth = PlayerHealth;
+	Score = 0;
+	highscore = Highscore(Score);
 }
 
 //--------------------------------------------------------------
@@ -152,6 +166,8 @@ void splashScreenWait()    // waits for time to pass in splash screen
 		{
 		case STARTGAME: g_eGameState = S_GAME;
 			break;
+		case INSTRUCTION: IsSelectionMade(false);
+			break;
 		case QUITGAME: g_bQuitGame = true;
 			break;
 		}
@@ -178,6 +194,8 @@ void moveCharacter()
     if (g_abKeyPressed[K_UP])
     {
 		if (IsCurrentState() == QUITGAME)
+			IsCurrentState(INSTRUCTION);
+		else if (IsCurrentState() == INSTRUCTION)
 			IsCurrentState(STARTGAME);
 
         //Beep(1440, 30);
@@ -195,6 +213,8 @@ void moveCharacter()
 	if (g_abKeyPressed[K_DOWN])
 	{
 		if (IsCurrentState() == STARTGAME)
+			IsCurrentState(INSTRUCTION);
+		else if (IsCurrentState() == INSTRUCTION)
 			IsCurrentState(QUITGAME);
 
 		//Beep(1440, 30);
@@ -274,12 +294,24 @@ void renderMap()
 void renderCharacter()
 {
     // Draw the location of the character
-    WORD charColor = 0x0C;
-    if (g_sChar.m_bActive)
-    {
-        charColor = 0x0A;
-    }
-    g_Console.writeToBuffer(g_sChar.m_cLocation, (char)64, charColor);
+	WORD charColor[] = { 0x0A, 0xAA };
+
+	if (t_charBlink < g_dElapsedTime)
+	{
+		t_charBlink += DelayCharBlink;
+		(charState == C_LIT) ? (charState = C_UNLIT) : (charState = C_LIT);
+	}
+
+	if (charState)
+	{
+		colour(charColor[C_UNLIT]);
+		g_Console.writeToBuffer(g_sChar.m_cLocation, (char)64, charColor[C_UNLIT]);
+	}
+	else
+	{
+		colour(charColor[C_LIT]);
+		g_Console.writeToBuffer(g_sChar.m_cLocation, (char)64, charColor[C_LIT]);
+	}
 }
 
 void renderFramerate()
@@ -294,14 +326,14 @@ void renderFramerate()
     g_Console.writeToBuffer(c, ss.str(),0x09);
 
 	ss.str("");
-	ss << PlayerHealth << " Lives";
+	ss << playerHealth << " Lives";
 	c.X = 15;
 	c.Y = 0;
 	g_Console.writeToBuffer(c, ss.str(), 0x09);
 	
 	if (g_dElapsedTime > 5 && g_dElapsedTime < 5.01)
 	{
-		PlayerHealth--;
+		playerHealth--;
 	}
 
 	// displays the elapsed time
@@ -344,23 +376,27 @@ void TriggerMiniGames()
 void RunPuzzle()
 {
 	Backtogame = false;
+	shutdown();
 	g_Console.~Console();
 	Score += Puzzle();
 	g_eGameState = S_GAME;
 	processUserInput();
 	COORD c = { ScreenResoX, ScreenResoY };
 	g_Console.initConsole(c, "test");
+	t_charBlink = g_dElapsedTime;
 }
 
 void RunPictures()
 {
 	Backtogame = false;
+	shutdown();
 	g_Console.~Console();
 	Score += Picture_Puzzle();
 	g_eGameState = S_GAME;
 	processUserInput();
 	COORD c = { ScreenResoX, ScreenResoY };
 	g_Console.initConsole(c, "test");
+	t_charBlink = g_dElapsedTime;
 }
 
 void ScoreDisplay()

@@ -13,6 +13,9 @@ extern CStopWatch g_swTimer;
 extern bool Backtogame;
 extern bool g_bQuitGame;
 
+const unsigned int ScreenResoX = 120;
+const unsigned int ScreenResoY = 25;
+
 // Enumeration to store the control keys that your game will have
 enum EKEYS
 {
@@ -35,15 +38,18 @@ enum EGAMESTATES
 	S_PICTURES
 };
 
+enum CharState
+{
+	C_UNLIT,
+	C_LIT
+};
+
 // struct for the game character
 struct SGameChar
 {
     COORD m_cLocation;
     bool  m_bActive;
 };
-
-static unsigned int ScreenResoX = 120;
-static unsigned int ScreenResoY = 25;
 
 void init        ( void );      // initialize your variables, allocate memory, etc
 void getInput    ( void );      // get input from player
