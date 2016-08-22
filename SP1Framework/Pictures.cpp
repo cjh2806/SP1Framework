@@ -1,4 +1,3 @@
-#include "game.h"
 #include "Framework\console.h"
 #include "Pictures.h"
 #include <ctime>
