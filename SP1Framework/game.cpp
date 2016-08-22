@@ -153,11 +153,9 @@ void splashScreenWait()    // waits for time to pass in splash screen
 	{
 		switch (IsCurrentState())
 		{
-		case STARTGAME:
-			g_eGameState = S_GAME;
+		case STARTGAME: g_eGameState = S_GAME;
 			break;
-		case QUITGAME:
-			g_bQuitGame = true;
+		case QUITGAME: g_bQuitGame = true;
 			break;
 		}
 	}
@@ -186,12 +184,12 @@ void moveCharacter()
 			IsCurrentState(STARTGAME);
 
         //Beep(1440, 30);
-		if (g_sChar.m_cLocation.Y > 1 && getMazeData(g_sChar.m_cLocation.X - 1, g_sChar.m_cLocation.Y - 2).display != '*')
+		if (g_sChar.m_cLocation.Y > OffsetBuffer && getMazeData(g_sChar.m_cLocation.X - OffsetBuffer, g_sChar.m_cLocation.Y - 2).display != '*')
 			g_sChar.m_cLocation.Y--;
 
 		bSomethingHappened = true;
     }
-	if (g_abKeyPressed[K_LEFT] && g_sChar.m_cLocation.X > 1 && getMazeData(g_sChar.m_cLocation.X - 2, g_sChar.m_cLocation.Y - 1).display != '*')
+	if (g_abKeyPressed[K_LEFT] && g_sChar.m_cLocation.X > OffsetBuffer && getMazeData(g_sChar.m_cLocation.X - 2, g_sChar.m_cLocation.Y - OffsetBuffer).display != '*')
 	{
         //Beep(1440, 30);
         g_sChar.m_cLocation.X--;
@@ -203,12 +201,12 @@ void moveCharacter()
 			IsCurrentState(QUITGAME);
 
 		//Beep(1440, 30);
-		if (g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 2 && getMazeData(g_sChar.m_cLocation.X - 1, g_sChar.m_cLocation.Y).display != '*')
+		if (g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 2 && getMazeData(g_sChar.m_cLocation.X - OffsetBuffer, g_sChar.m_cLocation.Y).display != '*')
 			g_sChar.m_cLocation.Y++;
 
 		bSomethingHappened = true;
     }
-	if (g_abKeyPressed[K_RIGHT] && g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 2 && getMazeData(g_sChar.m_cLocation.X, g_sChar.m_cLocation.Y - 1).display != '*')
+	if (g_abKeyPressed[K_RIGHT] && g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 2 && getMazeData(g_sChar.m_cLocation.X, g_sChar.m_cLocation.Y - OffsetBuffer).display != '*')
 	{
 		//Beep(1440, 30);
 		g_sChar.m_cLocation.X++;
@@ -264,8 +262,8 @@ void renderMap()
 			{
 				if (getMazeData(i, j).display == 'S')
 				{
-					g_sChar.m_cLocation.X = i + 1;
-					g_sChar.m_cLocation.Y = j + 1;
+					g_sChar.m_cLocation.X = i + OffsetBuffer;
+					g_sChar.m_cLocation.Y = j + OffsetBuffer;
 				}
 			}
 		}
@@ -316,20 +314,7 @@ void renderFramerate()
     c.Y = 0;
 	g_Console.writeToBuffer(c, ss.str(), 0x09);
 
-	ss.str("");
-	ss << "Score: " << Score;
-	c.X = g_Console.getConsoleSize().X - ss.str().length();
-	c.Y = 1;
-	g_Console.writeToBuffer(c, ss.str(), 0x09);
-
-	if (Score > highscore)
-		highscore = Highscore(Score);
-	
-	ss.str("");
-	ss << "Highscore:" << highscore;
-	c.X = 0;
-	c.Y = 1;
-	g_Console.writeToBuffer(c, ss.str(), 0x09);
+	ScoreDisplay();
 }
 void renderToScreen()
 {
@@ -339,7 +324,7 @@ void renderToScreen()
 
 void detectMazeEnd()
 {
-	if (getMazeData(g_sChar.m_cLocation.X - 1, g_sChar.m_cLocation.Y - 1).display == 'E')
+	if (getMazeData(g_sChar.m_cLocation.X - OffsetBuffer, g_sChar.m_cLocation.Y - OffsetBuffer).display == 'E')
 	{
 		IsMazeGenerated(false);
 		TriggerMiniGames();
@@ -385,8 +370,18 @@ void ScoreDisplay()
 {
 	COORD c;
 	std::ostringstream ss;
-	ss << Score << " points";
-	c.X = g_Console.getConsoleSize().X - 9;
-	c.Y = 5;
-	g_Console.writeToBuffer(c, ss.str(), 0x59);
+	ss.str("");
+	ss << "Score: " << Score;
+	c.X = g_Console.getConsoleSize().X - ss.str().length();
+	c.Y = 2;
+	g_Console.writeToBuffer(c, ss.str(), 0x0A);
+
+	if (Score > highscore)
+		highscore = Highscore(Score);
+
+	ss.str("");
+	ss << "Highscore:" << highscore;
+	c.X = g_Console.getConsoleSize().X - ss.str().length();;
+	c.Y = 1;
+	g_Console.writeToBuffer(c, ss.str(), 0x0A);
 }

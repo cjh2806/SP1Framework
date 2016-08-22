@@ -9,7 +9,8 @@ using std::stack;
 #define YSIZE 53
 #define XSIZE 23
 
-static unsigned int coordOffset = 1;
+static unsigned int OffsetCoord = 1;
+static unsigned int OffsetBuffer = 1;
 
 struct Cell
 {

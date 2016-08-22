@@ -26,8 +26,8 @@ void bufferMaze(Console &refCon)
 	{
 		for (int j = 0; j < XSIZE; j++)
 		{
-			c.X = i + coordOffset;
-			c.Y = j + coordOffset;
+			c.X = i + OffsetCoord;
+			c.Y = j + OffsetCoord;
 
 			if (Level[i][j].display == '*')
 				refCon.writeToBuffer(c, Level[i][j].display, 0xFF);
