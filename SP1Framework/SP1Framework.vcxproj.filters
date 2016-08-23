@@ -106,5 +106,8 @@
     <Text Include="..\Resources\endMenu.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="..\Resources\instructionScreen.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
