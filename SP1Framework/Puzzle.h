@@ -1,6 +1,7 @@
 #include "Framework\timer.h"
 #include <iostream>
 
+#define LOGIC 3
 #define ASCII 97
 #define RANGE 26
 #define ONE 1
@@ -29,6 +30,12 @@ enum ePatterns {
 	PatternEIGHT,
 	PatternNINE,
 	PatternTEN
+};
+
+enum eLogic{
+	LogicONE,
+	LogicTWO,
+	LogicTHREE
 };
 
 enum eRiddles{
