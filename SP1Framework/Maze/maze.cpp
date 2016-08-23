@@ -4,25 +4,10 @@ bool isMazeGenerated = false;
 Cell Level[YSIZE][XSIZE];
 COORD StartPosition;
 
-bool IsMazeGenerated()
-{
-	return isMazeGenerated;
-}
-
-void IsMazeGenerated(bool input)
-{
-	isMazeGenerated = input;
-}
-
-Cell getMazeData(int a, int b)
-{
-	return Level[a][b];
-}
-
-COORD getStartPosition()
-{
-	return StartPosition;
-}
+bool IsMazeGenerated() { return isMazeGenerated; }
+void IsMazeGenerated(bool input) { isMazeGenerated = input; }
+Cell getMazeData(int a, int b) { return Level[a][b]; }
+COORD getStartPosition() { return StartPosition; }
 
 void bufferMaze(Console &refCon)
 {
