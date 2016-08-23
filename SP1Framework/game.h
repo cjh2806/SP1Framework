@@ -13,6 +13,7 @@ extern CStopWatch g_swTimer;
 extern bool g_bQuitGame;
 
 const COORD ScreenReso = { 120, 50 };
+const unsigned int OffsetBoundary = 1;
 
 #define VK_A              0x41
 #define VK_B              0x42

@@ -3,15 +3,32 @@
 bool isMazeGenerated = false;
 Cell Level[YSIZE][XSIZE];
 COORD StartPosition;
+int OffsetBuffer[2];
+
+void SetOffsetBuffer(Console &input)
+{
+	OffsetBuffer[0] = (input.getConsoleSize().X / 2) - (YSIZE / 2);
+	OffsetBuffer[1] = (input.getConsoleSize().Y / 2) - (XSIZE / 2);
+}
 
 bool IsMazeGenerated() { return isMazeGenerated; }
 void IsMazeGenerated(bool input) { isMazeGenerated = input; }
-Cell getMazeData(int a, int b) { return Level[a][b]; }
 
-COORD getStartPosition(int a, int b)
+bool checkMazeDisplay(COORD input, char aChar, int offX, int offY)
 {
-	StartPosition.X += a;
-	StartPosition.Y += b;
+	input.X -= OffsetBuffer[0];
+	input.Y -= OffsetBuffer[1];
+
+	if (Level[input.X + offX][input.Y + offY].display == aChar)
+		return true;
+	else
+		return false;
+}
+
+COORD getStartPosition()
+{
+	StartPosition.X += OffsetBuffer[0];
+	StartPosition.Y += OffsetBuffer[1];
 
 	return StartPosition;
 }
@@ -24,8 +41,8 @@ void bufferMaze(Console &refCon)
 	{
 		for (int j = 0; j < XSIZE; j++)
 		{
-			c.X = i + OffsetCoord;
-			c.Y = j + OffsetCoord;
+			c.X = i + OffsetBuffer[0];
+			c.Y = j + OffsetBuffer[1];
 
 			if (Level[i][j].display == '*')
 				refCon.writeToBuffer(c, Level[i][j].display, 0xFF);

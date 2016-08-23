@@ -10,7 +10,6 @@ using std::stack;
 #define XSIZE 23
 
 const unsigned int OffsetCoord = 1;
-const unsigned int OffsetBuffer = 1;
 
 struct Cell
 {
@@ -22,10 +21,11 @@ struct Cell
 	char display;
 };
 
+void SetOffsetBuffer(Console &input);
 bool IsMazeGenerated();
 void IsMazeGenerated(bool input);
-Cell getMazeData(int a, int b);
-COORD getStartPosition(int a = 0, int b = 0);
+bool checkMazeDisplay(COORD input, char aChar, int offX = 0, int offY = 0);
+COORD getStartPosition();
 void bufferMaze(Console &refCon);
 void generateMaze();
 void Initialize(Cell Level[][XSIZE]);

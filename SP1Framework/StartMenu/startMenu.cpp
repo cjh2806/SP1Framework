@@ -95,4 +95,9 @@ void startMenu(Console &refCon)
 		refCon.writeToBuffer(c, SelectedMenu[2], color[1]);
 		break;
 	}
+	
+	string display = "Use 'Up' & 'Down' keys to switch between selections, 'Space Bar' to confirm your selection.";
+	c = refCon.getConsoleSize();
+	c = { ((c.X / 2) - (display.length() / 2)), (c.Y - 2) };
+	refCon.writeToBuffer(c, display, color[0]);
 }

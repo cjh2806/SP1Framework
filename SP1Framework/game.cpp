@@ -51,10 +51,10 @@ void init( void )
     g_Console.setConsoleFont(0, 16, L"Raster Consolas");
 
 	initMenuTitle();
+	SetOffsetBuffer(g_Console);
 
 	charState = C_LIT;
-
-	t_charBlink = 0.0;
+	t_charBlink = g_dElapsedTime;
 	playerHealth = PlayerHealth;
 	Score = 0;
 	highscore = Highscore(Score);
@@ -222,6 +222,9 @@ void moveCharacter()
     if (g_dBounceTime > g_dElapsedTime)
         return;
 
+	/*if (g_sChar.m_cLocation.Y > OffsetBoundary && !checkMazeDisplay(g_sChar.m_cLocation, '*', 0, -1) && g_eGameState == S_GAME)
+		g_sChar.m_cLocation.Y--;*/
+
     // Updating the location of the character based on the key press
     // providing a beep sound whenver we shift the character
     if (g_abKeyPressed[K_UP])
@@ -232,12 +235,12 @@ void moveCharacter()
 			IsCurrentState(STARTGAME);
 
         //Beep(1440, 30);
-		if (g_sChar.m_cLocation.Y > OffsetBuffer && getMazeData(g_sChar.m_cLocation.X - OffsetBuffer, g_sChar.m_cLocation.Y - 2).display != '*')
+		if (g_sChar.m_cLocation.Y > OffsetBoundary && !checkMazeDisplay(g_sChar.m_cLocation, '*', 0, (-1)))
 			g_sChar.m_cLocation.Y--;
 
 		bSomethingHappened = true;
     }
-	if (g_abKeyPressed[K_LEFT] && g_sChar.m_cLocation.X > OffsetBuffer && getMazeData(g_sChar.m_cLocation.X - 2, g_sChar.m_cLocation.Y - OffsetBuffer).display != '*')
+	if (g_abKeyPressed[K_LEFT] && g_sChar.m_cLocation.X > OffsetBoundary && !checkMazeDisplay(g_sChar.m_cLocation, '*', (-1)))
 	{
         //Beep(1440, 30);
         g_sChar.m_cLocation.X--;
@@ -251,12 +254,12 @@ void moveCharacter()
 			IsCurrentState(QUITGAME);
 
 		//Beep(1440, 30);
-		if (g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 2 && getMazeData(g_sChar.m_cLocation.X - OffsetBuffer, g_sChar.m_cLocation.Y).display != '*')
+		if (g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 2 && !checkMazeDisplay(g_sChar.m_cLocation, '*', 0, 1))
 			g_sChar.m_cLocation.Y++;
 
 		bSomethingHappened = true;
     }
-	if (g_abKeyPressed[K_RIGHT] && g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 2 && getMazeData(g_sChar.m_cLocation.X, g_sChar.m_cLocation.Y - OffsetBuffer).display != '*')
+	if (g_abKeyPressed[K_RIGHT] && g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 2 && !checkMazeDisplay(g_sChar.m_cLocation, '*', 1))
 	{
 		//Beep(1440, 30);
 		g_sChar.m_cLocation.X++;
@@ -306,7 +309,7 @@ void renderMap()
 	{
 		generateMaze();
 
-		g_sChar.m_cLocation = getStartPosition(OffsetBuffer, OffsetBuffer);
+		g_sChar.m_cLocation = getStartPosition();
 
 		IsMazeGenerated(true);
 	}
@@ -396,7 +399,7 @@ void initConsole(bool input)
 
 void detectMazeEnd()
 {
-	if (getMazeData(g_sChar.m_cLocation.X - OffsetBuffer, g_sChar.m_cLocation.Y - OffsetBuffer).display == 'E')
+	if (checkMazeDisplay(g_sChar.m_cLocation ,'E'))
 	{
 		IsMazeGenerated(false);
 		TriggerMiniGames();
@@ -452,7 +455,7 @@ void ScoreDisplay()
 
 	ss.str("");
 	ss << "Highscore:" << highscore;
-	c.X = g_Console.getConsoleSize().X - ss.str().length();;
+	c.X = g_Console.getConsoleSize().X - ss.str().length();
 	c.Y = 1;
 	g_Console.writeToBuffer(c, ss.str(), 0x0A);
 }
