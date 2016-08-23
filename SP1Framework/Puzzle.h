@@ -16,8 +16,6 @@
 #define GAME_TOTAL 5
 
 using namespace std;
-//using std::string;
-//using std::to_string;
 
 enum eGame {
 	GAME_ONE,

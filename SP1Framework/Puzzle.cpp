@@ -85,6 +85,12 @@ int random_number_game()
 	Sleep(2000);
 
 	if (guesses < 10)
+	cout << "Correct! It only took you " << guesses << " times to guess!" << endl;
+	if (guesses < 5)
+	{
+		Score = 100;
+	}
+	else if (guesses < 10)
 	{
 		Score = 50;
 	}
@@ -130,9 +136,13 @@ int random_alphabet()
 		}
 	}
 	cout << "Correct! It only took you " << guesses << " times to guess!" << endl;
-	if (guesses < 10)
+	if (guesses < 5)
 	{
 		Score = 100;
+	}
+	else if (guesses < 10)
+	{
+		Score = 50;
 	}
 	else
 	{
@@ -624,7 +634,11 @@ int Riddles()
 			}
 
 		}
-		if (Tries < 10)
+		if (Tries < 5)
+		{
+			Score = 100;
+		}
+		else if (Tries < 10)
 		{
 			Score = 50;
 		}
@@ -661,7 +675,11 @@ int Riddles()
 			}
 
 		}
-		if (Tries < 10)
+		if (Tries < 5)
+		{
+			Score = 100;
+		}
+		else if (Tries < 10)
 		{
 			Score = 50;
 		}
@@ -702,7 +720,11 @@ int Riddles()
 				Tries++;
 			}
 		}
-		if (Tries < 10)
+		if (Tries < 5)
+		{
+			Score = 100;
+		}
+		else if (Tries < 10)
 		{
 			Score = 50;
 		}
@@ -738,7 +760,11 @@ int Riddles()
 				Tries++;
 			}
 		}
-		if (Tries < 10)
+		if (Tries < 5)
+		{
+			Score = 100;
+		}
+		else if (Tries < 10)
 		{
 			Score = 50;
 		}
@@ -774,7 +800,11 @@ int Riddles()
 				Tries++;
 			}
 		}
-		if (Tries < 10)
+		if (Tries < 5)
+		{
+			Score = 100;
+		}
+		else if (Tries < 10)
 		{
 			Score = 50;
 		}
@@ -810,7 +840,11 @@ int Riddles()
 				Tries++;
 			}
 		}
-		if (Tries < 10)
+		if (Tries < 5)
+		{
+			Score = 100;
+		}
+		else if (Tries < 10)
 		{
 			Score = 50;
 		}
@@ -846,7 +880,11 @@ int Riddles()
 				Tries++;
 			}
 		}
-		if (Tries < 10)
+		if (Tries < 5)
+		{
+			Score = 100;
+		}
+		else if (Tries < 10)
 		{
 			Score = 50;
 		}
@@ -882,7 +920,11 @@ int Riddles()
 				Tries++;
 			}
 		}
-		if (Tries < 10)
+		if (Tries < 5)
+		{
+			Score = 100;
+		}
+		else if (Tries < 10)
 		{
 			Score = 50;
 		}
@@ -918,9 +960,13 @@ int Riddles()
 				Tries++;
 			}
 		}
-		if (Tries < 10)
+		if (Tries < 5)
 		{
 			Score = 100;
+		}
+		else if (Tries < 10)
+		{
+			Score = 50;
 		}
 		else
 		{
@@ -934,7 +980,7 @@ int Riddles()
 		while (x != 0)
 		{
 			cin >> Answer;
-			if (Tries == 10)
+			if (Tries == 5)
 			{
 				cout << "Hint: It's related to music" << endl;
 			}
@@ -954,9 +1000,13 @@ int Riddles()
 				Tries++;
 			}
 		}
-		if (Tries < 10)
+		if (Tries < 5)
 		{
 			Score = 100;
+		}
+		else if (Tries < 10)
+		{
+			Score = 50;
 		}
 		else
 		{
@@ -970,7 +1020,7 @@ int Riddles()
 		while (x != 0)
 		{
 			cin >> Answer;
-			if (Tries == 10)
+			if (Tries == 5)
 			{
 				cout << "Hint: What starts the fire" << endl;
 			}
@@ -990,9 +1040,13 @@ int Riddles()
 				Tries++;
 			}
 		}
-		if (Tries < 10)
+		if (Tries < 5)
 		{
 			Score = 100;
+		}
+		else if (Tries < 10)
+		{
+			Score = 50;
 		}
 		else
 		{
@@ -1006,7 +1060,7 @@ int Riddles()
 		while (x != 0)
 		{
 			cin >> Answer;
-			if (Tries == 10)
+			if (Tries == 5)
 			{
 				cout << "Hint: The word is in the riddle" << endl;
 			}
@@ -1026,9 +1080,13 @@ int Riddles()
 				Tries++;
 			}
 		}
-		if (Tries < 10)
+		if (Tries < 5)
 		{
 			Score = 100;
+		}
+		else if (Tries < 10)
+		{
+			Score = 50;
 		}
 		else
 		{
@@ -1042,7 +1100,7 @@ int Riddles()
 		while (x != 0)
 		{
 			cin >> Answer;
-			if (Tries == 10)
+			if (Tries == 5)
 			{
 				cout << "Hint: 4" << endl;
 			}
@@ -1062,9 +1120,13 @@ int Riddles()
 				Tries++;
 			}
 		}
-		if (Tries < 10)
+		if (Tries < 5)
 		{
 			Score = 100;
+		}
+		else if (Tries < 10)
+		{
+			Score = 50;
 		}
 		else
 		{
@@ -1078,7 +1140,7 @@ int Riddles()
 		while (x != 0)
 		{
 			cin >> Answer;
-			if (Tries == 10)
+			if (Tries == 5)
 			{
 				cout << "Hint: All died except 9" << endl;
 			}
@@ -1098,7 +1160,11 @@ int Riddles()
 				Tries++;
 			}
 		}
-		if (Tries < 10)
+		if (Tries < 5)
+		{
+			Score = 100;
+		}
+		else if (Tries < 10)
 		{
 			Score = 50;
 		}
@@ -1134,7 +1200,11 @@ int Riddles()
 				Tries++;
 			}
 		}
-		if (Tries < 10)
+		if (Tries < 5)
+		{
+			Score = 100;
+		}
+		else if (Tries < 10)
 		{
 			Score = 50;
 		}
