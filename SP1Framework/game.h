@@ -10,11 +10,9 @@
 #include "Puzzle.h"
 
 extern CStopWatch g_swTimer;
-extern bool Backtogame;
 extern bool g_bQuitGame;
 
-const unsigned int ScreenResoX = 120;
-const unsigned int ScreenResoY = 25;
+const COORD ScreenReso = { 120, 50 };
 
 // Enumeration to store the control keys that your game will have
 enum EKEYS

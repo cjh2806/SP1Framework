@@ -27,7 +27,7 @@ EGAMESTATES g_eGameState = S_SPLASHSCREEN;
 double  g_dBounceTime; // this is to prevent key bouncing, so we won't trigger keypresses more than once
 
 // Console object
-Console g_Console(ScreenResoX, ScreenResoY, "Maze Thinker");
+Console g_Console(ScreenReso, "Maze Thinker");
 
 //--------------------------------------------------------------
 // Purpose  : Initialisation function
@@ -148,11 +148,8 @@ void render()
 		case S_ENDMENU: endScreen();
 			break;
 	}
-	if (Backtogame == true)
-	{
-		renderFramerate();  // renders debug information, frame rate, elapsed time, etc
-		renderToScreen();   // dump the contents of the buffer to the screen, one frame worth of game
-	}
+	renderFramerate();  // renders debug information, frame rate, elapsed time, etc
+	renderToScreen();   // dump the contents of the buffer to the screen, one frame worth of game
 }
 
 void splashScreen()
@@ -344,10 +341,25 @@ void renderFramerate()
 
 	ScoreDisplay();
 }
+
 void renderToScreen()
 {
     // Writes the buffer to the console, hence you will see what you have written
     g_Console.flushBufferToConsole();
+}
+
+void initConsole(bool input)
+{
+	if (input)
+	{
+		g_Console.initConsole(ScreenReso, "Maze Thinker");
+		g_Console.setConsoleFont(0, 16, L"Raster Consolas");
+	}
+	else
+	{
+		shutdown();
+		g_Console.~Console();
+	}
 }
 
 void detectMazeEnd()
@@ -359,6 +371,7 @@ void detectMazeEnd()
 		Score += 50;
 	}
 }
+
 void TriggerMiniGames()
 {
 	srand(time(NULL));
@@ -372,27 +385,22 @@ void TriggerMiniGames()
 		g_eGameState = S_PICTURES;
 	}
 }
+
 void RunPuzzle()
 {
-	Backtogame = false;
-	shutdown();
-	g_Console.~Console();
+	initConsole(false);
 	Score += Puzzle();
 	g_eGameState = S_GAME;
-	COORD c = { ScreenResoX, ScreenResoY };
-	g_Console.initConsole(c, "Maze Thinker");
+	initConsole(true);
 	t_charBlink = g_dElapsedTime;
 }
 
 void RunPictures()
 {
-	Backtogame = false;
-	shutdown();
-	g_Console.~Console();
+	initConsole(false);
 	Score += Picture_Puzzle();
 	g_eGameState = S_GAME;
-	COORD c = { ScreenResoX, ScreenResoY };
-	g_Console.initConsole(c, "Maze Thinker");
+	initConsole(true);
 	t_charBlink = g_dElapsedTime;
 }
 
