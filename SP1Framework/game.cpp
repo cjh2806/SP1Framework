@@ -415,6 +415,7 @@ void ScoreDisplay()
 	c.Y = 1;
 	g_Console.writeToBuffer(c, ss.str(), 0x0A);
 }
+
 void endScreen()
 {
 	processUserInput();
