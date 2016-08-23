@@ -15,6 +15,7 @@ double t_charBlink;
 int playerHealth;
 int highscore;
 int Score;
+int timer;
 
 double  g_dElapsedTime;
 double  g_dDeltaTime;
@@ -144,6 +145,8 @@ void render()
             break;
         case S_GAME: renderGame();
             break;
+		case S_ENDMENU: endScreen();
+			break;
 	}
 	if (Backtogame == true)
 	{
@@ -331,9 +334,14 @@ void renderFramerate()
 	c.Y = 0;
 	g_Console.writeToBuffer(c, ss.str(), 0x09);
 	
-	if (g_dElapsedTime > 5 && g_dElapsedTime < 5.01)
+	if (g_dElapsedTime > (1 + timer) && g_dElapsedTime < (1.01 + timer) && playerHealth>0)
 	{
+		timer = timer + 2;
 		playerHealth--;
+	}
+	if (playerHealth <= 0)
+	{
+		g_eGameState = S_ENDMENU;
 	}
 
 	// displays the elapsed time
@@ -417,4 +425,9 @@ void ScoreDisplay()
 	c.X = g_Console.getConsoleSize().X - ss.str().length();;
 	c.Y = 1;
 	g_Console.writeToBuffer(c, ss.str(), 0x0A);
+}
+void endScreen()
+{
+	processUserInput();
+	endMenu(g_Console);
 }

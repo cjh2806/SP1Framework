@@ -42,9 +42,6 @@
     <ClCompile Include="Framework\timer.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
-    <ClCompile Include="game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Maze\maze.cpp">
       <Filter>Source Files\Maze</Filter>
     </ClCompile>
@@ -60,7 +57,10 @@
     <ClCompile Include="Puzzle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\endMenu.cpp">
+    <ClCompile Include="game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="endMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -70,9 +70,6 @@
     </ClInclude>
     <ClInclude Include="Framework\timer.h">
       <Filter>Header Files\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="game.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Maze\maze.h">
       <Filter>Header Files\Maze</Filter>
@@ -89,12 +86,18 @@
     <ClInclude Include="Highscore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\endMenu.h">
+    <ClInclude Include="game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="endMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\MenuTitle.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="..\Resources\endMenu.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
