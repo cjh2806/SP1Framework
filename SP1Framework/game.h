@@ -2,7 +2,7 @@
 #define _GAME_H
 #include "Framework\timer.h"
 #include "Framework\console.h"
-
+#include "endMenu.h"
 #include "StartMenu\startMenu.h"
 #include "Maze\maze.h"
 #include "Highscore.h"
@@ -35,7 +35,8 @@ enum EGAMESTATES
     S_GAME,
     S_COUNT,
 	S_PUZZLE,
-	S_PICTURES
+	S_PICTURES,
+	S_ENDMENU
 };
 
 enum CharState
@@ -75,5 +76,6 @@ void BackToGame();
 void RunPictures();
 void ScoreDisplay();
 void detectMazeEnd();
+void endScreen();
 
 #endif // _GAME_H

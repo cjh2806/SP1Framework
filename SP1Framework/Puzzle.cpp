@@ -65,7 +65,6 @@ int random_number_game()
 	{
 		Score = 0;
 	}
-	cin.clear();
 	return Score;
 }
 
@@ -112,7 +111,6 @@ int random_alphabet()
 	{
 		Score = 0;
 	}
-	cin.clear();
 	return Score;
 }
 int random_pattern()
@@ -276,101 +274,277 @@ int random_pattern()
 	{
 		Score = 0;
 	}
-	cin.clear();
 	return Score;
 }
 int logic_game()
 {
+	int Logic_Game = rand();
 	int score;
 	int UserAnswer;
 	int correct = 0;
-	cout << "There are 12 pens on the table, you took 3, how many do you have?" << endl;
-	cout << "1) 12" << endl;
-	cout << "2) 9" << endl;
-	cout << "3) 0" << endl;
-	cout << "4) 3" << endl;
+	if (Logic_Game % LOGIC == LogicONE)
+	{
+		cout << "There are 12 pens on the table, you took 3, how many do you have?" << endl;
+		cout << "1) 12" << endl;
+		cout << "2) 9" << endl;
+		cout << "3) 0" << endl;
+		cout << "4) 3" << endl;
 
-	cin >> UserAnswer;
-	if (UserAnswer != 4)
-	{
-		cout << "Wrong, you took 3 pens so you have 3 pens" << endl;
-	}
-	else
-	{
-		cout << "Correct" << endl;
-		correct++;
-	}
+		cin >> UserAnswer;
+		if (UserAnswer != 4)
+		{
+			cout << "Wrong, you took 3 pens so you have 3 pens" << endl;
+		}
+		else
+		{
+			cout << "Correct" << endl;
+			correct++;
+		}
 
-	cout << "If an electric train is traveling from the east to the west, which direction is the smoke traveling?" << endl;
-	cout << "1) East" << endl;
-	cout << "2) West" << endl;
-	cout << "3) Up" << endl;
-	cout << "4) None of the above" << endl;
+		cout << "If an electric train is traveling from the east to the west, which direction is the smoke traveling?" << endl;
+		cout << "1) East" << endl;
+		cout << "2) West" << endl;
+		cout << "3) Up" << endl;
+		cout << "4) None of the above" << endl;
 
-	cin >> UserAnswer;
-	if (UserAnswer != 4)
-	{
-		cout << "Wrong, an electric train does not produse smoke" << endl;
-	}
-	else
-	{
-		cout << "Correct" << endl;
-		correct++;
-	}
+		cin >> UserAnswer;
+		if (UserAnswer != 4)
+		{
+			cout << "Wrong, an electric train does not produse smoke" << endl;
+		}
+		else
+		{
+			cout << "Correct" << endl;
+			correct++;
+		}
 
-	cout << "There are 100 birds on a tree" << endl;
-	cout << "*BANG*" << endl;
-	cout << "you shot and killed 1 bird" << endl;
-	cout << "How many birds are left on the tree?" << endl;
-	cout << "1) 0" << endl;
-	cout << "2) 100" << endl;
-	cout << "3) 99" << endl;
-	cout << "4) 1" << endl;
+		cout << "There are 100 birds on a tree" << endl;
+		cout << "*BANG*" << endl;
+		cout << "you shot and killed 1 bird" << endl;
+		cout << "How many birds are left on the tree?" << endl;
+		cout << "1) 0" << endl;
+		cout << "2) 100" << endl;
+		cout << "3) 99" << endl;
+		cout << "4) 1" << endl;
 
-	cin >> UserAnswer;
-	if (UserAnswer != 1)
-	{
-		cout << "Wrong, if you fired a gun and killed a bird the other birds will fly away" << endl;
-	}
-	else
-	{
-		cout << "Correct" << endl;
-		correct++;
-	}
+		cin >> UserAnswer;
+		if (UserAnswer != 1)
+		{
+			cout << "Wrong, if you fired a gun and killed a bird the other birds will fly away" << endl;
+		}
+		else
+		{
+			cout << "Correct" << endl;
+			correct++;
+		}
 
-	cout << "If you are in a race, what place are you in if you take over the person who is in second place?" << endl;
-	cout << "1) First" << endl;
-	cout << "2) Second" << endl;
-	cout << "3) Third" << endl;
-	cout << "4) Last" << endl;
+		cout << "If you are in a race, what place are you in if you take over the person who is in second place?" << endl;
+		cout << "1) First" << endl;
+		cout << "2) Second" << endl;
+		cout << "3) Third" << endl;
+		cout << "4) Last" << endl;
 
-	cin >> UserAnswer;
-	if (UserAnswer != 2)
-	{
-		cout << "Wrong! If you overtake second, you are now second" << endl;
-	}
-	else
-	{
-		cout << "Correct!" << endl;
-		correct++;
-	}
-	cout << "1 is 3, 3 is 5, 5 is 4, 7 is 5. What is 9?" << endl;
-	cout << "1) 5" << endl;
-	cout << "2) 4" << endl;
-	cout << "3) 6" << endl;
-	cout << "4) 3" << endl;
+		cin >> UserAnswer;
+		if (UserAnswer != 2)
+		{
+			cout << "Wrong! If you overtake second, you are now second" << endl;
+		}
+		else
+		{
+			cout << "Correct!" << endl;
+			correct++;
+		}
+		cout << "1 is 3, 3 is 5, 5 is 4, 7 is 5. What is 9?" << endl;
+		cout << "1) 5" << endl;
+		cout << "2) 4" << endl;
+		cout << "3) 6" << endl;
+		cout << "4) 3" << endl;
 
-	cin >> UserAnswer;
-	if (UserAnswer != 2)
-	{
-		cout << "Wrong! 9 is 4 as there are 4 letters in nine" << endl;
+		cin >> UserAnswer;
+		if (UserAnswer != 2)
+		{
+			cout << "Wrong! 9 is 4 as there are 4 letters in nine" << endl;
+		}
+		else
+		{
+			cout << "Correct!" << endl;
+			correct++;
+		}
 	}
-	else
+	else if (Logic_Game % LOGIC == LogicTWO)
 	{
-		cout << "Correct!" << endl;
-		correct++;
-	}
+		cout << "If LOVE is coded as NRZJ, what is FIRE coded as?" << endl;
+		cout << "1) HLVJ" << endl;
+		cout << "2) GKUI" << endl;
+		cout << "3) HKVJ" << endl;
+		cout << "4) GLUJ" << endl;
 
+		cin >> UserAnswer;
+		if (UserAnswer != 2)
+		{
+			cout << "Wrong! In the code, the first letter is the second alphabet, the second letter is the third alphabet, the third letter is the fourth alphabet and so on after the corresponding letter in the word. " << endl;
+		}
+		else
+		{
+			cout << "Correct!" << endl;
+			correct++;
+		}
+
+		cout << "Banks is related to Money in the same way as Transport is the related to ____" << endl;
+		cout << "1) Traffic" << endl;
+		cout << "2) Goods" << endl;
+		cout << "3) Speed" << endl;
+		cout << "4) Road" << endl;
+
+		cin >> UserAnswer;
+		if (UserAnswer != 2)
+		{
+			cout << "Wrong! Bank deals with transaction of Money.Likewise Transport deals with the movement of Goods." << endl;
+		}
+		else
+		{
+			cout << "Correct!" << endl;
+			correct++;
+		}
+
+		cout << "Find the odd one out." << endl;
+		cout << "1) Vapour" << endl;
+		cout << "2) Mist" << endl;
+		cout << "3) Hailstone" << endl;
+		cout << "4) Fog" << endl;
+
+		cin >> UserAnswer;
+		if (UserAnswer != 1)
+		{
+			cout << "Wrong! All except Vapour are different forms of Precipitation." << endl;
+		}
+		else
+		{
+			cout << "Correct!" << endl;
+			correct++;
+		}
+
+		cout << " F is the brother of A, C is the daughter of A, K is the sister of F and G is the brother of C then who is the uncle of G?" << endl;
+		cout << "1) C" << endl;
+		cout << "2) A" << endl;
+		cout << "3) K" << endl;
+		cout << "4) None of the above" << endl;
+
+		cin >> UserAnswer;
+		if (UserAnswer != 2)
+		{
+			cout << "Wrong! C & J are childern of A and F is the brother of A. So, F is uncle of C & J. " << endl;
+		}
+		else
+		{
+			cout << "Correct!" << endl;
+			correct++;
+		}
+
+		cout << "JE, LH, OL, SQ, ?" << endl;
+		cout << "1) WV" << endl;
+		cout << "2) WX" << endl;
+		cout << "3) VW" << endl;
+		cout << "4) XW" << endl;
+
+		cin >> UserAnswer;
+		if (UserAnswer != 4)
+		{
+			cout << "Wrong! The first letter moves forward 2,3,4 ...... steps. The second letter moves forward 3,4,5 ...... steps." << endl;
+		}
+		else
+		{
+			cout << "Correct!" << endl;
+			correct++;
+		}
+	}
+	else if (Logic_Game % LOGIC == LogicTHREE)
+	{
+		cout << "Words from an artifical language. agnoscrenia means poisonous spider delanocrenia means poisonous snake agnosdeery means brown spider Which word could mean 'black widow spider'?" << endl;
+		cout << "1) deeryclostagnos" << endl;
+		cout << "2) agnosdelano" << endl;
+		cout << "3) agnosvitriblunin" << endl;
+		cout << "4) trymuttiagnos" << endl;
+
+		cin >> UserAnswer;
+		if (UserAnswer != 3)
+		{
+			cout << "Wrong! In this language, the noun appears first and the adjectives follow. Since agnos means spider and should appear first, choices 1 and 4 can be ruled out. Choice 2 can be ruled out because delano means snake. " << endl;
+		}
+		else
+		{
+			cout << "Correct" << endl;
+			correct++;
+		}
+
+		cout << "Statements: All fishes are grey in colour. Some fishes are heavy. Conclusions: All heavy fishes are grey in colour. All light fishes are not grey in colour." << endl;
+		cout << "1) Only conclusion I and II follows." << endl;
+		cout << "2) Only conclusion I follows." << endl;
+		cout << "3) Only conclusion II follows." << endl;
+		cout << "4) Neither conclusion I or II follows" << endl;
+
+		cin >> UserAnswer;
+		if (UserAnswer != 2)
+		{
+			cout << "Wrong! Only conclusion I follows." << endl;
+		}
+		else
+		{
+			cout << "Correct!" << endl;
+			correct++;
+		}
+
+		cout << "What has a head, tail, is brown and has no legs?" << endl;
+		cout << "1) An apple" << endl;
+		cout << "2) An ant" << endl;
+		cout << "3) A penny" << endl;
+		cout << "4) A stalk of an apple" << endl;
+
+		cin >> UserAnswer;
+		if (UserAnswer != 3)
+		{
+			cout << "Wrong! A penny has a head and tail and it's also brown" << endl;
+		}
+		else
+		{
+			cout << "Correct!" << endl;
+			correct++;
+		}
+
+		cout << "Adriana's mom had four kids: Marta, Anna, Justina..." << endl;
+		cout << "1) Cleopatra" << endl;
+		cout << "2) Annabell" << endl;
+		cout << "3) Adriana" << endl;
+		cout << "4) Christina" << endl;
+
+		cin >> UserAnswer;
+		if (UserAnswer != 3)
+		{
+			cout << "Wrong! Adriana is her mother's child too" << endl;
+		}
+		else
+		{
+			cout << "Correct!" << endl;
+			correct++;
+		}
+
+		cout << "Imagine you're in a dark room that is perfectly empty with nothing in it. There are no windows or doors. What is the easiest way to escape?" << endl;
+		cout << "1) Die" << endl;
+		cout << "2) Wait" << endl;
+		cout << "3) Dig a hole in the ground with your hands" << endl;
+		cout << "4) Stop imagining" << endl;
+
+		cin >> UserAnswer;
+		if (UserAnswer != 4)
+		{
+			cout << "Wrong! Just stop imagining and you will leave the room" << endl;
+		}
+		else
+		{
+			cout << "Correct!" << endl;
+			correct++;
+		}
+	}
 	if (correct == 0 || correct == 1)
 	{
 		cout << "You aren't that great with this are you?" << endl;
@@ -386,7 +560,6 @@ int logic_game()
 		cout << "YOU SIR, are a genius!" << endl;
 		score = 100;
 	}
-	cin.clear();
 	return score;
 }
 
@@ -944,5 +1117,4 @@ int Riddles()
 		}
 		return Score;
 	}
-	cin.clear();
 }
