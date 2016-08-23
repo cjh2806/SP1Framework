@@ -518,7 +518,7 @@ int logic_game()
 		cout << "4) Christina" << endl;
 
 		cin >> UserAnswer;
-		if (UserAnswer != 2)
+		if (UserAnswer != 3)
 		{
 			cout << "Wrong! Adriana is her mother's child too" << endl;
 		}
