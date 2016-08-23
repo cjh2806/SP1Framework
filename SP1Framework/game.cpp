@@ -99,6 +99,36 @@ void getInput( void )
     g_abKeyPressed[K_ESCAPE] = isKeyPressed(VK_ESCAPE);
 }
 
+void Alphabets()
+{
+	g_abKeyPressed[K_A] = isKeyPressed(VK_A);
+	g_abKeyPressed[K_B] = isKeyPressed(VK_B);
+	g_abKeyPressed[K_C] = isKeyPressed(VK_C);
+	g_abKeyPressed[K_D] = isKeyPressed(VK_D);
+	g_abKeyPressed[K_E] = isKeyPressed(VK_E);
+	g_abKeyPressed[K_F] = isKeyPressed(VK_F);
+	g_abKeyPressed[K_G] = isKeyPressed(VK_G);
+	g_abKeyPressed[K_H] = isKeyPressed(VK_H);
+	g_abKeyPressed[K_I] = isKeyPressed(VK_I);
+	g_abKeyPressed[K_J] = isKeyPressed(VK_J);
+	g_abKeyPressed[K_K] = isKeyPressed(VK_K);
+	g_abKeyPressed[K_L] = isKeyPressed(VK_L);
+	g_abKeyPressed[K_M] = isKeyPressed(VK_M);
+	g_abKeyPressed[K_N] = isKeyPressed(VK_N);
+	g_abKeyPressed[K_O] = isKeyPressed(VK_O);
+	g_abKeyPressed[K_P] = isKeyPressed(VK_P);
+	g_abKeyPressed[K_Q] = isKeyPressed(VK_Q);
+	g_abKeyPressed[K_R] = isKeyPressed(VK_R);
+	g_abKeyPressed[K_S] = isKeyPressed(VK_S);
+	g_abKeyPressed[K_T] = isKeyPressed(VK_T);
+	g_abKeyPressed[K_U] = isKeyPressed(VK_U);
+	g_abKeyPressed[K_V] = isKeyPressed(VK_V);
+	g_abKeyPressed[K_W] = isKeyPressed(VK_W);
+	g_abKeyPressed[K_X] = isKeyPressed(VK_X);
+	g_abKeyPressed[K_Y] = isKeyPressed(VK_Y);
+	g_abKeyPressed[K_Z] = isKeyPressed(VK_Z);
+}
+
 //--------------------------------------------------------------
 // Purpose  : Update function
 //            This is the update function
