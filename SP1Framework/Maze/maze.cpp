@@ -16,10 +16,10 @@ void IsMazeGenerated(bool input) { isMazeGenerated = input; }
 
 bool checkMazeDisplay(COORD input, char aChar, int offX, int offY)
 {
-	input.X -= OffsetBuffer[0];
-	input.Y -= OffsetBuffer[1];
+	input.X = input.X - OffsetBuffer[0] + offX;
+	input.Y = input.Y - OffsetBuffer[1] + offY;
 
-	if (Level[input.X + offX][input.Y + offY].display == aChar)
+	if (Level[input.X][input.Y].display == aChar)
 		return true;
 	else
 		return false;
