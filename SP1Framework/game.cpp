@@ -26,7 +26,7 @@ EGAMESTATES g_eGameState = S_SPLASHSCREEN;
 double  g_dBounceTime; // this is to prevent key bouncing, so we won't trigger keypresses more than once
 
 // Console object
-Console g_Console(ScreenResoX, ScreenResoY, "SP1 Framework");
+Console g_Console(ScreenResoX, ScreenResoY, "Maze Thinker");
 
 //--------------------------------------------------------------
 // Purpose  : Initialisation function
@@ -273,17 +273,8 @@ void renderMap()
 	{
 		generateMaze();
 
-		for (int i = 0; i < YSIZE; i++)
-		{
-			for (int j = 0; j < XSIZE; j++)
-			{
-				if (getMazeData(i, j).display == 'S')
-				{
-					g_sChar.m_cLocation.X = i + OffsetBuffer;
-					g_sChar.m_cLocation.Y = j + OffsetBuffer;
-				}
-			}
-		}
+		g_sChar.m_cLocation.X = getStartPosition().X + OffsetBuffer;
+		g_sChar.m_cLocation.Y = getStartPosition().Y + OffsetBuffer;
 
 		IsMazeGenerated(true);
 	}
@@ -380,9 +371,8 @@ void RunPuzzle()
 	g_Console.~Console();
 	Score += Puzzle();
 	g_eGameState = S_GAME;
-	processUserInput();
 	COORD c = { ScreenResoX, ScreenResoY };
-	g_Console.initConsole(c, "test");
+	g_Console.initConsole(c, "Maze Thinker");
 	t_charBlink = g_dElapsedTime;
 }
 
@@ -393,9 +383,8 @@ void RunPictures()
 	g_Console.~Console();
 	Score += Picture_Puzzle();
 	g_eGameState = S_GAME;
-	processUserInput();
 	COORD c = { ScreenResoX, ScreenResoY };
-	g_Console.initConsole(c, "test");
+	g_Console.initConsole(c, "Maze Thinker");
 	t_charBlink = g_dElapsedTime;
 }
 

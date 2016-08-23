@@ -2,6 +2,7 @@
 
 bool isMazeGenerated = false;
 Cell Level[YSIZE][XSIZE];
+COORD StartPosition;
 
 bool IsMazeGenerated()
 {
@@ -16,6 +17,11 @@ void IsMazeGenerated(bool input)
 Cell getMazeData(int a, int b)
 {
 	return Level[a][b];
+}
+
+COORD getStartPosition()
+{
+	return StartPosition;
 }
 
 void bufferMaze(Console &refCon)
@@ -93,6 +99,7 @@ void GenerateMaze(Cell Level[][XSIZE], int &posX, int &posY, int &goalX, int &go
 
 	Level[randomY][randomX].display = 'S';						// Set S as the start cell
 	Level[randomY][randomX].visited = true;						// Set start cell as visited;
+	StartPosition = { randomY, randomX };
 
 	while (visitedCells < totalCells)
 	{
