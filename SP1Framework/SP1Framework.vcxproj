@@ -82,6 +82,7 @@
     <ClCompile Include="Framework\timer.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="Highscore.cpp" />
+    <ClCompile Include="instructions.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Maze\maze.cpp" />
     <ClCompile Include="Pictures.cpp" />
@@ -94,6 +95,7 @@
     <ClInclude Include="Framework\timer.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="Highscore.h" />
+    <ClInclude Include="instructions.h" />
     <ClInclude Include="Maze\maze.h" />
     <ClInclude Include="Pictures.h" />
     <ClInclude Include="Puzzle.h" />
@@ -101,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Resources\endMenu.txt" />
+    <Text Include="..\Resources\instructionScreen.txt" />
     <Text Include="Resources\MenuTitle.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
