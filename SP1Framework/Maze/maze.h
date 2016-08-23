@@ -25,7 +25,7 @@ struct Cell
 bool IsMazeGenerated();
 void IsMazeGenerated(bool input);
 Cell getMazeData(int a, int b);
-COORD getStartPosition();
+COORD getStartPosition(int a = 0, int b = 0);
 void bufferMaze(Console &refCon);
 void generateMaze();
 void Initialize(Cell Level[][XSIZE]);

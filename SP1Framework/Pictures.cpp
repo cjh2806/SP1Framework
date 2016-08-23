@@ -1,8 +1,8 @@
-#include "Framework\console.h"
 #include "Pictures.h"
-#include <ctime>
 
-using namespace std;
+Console* ptrPicCon;
+
+void initPicCon(Console &input) { ptrPicCon = &input; }
 
 int Picture_Puzzle()
 {

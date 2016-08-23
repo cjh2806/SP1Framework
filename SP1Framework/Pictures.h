@@ -1,9 +1,12 @@
-#include "Framework\timer.h"
 #include "Framework\console.h"
+#include "Framework\timer.h"
 #include <fstream>
 #include <iostream>
+#include <ctime>
 
 #define PICTURES 5
+
+using namespace std;
 
 enum ePICTURES{
 	PictureONE,
@@ -13,5 +16,6 @@ enum ePICTURES{
 	PictureFIVE
 };
 
-std::string getFileContents(std::ifstream&);
+void initPicCon(Console &input);
 int Picture_Puzzle();
+string getFileContents(ifstream&);

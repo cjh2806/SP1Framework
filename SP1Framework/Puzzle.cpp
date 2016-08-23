@@ -1,8 +1,9 @@
-#include <iomanip>
-#include <sstream>
 #include "Puzzle.h"
 
-using namespace std;
+Console* ptrPuzCon;
+string display;
+
+void initPuzCon(Console &input) { ptrPuzCon = &input; }
 
 int Puzzle()
 {
@@ -10,7 +11,7 @@ int Puzzle()
 	int Score = 0;
 	int Minigames = rand();
 	Minigames %= 5;
-	switch (Minigames)
+	switch (/*Minigames*/0)
 	{
 	case eGame::GAME_ONE: Score = random_number_game();
 		break;
@@ -28,35 +29,61 @@ int Puzzle()
 
 int random_number_game()
 {
+	COORD c = { 1, 1 };
 	int Variable = rand() % LIMIT + ONE;
 	int Score;
 	int UserAnswer;
 	int guesses = 1;
 	int x = 1;
-	cout << "From 1 to " << LIMIT << ", guess the number" << endl;
+
+	//cout << "From 1 to " << LIMIT << ", guess the number" << endl;
+
 	while (x != 0)
 	{
-		cin >> UserAnswer;
+		ptrPuzCon->clearBuffer(0x1F);
+		display = "From 1 to " + to_string(LIMIT) + ", guess the number";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		//cin >> UserAnswer;
+		// grab input here
+
+		c = { 1, 10 };
 		if (UserAnswer > LIMIT || UserAnswer < ONE)
 		{
-			cout << "Number over the range" << endl;
+			//cout << "Number over the range" << endl;
+			display = "Number over the range";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 		}
 		if (UserAnswer < Variable)
 		{
-			cout << "Wrong, gimme a bigger number" << endl;
+			//cout << "Wrong, gimme a bigger number" << endl;
+			display = "Wrong, gimme a bigger number";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+
 			guesses++;
 		}
 		else if (UserAnswer > Variable)
 		{
-			cout << "Wrong, gimme a smaller number" << endl;
+			//cout << "Wrong, gimme a smaller number" << endl;
+			display = "Wrong, gimme a smaller number";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+
 			guesses++;
 		}
 		else if (UserAnswer == Variable)
 		{
 			break;
 		}
+
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		ptrPuzCon->flushBufferToConsole();
 	}
-	cout << "Correct! It only took you " << guesses << " times to guess!" << endl;
+
+	//cout << "Correct! It only took you " << guesses << " times to guess!" << endl;
+	display = "Correct! It only took you " + to_string(guesses) + " times to guess!";
+	ptrPuzCon->writeToBuffer(c, display, 0x0F);
+
+	Sleep(2000);
+
 	if (guesses < 10)
 	{
 		Score = 50;

@@ -7,7 +7,14 @@ COORD StartPosition;
 bool IsMazeGenerated() { return isMazeGenerated; }
 void IsMazeGenerated(bool input) { isMazeGenerated = input; }
 Cell getMazeData(int a, int b) { return Level[a][b]; }
-COORD getStartPosition() { return StartPosition; }
+
+COORD getStartPosition(int a, int b)
+{
+	StartPosition.X += a;
+	StartPosition.Y += b;
+
+	return StartPosition;
+}
 
 void bufferMaze(Console &refCon)
 {

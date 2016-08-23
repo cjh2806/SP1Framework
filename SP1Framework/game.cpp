@@ -58,6 +58,9 @@ void init( void )
 	playerHealth = PlayerHealth;
 	Score = 0;
 	highscore = Highscore(Score);
+
+	initPicCon(g_Console);
+	initPuzCon(g_Console);
 }
 
 //--------------------------------------------------------------
@@ -273,8 +276,7 @@ void renderMap()
 	{
 		generateMaze();
 
-		g_sChar.m_cLocation.X = getStartPosition().X + OffsetBuffer;
-		g_sChar.m_cLocation.Y = getStartPosition().Y + OffsetBuffer;
+		g_sChar.m_cLocation = getStartPosition(OffsetBuffer, OffsetBuffer);
 
 		IsMazeGenerated(true);
 	}
@@ -325,7 +327,7 @@ void renderFramerate()
 	if (g_dElapsedTime > (1 + timer) && g_dElapsedTime < (1.01 + timer) && playerHealth>0)
 	{
 		timer = timer + 2;
-		playerHealth--;
+		//playerHealth--;
 	}
 	if (playerHealth <= 0)
 	{
@@ -376,6 +378,7 @@ void TriggerMiniGames()
 {
 	srand(time(NULL));
 	int i = rand();
+	i = 1; // For debugging
 	if (i % 2 == 1)
 	{
 		g_eGameState = S_PUZZLE;
@@ -388,19 +391,19 @@ void TriggerMiniGames()
 
 void RunPuzzle()
 {
-	initConsole(false);
+	//initConsole(false);
 	Score += Puzzle();
 	g_eGameState = S_GAME;
-	initConsole(true);
+	//initConsole(true);
 	t_charBlink = g_dElapsedTime;
 }
 
 void RunPictures()
 {
-	initConsole(false);
+	//initConsole(false);
 	Score += Picture_Puzzle();
 	g_eGameState = S_GAME;
-	initConsole(true);
+	//initConsole(true);
 	t_charBlink = g_dElapsedTime;
 }
 
