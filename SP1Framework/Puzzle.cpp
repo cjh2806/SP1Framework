@@ -11,7 +11,7 @@ int Puzzle()
 	int Score = 0;
 	int Minigames = rand();
 	Minigames %= 5;
-	switch (/*Minigames*/0)
+	switch (/*Minigames*/ 0)		// For debugging
 	{
 	case eGame::GAME_ONE: Score = random_number_game();
 		break;
@@ -29,24 +29,32 @@ int Puzzle()
 
 int random_number_game()
 {
-	COORD c = { 1, 1 };
+	COORD c = { 1, 1 };		// Used for display position
 	int Variable = rand() % LIMIT + ONE;
 	int Score;
-	int UserAnswer;
-	int guesses = 1;
+	int UserAnswer = 0;
+	int guesses = 0;
 	int x = 1;
 
 	//cout << "From 1 to " << LIMIT << ", guess the number" << endl;
 
 	while (x != 0)
 	{
-		ptrPuzCon->clearBuffer(0x1F);
+		ptrPuzCon->clearBuffer(0x1F);	// Clears console screen
+
 		display = "From 1 to " + to_string(LIMIT) + ", guess the number";
 		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		ptrPuzCon->flushBufferToConsole();	// Shows what you have buffered on console
 		//cin >> UserAnswer;
-		// grab input here
+		
+		// Detect input here
+		do
+		{
 
-		c = { 1, 10 };
+		} while (UserAnswer == 0);
+
+		c = { 1, 10 };	// Change display position
+
 		if (UserAnswer > LIMIT || UserAnswer < ONE)
 		{
 			//cout << "Number over the range" << endl;
@@ -74,18 +82,16 @@ int random_number_game()
 			break;
 		}
 
-		ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		ptrPuzCon->flushBufferToConsole();
+		ptrPuzCon->flushBufferToConsole();	// Shows what you have buffered on console
 	}
 
 	//cout << "Correct! It only took you " << guesses << " times to guess!" << endl;
 	display = "Correct! It only took you " + to_string(guesses) + " times to guess!";
 	ptrPuzCon->writeToBuffer(c, display, 0x0F);
+	ptrPuzCon->flushBufferToConsole();	// Shows what you have buffered on console
 
 	Sleep(2000);
 
-	if (guesses < 10)
-	cout << "Correct! It only took you " << guesses << " times to guess!" << endl;
 	if (guesses < 5)
 	{
 		Score = 100;
@@ -98,6 +104,7 @@ int random_number_game()
 	{
 		Score = 0;
 	}
+
 	return Score;
 }
 
@@ -106,7 +113,7 @@ int random_alphabet()
 	int AsciiCharacter = rand() % RANGE + ASCII;
 	int Score;
 	char UserAnswer;
-	int guesses = 1;
+	int guesses = 0;
 	int x = 1;
 	cout << "From a to z , guess the letter" << endl;
 	while (x != 0)
