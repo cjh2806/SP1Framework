@@ -129,6 +129,20 @@ void Alphabets()
 	g_abKeyPressed[K_Z] = isKeyPressed(VK_Z);
 }
 
+void numbers(void)
+{
+	g_abKeyPressed[K_1] = isKeyPressed(VK_1);
+	g_abKeyPressed[K_2] = isKeyPressed(VK_2);
+	g_abKeyPressed[K_3] = isKeyPressed(VK_3);
+	g_abKeyPressed[K_4] = isKeyPressed(VK_4);
+	g_abKeyPressed[K_5] = isKeyPressed(VK_5);
+	g_abKeyPressed[K_6] = isKeyPressed(VK_6);
+	g_abKeyPressed[K_7] = isKeyPressed(VK_7);
+	g_abKeyPressed[K_8] = isKeyPressed(VK_8);
+	g_abKeyPressed[K_9] = isKeyPressed(VK_9);
+	g_abKeyPressed[K_0] = isKeyPressed(VK_0);
+}
+
 //--------------------------------------------------------------
 // Purpose  : Update function
 //            This is the update function
@@ -180,6 +194,8 @@ void render()
             break;
 		case S_ENDMENU: endScreen();
 			break;
+		case S_INSTRUCTIONS: instructionScreen();
+			break;
 	}
 	renderFramerate();  // renders debug information, frame rate, elapsed time, etc
 	renderToScreen();   // dump the contents of the buffer to the screen, one frame worth of game
@@ -199,7 +215,7 @@ void splashScreenWait()    // waits for time to pass in splash screen
 		{
 		case STARTGAME: g_eGameState = S_GAME;
 			break;
-		case INSTRUCTION: IsSelectionMade(false);
+		case INSTRUCTION: g_eGameState = S_INSTRUCTIONS;
 			break;
 		case QUITGAME: g_bQuitGame = true;
 			break;
@@ -461,4 +477,9 @@ void endScreen()
 {
 	processUserInput();
 	endMenu(g_Console);
+}
+
+void instructionScreen()
+{
+	instructions(g_Console);
 }

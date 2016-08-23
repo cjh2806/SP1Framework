@@ -1,5 +1,6 @@
 #ifndef _GAME_H
 #define _GAME_H
+#include "instructions.h"
 #include "Framework\timer.h"
 #include "Framework\console.h"
 #include "endMenu.h"
@@ -40,6 +41,17 @@ const COORD ScreenReso = { 120, 50 };
 #define VK_X              0x58
 #define VK_Y              0x59
 #define VK_Z              0x5A
+
+#define VK_1			  0x30
+#define VK_2			  0x31
+#define VK_3			  0x32
+#define VK_4			  0x33
+#define VK_5			  0x34
+#define VK_6			  0x35
+#define VK_7			  0x36
+#define VK_8			  0x37
+#define VK_9			  0x38
+#define VK_0			  0x39
 
 
 // Enumeration to store the control keys that your game will have
@@ -84,6 +96,20 @@ enum EALPHABETS
 	K_Z
 };
 
+enum ENUMBERS
+{
+	K_1,
+	K_2,
+	K_3,
+	K_4,
+	K_5,
+	K_6,
+	K_7,
+	K_8,
+	K_9,
+	K_0
+};
+
 // Enumeration for the different screen states
 enum EGAMESTATES
 {
@@ -92,7 +118,8 @@ enum EGAMESTATES
 	S_COUNT,
 	S_PUZZLE,
 	S_PICTURES,
-	S_ENDMENU
+	S_ENDMENU,
+	S_INSTRUCTIONS
 };
 
 enum CharState
@@ -134,5 +161,7 @@ void ScoreDisplay();
 void detectMazeEnd();
 void endScreen();
 void Alphabets();
+void instructionScreen();
+void numbers();
 
 #endif // _GAME_H
