@@ -65,7 +65,6 @@ int random_number_game()
 	{
 		Score = 0;
 	}
-	cin.clear();
 	return Score;
 }
 
@@ -275,7 +274,6 @@ int random_pattern()
 	{
 		Score = 0;
 	}
-	cin.clear();
 	return Score;
 }
 int logic_game()

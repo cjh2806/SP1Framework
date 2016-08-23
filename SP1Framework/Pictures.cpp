@@ -104,7 +104,6 @@ int Picture_Puzzle()
 			Score = 0;
 		}
 	}
-	cin.clear();
 	return Score;
 }
 
