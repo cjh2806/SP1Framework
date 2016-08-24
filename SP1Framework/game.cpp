@@ -5,6 +5,9 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <windows.h>
+#include <MMSystem.h>
+#pragma comment(lib, "Winmm.lib")
 
 const double DelayCharBlink = 0.5;
 const unsigned int PlayerHealth = 3;
@@ -61,6 +64,8 @@ void init( void )
 
 	initPicCon(g_Console);
 	initPuzCon(g_Console);
+
+	music();
 }
 
 //--------------------------------------------------------------
@@ -227,7 +232,7 @@ void gameplay()            // gameplay logic
 {
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     moveCharacter();    // moves the character, collision detection, physics, etc
-                        // sound can be played here too.
+	music();                   // sound can be played here too.
 
 	detectMazeEnd();
 }
@@ -485,4 +490,10 @@ void endScreen()
 void instructionScreen()
 {
 	instructions(g_Console);
+}
+
+void music()
+{
+	mciSendString(L"open \"Nyan.mp3\" type mpegvideo alias mp3", NULL, 0, NULL);
+	mciSendString(L"play mp3", NULL, 0, NULL);
 }
