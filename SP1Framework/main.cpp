@@ -37,6 +37,8 @@ void mainLoop( void )
     g_Timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!g_bQuitGame)      // run this loop until user wants to quit 
 	{
+		Alphabets();
+		numbers();
 		getInput();                         // get keyboard input
 		update(g_Timer.getElapsedTime());   // update the game
 		render();                           // render the graphics output to screen

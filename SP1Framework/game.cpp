@@ -16,12 +16,13 @@ const char CharacterType = 64;
 
 CharState charState;
 
+bool InitPuzzle;
 double t_charBlink;
 int playerHealth;
 int highscore;
 int Score;
 int timer;
-
+string Input;
 double  g_dElapsedTime;
 double  g_dDeltaTime;
 bool    g_abKeyPressed[K_COUNT];
@@ -56,6 +57,7 @@ void init( void )
     g_Console.setConsoleFont(0, 16, L"Raster Consolas");
 
 	initMenuTitle();
+	Input = "";
 	SetOffsetBuffer(g_Console);
 
 	charState = C_LIT;
@@ -65,7 +67,7 @@ void init( void )
 	highscore = Highscore(Score);
 
 	initPicCon(g_Console);
-	initPuzCon(g_Console);
+	initPuzPtr(g_Console);
 
 	music();
 }
@@ -104,6 +106,8 @@ void getInput( void )
     g_abKeyPressed[K_RIGHT]  = isKeyPressed(VK_RIGHT);
     g_abKeyPressed[K_SPACE]  = isKeyPressed(VK_SPACE);
     g_abKeyPressed[K_ESCAPE] = isKeyPressed(VK_ESCAPE);
+	g_abKeyPressed[K_BACK] = isKeyPressed(VK_BACK);
+	g_abKeyPressed[K_RETURN] = isKeyPressed(VK_RETURN);
 }
 
 void Alphabets()
@@ -148,6 +152,16 @@ void numbers(void)
 	g_abKeyPressed[K_8] = isKeyPressed(VK_8);
 	g_abKeyPressed[K_9] = isKeyPressed(VK_9);
 	g_abKeyPressed[K_0] = isKeyPressed(VK_0);
+	g_abKeyPressed[K_NUM0] = isKeyPressed(VK_NUMPAD0);
+	g_abKeyPressed[K_NUM1] = isKeyPressed(VK_NUMPAD1);
+	g_abKeyPressed[K_NUM2] = isKeyPressed(VK_NUMPAD2);
+	g_abKeyPressed[K_NUM3] = isKeyPressed(VK_NUMPAD3);
+	g_abKeyPressed[K_NUM4] = isKeyPressed(VK_NUMPAD4);
+	g_abKeyPressed[K_NUM5] = isKeyPressed(VK_NUMPAD5);
+	g_abKeyPressed[K_NUM6] = isKeyPressed(VK_NUMPAD6);
+	g_abKeyPressed[K_NUM7] = isKeyPressed(VK_NUMPAD7);
+	g_abKeyPressed[K_NUM8] = isKeyPressed(VK_NUMPAD8);
+	g_abKeyPressed[K_NUM9] = isKeyPressed(VK_NUMPAD9);
 }
 
 //--------------------------------------------------------------
@@ -199,6 +213,8 @@ void render()
             break;
         case S_GAME: renderGame();
             break;
+		case S_PUZZLE: Puzzle();
+			break;
 		case S_ENDMENU: endScreen();
 			break;
 		case S_INSTRUCTIONS: instructionScreen();
@@ -478,6 +494,7 @@ void TriggerMiniGames()
 	i = 1; // For debugging
 	if (i % 2 == 1)
 	{
+		InitPuzzle = false;
 		g_eGameState = S_PUZZLE;
 	}
 	else
@@ -488,10 +505,21 @@ void TriggerMiniGames()
 
 void RunPuzzle()
 {
-	//initConsole(false);
-	Score += Puzzle();
-	g_eGameState = S_GAME;
-	//initConsole(true);
+	Typing();
+
+	if (InitPuzzle)
+	{
+		initCurrentAnswer();
+		InitPuzzle = false;
+	}
+
+	if (isPuzzleFinished())
+	{
+		Score += AddScore();
+		AddScore(0);
+		g_eGameState = S_GAME;
+	}
+
 	t_charBlink = g_dElapsedTime;
 }
 
@@ -540,4 +568,212 @@ void music()
 {
 	mciSendString(L"open \"Nyan.mp3\" type mpegvideo alias mp3", NULL, 0, NULL);
 	mciSendString(L"play mp3", NULL, 0, NULL);
+}
+
+void Typing()
+{
+	bool bSomethingHappened = false;
+	if (g_dBounceTime > g_dElapsedTime)
+		return;
+	/*if (g_abKeyPressed[K_A])
+	{
+	Input += "a";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_B])
+	{
+	Input += "b";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_C])
+	{
+	Input += "c";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_D])
+	{
+	Input += "d";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_E])
+	{
+	Input += "e";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_F])
+	{
+	Input += "f";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_G])
+	{
+	Input += "g";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_H])
+	{
+	Input += "h";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_I])
+	{
+	Input += "i";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_J])
+	{
+	Input += "j";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_K])
+	{
+	Input += "k";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_L])
+	{
+	Input += "l";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_M])
+	{
+	Input += "m";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_N])
+	{
+	Input += "n";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_O])
+	{
+	Input += "o";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_P])
+	{
+	Input += "p";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_Q])
+	{
+	Input += "q";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_R])
+	{
+	Input += "r";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_S])
+	{
+	Input += "s";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_T])
+	{
+	Input += "t";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_U])
+	{
+	Input += "u";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_V])
+	{
+	Input += "v";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_W])
+	{
+	Input += "w";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_X])
+	{
+	Input += "x";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_Y])
+	{
+	Input += "y";
+	bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_Z])
+	{
+	Input += "z";
+	bSomethingHappened = true;
+	}*/
+	/*else*/ if (g_abKeyPressed[K_1] || g_abKeyPressed[K_NUM1])
+	{
+		Input += "1";
+		bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_2] || g_abKeyPressed[K_NUM2])
+	{
+		Input += "2";
+		bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_3] || g_abKeyPressed[K_NUM3])
+	{
+		Input += "3";
+		bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_4] || g_abKeyPressed[K_NUM4])
+	{
+		Input += "4";
+		bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_5] || g_abKeyPressed[K_NUM5])
+	{
+		Input += "5";
+		bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_6] || g_abKeyPressed[K_NUM6])
+	{
+		Input += "6";
+		bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_7] || g_abKeyPressed[K_NUM7])
+	{
+		Input += "7";
+		bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_8] || g_abKeyPressed[K_NUM8])
+	{
+		Input += "8";
+		bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_9] || g_abKeyPressed[K_NUM9])
+	{
+		Input += "9";
+		bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_0] || g_abKeyPressed[K_NUM0])
+	{
+		Input += "0";
+		bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_BACK] && (Input.length() != 0))
+	{
+		Input.erase(Input.length() - 1, 1);
+		bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_RETURN])
+	{
+		if (Input != "")
+		{
+			transferUserInput(Input);
+			Input = "";
+			AddGuesses();
+		}
+	}
+	if (bSomethingHappened)
+	{
+		// set the bounce time to some time in the future to prevent accidental triggers
+		g_dBounceTime = g_dElapsedTime + 0.125; // 125ms should be enough
+	}
+
+	CurrentUserInput(Input);
 }

@@ -64,11 +64,8 @@ enum EKEYS
 	K_RIGHT,
 	K_ESCAPE,
 	K_SPACE,
-	K_COUNT
-};
-
-enum EALPHABETS
-{
+	K_BACK,
+	K_RETURN,
 	K_A,
 	K_B,
 	K_C,
@@ -94,11 +91,7 @@ enum EALPHABETS
 	K_W,
 	K_X,
 	K_Y,
-	K_Z
-};
-
-enum ENUMBERS
-{
+	K_Z,
 	K_1,
 	K_2,
 	K_3,
@@ -108,9 +101,19 @@ enum ENUMBERS
 	K_7,
 	K_8,
 	K_9,
-	K_0
+	K_0,
+	K_NUM0,
+	K_NUM1,
+	K_NUM2,
+	K_NUM3,
+	K_NUM4,
+	K_NUM5,
+	K_NUM6,
+	K_NUM7,
+	K_NUM8,
+	K_NUM9,
+	K_COUNT
 };
-
 // Enumeration for the different screen states
 enum EGAMESTATES
 {
@@ -165,5 +168,6 @@ void Alphabets();
 void instructionScreen();
 void numbers();
 void music();
+void Typing();
 
 #endif // _GAME_H

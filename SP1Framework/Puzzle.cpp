@@ -1,111 +1,142 @@
 #include "Puzzle.h"
 
 Console* ptrPuzCon;
+double* ptrPuzElapsedTime;
 string display;
 
-void initPuzCon(Console &input) { ptrPuzCon = &input; }
+string confirmUserInput;
+string currentUserInput;
+int currentRandomAnswer;
+int score;
+int Minigames;
+int Guesses;
+bool IsPuzzleFinished;
 
-int Puzzle()
+void transferUserInput(string input) { confirmUserInput = input; }	// Transfer userInput from game.cpp to here
+bool isPuzzleFinished() { return IsPuzzleFinished; }
+void isPuzzleFinished(bool input) { IsPuzzleFinished = input; }
+void CurrentUserInput(string input) { currentUserInput = input; }
+void AddGuesses() { Guesses++; }
+int AddScore() { return score; }
+void AddScore(int input) { score = input; }
+
+void initPuzPtr(Console &input)
 {
-	srand(time(NULL));
-	int Score = 0;
-	int Minigames = rand();
-	Minigames %= 5;
-	switch (/*Minigames*/ 0)		// For debugging
-	{
-	case eGame::GAME_ONE: Score = random_number_game();
-		break;
-	case eGame::GAME_TWO: Score = random_alphabet();
-		break;
-	case eGame::GAME_THREE: Score = random_pattern();
-		break;
-	case eGame::GAME_FOUR: Score = logic_game();
-		break;
-	case eGame::GAME_FIVE: Score = Riddles();
-		break;
-	}
-	return Score;
+	ptrPuzCon = &input;
 }
 
-int random_number_game()
+void initCurrentAnswer()	// Run this function once. It will set the current puzzle and current answer
 {
+	// Set which minigame to run first
+	srand(time(NULL));
+	ptrPuzCon->clearBuffer(0x1F);
+	ptrPuzCon->flushBufferToConsole();
+	confirmUserInput = "";
+	score = 0;
+	Minigames = rand();
+	Minigames %= 3;
+	IsPuzzleFinished = false;
+	Guesses = 0;
+	switch (/*Minigames*/ 0)	// Checks minigame state and sets the answer according to the minigame state to the currentRandomAnswer variable
+	{
+	case eGame::GAME_ONE: currentRandomAnswer = rand() % 100 + 1;
+		break;
+	case eGame::GAME_TWO: currentRandomAnswer = rand() % 26 + 97;
+		break;
+	case eGame::GAME_THREE: currentRandomAnswer = rand() % 100 + 1;
+		break;
+	case eGame::GAME_FOUR:;
+		break;
+	case eGame::GAME_FIVE:;
+		break;
+	}
+	// Reset any variable that needs reseting here
+}
+
+void Puzzle()	// Function will be called to run in game.cpp (somewhere that is able to connect to render function)
+{
+	// These will transfer to initCurrentAnswer(). Some tweaking is required to make it work.
+
+	/////////////////////////////////////
+
+	switch (/*Minigames*/ 0)		// For debugging
+	{
+	case eGame::GAME_ONE: random_number_game();
+		break;
+	case eGame::GAME_TWO: random_alphabet();
+		break;
+	case eGame::GAME_THREE: random_pattern();
+		break;
+	case eGame::GAME_FOUR: logic_game();
+		break;
+	case eGame::GAME_FIVE: Riddles();
+		break;
+	}
+}
+
+void random_number_game()
+{
+	// Conditions in this function have to check against confirmUserInput
+	// 
+
 	COORD c = { 1, 1 };		// Used for display position
-	int Variable = rand() % LIMIT + ONE;
-	int Score;
-	int UserAnswer = 0;
-	int guesses = 0;
-	int x = 1;
+	//ptrPuzCon->clearBuffer(0x1F);	// Clears console screen
 
-	//cout << "From 1 to " << LIMIT << ", guess the number" << endl;
-
-	while (x != 0)
-	{
-		ptrPuzCon->clearBuffer(0x1F);	// Clears console screen
-
-		display = "From 1 to " + to_string(LIMIT) + ", guess the number";
-		ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		ptrPuzCon->flushBufferToConsole();	// Shows what you have buffered on console
-		//cin >> UserAnswer;
-		
-		// Detect input here
-		do
-		{
-
-		} while (UserAnswer == 0);
-
-		c = { 1, 10 };	// Change display position
-
-		if (UserAnswer > LIMIT || UserAnswer < ONE)
-		{
-			//cout << "Number over the range" << endl;
-			display = "Number over the range";
-			ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		}
-		if (UserAnswer < Variable)
-		{
-			//cout << "Wrong, gimme a bigger number" << endl;
-			display = "Wrong, gimme a bigger number";
-			ptrPuzCon->writeToBuffer(c, display, 0x0F);
-
-			guesses++;
-		}
-		else if (UserAnswer > Variable)
-		{
-			//cout << "Wrong, gimme a smaller number" << endl;
-			display = "Wrong, gimme a smaller number";
-			ptrPuzCon->writeToBuffer(c, display, 0x0F);
-
-			guesses++;
-		}
-		else if (UserAnswer == Variable)
-		{
-			break;
-		}
-
-		ptrPuzCon->flushBufferToConsole();	// Shows what you have buffered on console
-	}
-
-	//cout << "Correct! It only took you " << guesses << " times to guess!" << endl;
-	display = "Correct! It only took you " + to_string(guesses) + " times to guess!";
+	display = "From 1 to " + to_string(LIMIT) + ", guess the number";
 	ptrPuzCon->writeToBuffer(c, display, 0x0F);
-	ptrPuzCon->flushBufferToConsole();	// Shows what you have buffered on console
+	c = { 1, 2 };
+	ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
 
-	Sleep(2000);
+	// Detect input here
 
-	if (guesses < 5)
-	{
-		Score = 100;
-	}
-	else if (guesses < 10)
-	{
-		Score = 50;
-	}
-	else
-	{
-		Score = 0;
-	}
+	c = { 1, 10 };	// Change display position
 
-	return Score;
+	if (atoi(confirmUserInput.c_str()) > LIMIT)
+	{
+		//cout << "Number over the range" << endl;
+		display = "Number over the range";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+	}
+	if (atoi(confirmUserInput.c_str()) < currentRandomAnswer && confirmUserInput != "")
+	{
+		//cout << "Wrong, gimme a bigger number" << endl;
+		display = "Wrong, gimme a bigger number";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+
+		//Guesses++;
+	}
+	else if (atoi(confirmUserInput.c_str()) > currentRandomAnswer && confirmUserInput != "")
+	{
+		//cout << "Wrong, gimme a smaller number" << endl;
+		display = "Wrong, gimme a smaller number";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+
+		//Guesses++;
+	}
+	else if (atoi(confirmUserInput.c_str()) == currentRandomAnswer && confirmUserInput != "")
+	{
+		if (Guesses < 5)
+			score += 100;
+		else if (Guesses < 10)
+			score += 50;
+		else
+			score += 0;
+
+		IsPuzzleFinished = true;
+
+		clock_t startTime = clock();
+		double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+		double delay = 1.0;
+
+		while (duration < delay)
+		{
+			duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+			display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+			ptrPuzCon->flushBufferToConsole();
+		}
+	}
 }
 
 int random_alphabet()

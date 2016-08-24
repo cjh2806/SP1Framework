@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
+#include <ctime>
 
 #define LOGIC 3
 #define ASCII 97
@@ -61,11 +62,18 @@ enum eRiddles{
 	RiddleFOURTEEN,
 	RiddleFIFTEEN
 };
-
-void initPuzCon(Console &input);
-int Puzzle();
+void initPuzPtr(Console &input);
+void initCurrentAnswer();
+bool isPuzzleFinished();
+void isPuzzleFinished(bool input);
+void CurrentUserInput(string input);
+void transferUserInput(string input);
+void AddGuesses();
+int AddScore();
+void AddScore(int input);
+void Puzzle();
 int random_alphabet();
-int random_number_game();
+void random_number_game();
 int random_pattern();
 int Riddles();
 int logic_game();
