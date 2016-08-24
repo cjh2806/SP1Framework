@@ -6,8 +6,8 @@
 using std::time;
 using std::stack;
 
-#define YSIZE 53
-#define XSIZE 23
+#define XSIZE 63
+#define YSIZE 33
 
 const unsigned int OffsetCoord = 1;
 
@@ -28,5 +28,5 @@ bool checkMazeDisplay(COORD input, char aChar, int offX = 0, int offY = 0);
 COORD getStartPosition();
 void bufferMaze(Console &refCon);
 void generateMaze();
-void Initialize(Cell Level[][XSIZE]);
-void GenerateMaze(Cell Level[][XSIZE], int &posX, int &posY, int &goalX, int &goalY);
+void Initialize(Cell Level[][YSIZE]);
+void GenerateMaze(Cell Level[][YSIZE], int &posX, int &posY, int &goalX, int &goalY);

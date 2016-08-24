@@ -9,8 +9,10 @@
 #include <MMSystem.h>
 #pragma comment(lib, "Winmm.lib")
 
+const WORD bgColor = 0x0F;
 const double DelayCharBlink = 0.5;
 const unsigned int PlayerHealth = 3;
+const char CharacterType = 64;
 
 CharState charState;
 
@@ -218,12 +220,12 @@ void splashScreenWait()    // waits for time to pass in splash screen
 	{
 		switch (IsCurrentState())
 		{
-		case STARTGAME: g_eGameState = S_GAME;
-			break;
-		case INSTRUCTION: g_eGameState = S_INSTRUCTIONS;
-			break;
-		case QUITGAME: g_bQuitGame = true;
-			break;
+			case STARTGAME: g_eGameState = S_GAME;
+				break;
+			case INSTRUCTION: g_eGameState = S_INSTRUCTIONS;
+				break;
+			case QUITGAME: g_bQuitGame = true;
+				break;
 		}
 	}
 }
@@ -243,52 +245,93 @@ void moveCharacter()
     if (g_dBounceTime > g_dElapsedTime)
         return;
 
-	/*if (g_sChar.m_cLocation.Y > OffsetBoundary && !checkMazeDisplay(g_sChar.m_cLocation, '*', 0, -1) && g_eGameState == S_GAME)
-		g_sChar.m_cLocation.Y--;*/
-
     // Updating the location of the character based on the key press
     // providing a beep sound whenver we shift the character
     if (g_abKeyPressed[K_UP])
-    {
-		if (IsCurrentState() == QUITGAME)
-			IsCurrentState(INSTRUCTION);
-		else if (IsCurrentState() == INSTRUCTION)
-			IsCurrentState(STARTGAME);
+	{
+		//Beep(1440, 30);
 
-        //Beep(1440, 30);
-		if (g_sChar.m_cLocation.Y > OffsetBoundary && !checkMazeDisplay(g_sChar.m_cLocation, '*', 0, (-1)))
-			g_sChar.m_cLocation.Y--;
+		switch (g_eGameState)
+		{
+			case S_SPLASHSCREEN:
+				if (IsCurrentState() == QUITGAME)
+					IsCurrentState(INSTRUCTION);
+				else if (IsCurrentState() == INSTRUCTION)
+					IsCurrentState(STARTGAME);
+				break;
+
+			case S_GAME:
+				if (g_sChar.m_cLocation.Y > OffsetBoundary && !checkMazeDisplay(g_sChar.m_cLocation, '*', 0, (-1)))
+					g_sChar.m_cLocation.Y--;
+				break;
+
+			case S_PUZZLE:
+				break;
+
+			case S_PICTURES:
+				break;
+		}
 
 		bSomethingHappened = true;
     }
-	if (g_abKeyPressed[K_LEFT] && g_sChar.m_cLocation.X > OffsetBoundary && !checkMazeDisplay(g_sChar.m_cLocation, '*', (-1)))
+	if (g_abKeyPressed[K_LEFT])
 	{
         //Beep(1440, 30);
-        g_sChar.m_cLocation.X--;
+
+		if (g_eGameState == S_GAME && g_sChar.m_cLocation.X > OffsetBoundary && !checkMazeDisplay(g_sChar.m_cLocation, '*', (-1)))
+			g_sChar.m_cLocation.X--;
+
         bSomethingHappened = true;
     }
 	if (g_abKeyPressed[K_DOWN])
 	{
-		if (IsCurrentState() == STARTGAME)
-			IsCurrentState(INSTRUCTION);
-		else if (IsCurrentState() == INSTRUCTION)
-			IsCurrentState(QUITGAME);
-
 		//Beep(1440, 30);
-		if (g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 2 && !checkMazeDisplay(g_sChar.m_cLocation, '*', 0, 1))
-			g_sChar.m_cLocation.Y++;
 
+		switch (g_eGameState)
+		{
+			case S_SPLASHSCREEN:
+				if (IsCurrentState() == STARTGAME)
+					IsCurrentState(INSTRUCTION);
+				else if (IsCurrentState() == INSTRUCTION)
+					IsCurrentState(QUITGAME);
+				break;
+
+			case S_GAME:
+				if (g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 2 && !checkMazeDisplay(g_sChar.m_cLocation, '*', 0, 1))
+					g_sChar.m_cLocation.Y++;
+				break;
+
+			case S_PUZZLE:
+				break;
+
+			case S_PICTURES:
+				break;
+		}
+		
 		bSomethingHappened = true;
     }
-	if (g_abKeyPressed[K_RIGHT] && g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 2 && !checkMazeDisplay(g_sChar.m_cLocation, '*', 1))
+	if (g_abKeyPressed[K_RIGHT])
 	{
 		//Beep(1440, 30);
-		g_sChar.m_cLocation.X++;
+
+		if (g_eGameState == S_GAME && g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 2 && !checkMazeDisplay(g_sChar.m_cLocation, '*', 1))
+			g_sChar.m_cLocation.X++;
+
 		bSomethingHappened = true;
     }
 	if (g_abKeyPressed[K_SPACE])
 	{
-		IsSelectionMade(true);
+		switch (g_eGameState)
+		{
+			case S_SPLASHSCREEN:
+				IsSelectionMade(true);
+				break;
+
+			case S_INSTRUCTIONS:
+				g_eGameState = S_SPLASHSCREEN;
+				IsSelectionMade(false);
+				break;
+		}
 
 		//g_sChar.m_bActive = !g_sChar.m_bActive;
 		bSomethingHappened = true;
@@ -310,7 +353,7 @@ void processUserInput()
 void clearScreen()
 {
     // Clears the buffer with this colour attribute
-    g_Console.clearBuffer(0x1F);
+	g_Console.clearBuffer(bgColor);
 }
 
 void renderSplashScreen()  // renders the splash screen
@@ -352,12 +395,12 @@ void renderCharacter()
 	if (charState)
 	{
 		colour(charColor[C_UNLIT]);
-		g_Console.writeToBuffer(g_sChar.m_cLocation, (char)64, charColor[C_UNLIT]);
+		g_Console.writeToBuffer(g_sChar.m_cLocation, CharacterType, charColor[C_UNLIT]);
 	}
 	else
 	{
 		colour(charColor[C_LIT]);
-		g_Console.writeToBuffer(g_sChar.m_cLocation, (char)64, charColor[C_LIT]);
+		g_Console.writeToBuffer(g_sChar.m_cLocation, CharacterType, charColor[C_LIT]);
 	}
 }
 
@@ -489,6 +532,7 @@ void endScreen()
 
 void instructionScreen()
 {
+	moveCharacter();
 	instructions(g_Console);
 }
 
