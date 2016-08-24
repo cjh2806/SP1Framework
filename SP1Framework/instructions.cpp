@@ -23,5 +23,6 @@ void instructions(Console &refCon)
 		c.X = c.X / 2 - 10;
 		c.Y = c.Y / 2 + 6;
 		refCon.writeToBuffer(c, " - Back - ", 0xF0);
+		break;
 	}
 }
