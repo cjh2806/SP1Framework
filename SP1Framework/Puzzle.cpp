@@ -197,7 +197,6 @@ void random_alphabet()
 }
 void random_pattern()
 {
-	srand(time(NULL));
 	COORD c = { 1, 1 };
 	display = "Enter the next number in the pattern";
 	ptrPuzCon->writeToBuffer(c, display, 0x0F);
