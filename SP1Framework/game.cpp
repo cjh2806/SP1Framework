@@ -42,19 +42,19 @@ Console g_Console(ScreenReso, "Maze Thinker");
 // Input    : void
 // Output   : void
 //--------------------------------------------------------------
-void init( void )
+void init(void)
 {
-    // Set precision for floating point output
-    g_dElapsedTime = 0.0;
-    g_dBounceTime = 0.0;
-    // sets the initial state for the game
-    g_eGameState = S_SPLASHSCREEN;
+	// Set precision for floating point output
+	g_dElapsedTime = 0.0;
+	g_dBounceTime = 0.0;
+	// sets the initial state for the game
+	g_eGameState = S_SPLASHSCREEN;
 
-    g_sChar.m_cLocation.X = g_Console.getConsoleSize().X / 2;
-    g_sChar.m_cLocation.Y = g_Console.getConsoleSize().Y / 2;
-    g_sChar.m_bActive = true;
-    // sets the width, height and the font name to use in the console
-    g_Console.setConsoleFont(0, 16, L"Raster Consolas");
+	g_sChar.m_cLocation.X = g_Console.getConsoleSize().X / 2;
+	g_sChar.m_cLocation.Y = g_Console.getConsoleSize().Y / 2;
+	g_sChar.m_bActive = true;
+	// sets the width, height and the font name to use in the console
+	g_Console.setConsoleFont(0, 16, L"Raster Consolas");
 
 	initMenuTitle();
 	Input = "";
@@ -79,12 +79,12 @@ void init( void )
 // Input    : Void
 // Output   : void
 //--------------------------------------------------------------
-void shutdown( void )
+void shutdown(void)
 {
-    // Reset to white text on black background
-    colour(FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
+	// Reset to white text on black background
+	colour(FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
 
-    g_Console.clearBuffer();
+	g_Console.clearBuffer();
 }
 
 //--------------------------------------------------------------
@@ -98,14 +98,14 @@ void shutdown( void )
 // Input    : Void
 // Output   : void
 //--------------------------------------------------------------
-void getInput( void )
-{    
-    g_abKeyPressed[K_UP]     = isKeyPressed(VK_UP);
-    g_abKeyPressed[K_DOWN]   = isKeyPressed(VK_DOWN);
-    g_abKeyPressed[K_LEFT]   = isKeyPressed(VK_LEFT);
-    g_abKeyPressed[K_RIGHT]  = isKeyPressed(VK_RIGHT);
-    g_abKeyPressed[K_SPACE]  = isKeyPressed(VK_SPACE);
-    g_abKeyPressed[K_ESCAPE] = isKeyPressed(VK_ESCAPE);
+void getInput(void)
+{
+	g_abKeyPressed[K_UP] = isKeyPressed(VK_UP);
+	g_abKeyPressed[K_DOWN] = isKeyPressed(VK_DOWN);
+	g_abKeyPressed[K_LEFT] = isKeyPressed(VK_LEFT);
+	g_abKeyPressed[K_RIGHT] = isKeyPressed(VK_RIGHT);
+	g_abKeyPressed[K_SPACE] = isKeyPressed(VK_SPACE);
+	g_abKeyPressed[K_ESCAPE] = isKeyPressed(VK_ESCAPE);
 	g_abKeyPressed[K_BACK] = isKeyPressed(VK_BACK);
 	g_abKeyPressed[K_RETURN] = isKeyPressed(VK_RETURN);
 }
@@ -180,21 +180,21 @@ void numbers(void)
 //--------------------------------------------------------------
 void update(double dt)
 {
-    // get the delta time
-    g_dElapsedTime += dt;
-    g_dDeltaTime = dt;
+	// get the delta time
+	g_dElapsedTime += dt;
+	g_dDeltaTime = dt;
 
-    switch (g_eGameState)
-    {
-		case S_SPLASHSCREEN: splashScreen(); // game logic for the splash screen
-            break;
-        case S_GAME: gameplay(); // gameplay logic when we are in the game
-            break;
-		case S_PUZZLE: RunPuzzle();
-			break;
-		case S_PICTURES: RunPictures();
-			break;
-    }
+	switch (g_eGameState)
+	{
+	case S_SPLASHSCREEN: splashScreen(); // game logic for the splash screen
+		break;
+	case S_GAME: gameplay(); // gameplay logic when we are in the game
+		break;
+	case S_PUZZLE: RunPuzzle();
+		break;
+	case S_PICTURES: RunPictures();
+		break;
+	}
 }
 //--------------------------------------------------------------
 // Purpose  : Render function is to update the console screen
@@ -206,19 +206,19 @@ void update(double dt)
 //--------------------------------------------------------------
 void render()
 {
-    clearScreen();      // clears the current screen and draw from scratch 
-    switch (g_eGameState)
-    {
-        case S_SPLASHSCREEN: renderSplashScreen();
-            break;
-        case S_GAME: renderGame();
-            break;
-		case S_PUZZLE: Puzzle();
-			break;
-		case S_ENDMENU: endScreen();
-			break;
-		case S_INSTRUCTIONS: instructionScreen();
-			break;
+	clearScreen();      // clears the current screen and draw from scratch 
+	switch (g_eGameState)
+	{
+	case S_SPLASHSCREEN: renderSplashScreen();
+		break;
+	case S_GAME: renderGame();
+		break;
+	case S_PUZZLE: Puzzle();
+		break;
+	case S_ENDMENU: endScreen();
+		break;
+	case S_INSTRUCTIONS: instructionScreen();
+		break;
 	}
 	renderFramerate();  // renders debug information, frame rate, elapsed time, etc
 	renderToScreen();   // dump the contents of the buffer to the screen, one frame worth of game
@@ -236,20 +236,20 @@ void splashScreenWait()    // waits for time to pass in splash screen
 	{
 		switch (IsCurrentState())
 		{
-			case STARTGAME: g_eGameState = S_GAME;
-				break;
-			case INSTRUCTION: g_eGameState = S_INSTRUCTIONS;
-				break;
-			case QUITGAME: g_bQuitGame = true;
-				break;
+		case STARTGAME: g_eGameState = S_GAME;
+			break;
+		case INSTRUCTION: g_eGameState = S_INSTRUCTIONS;
+			break;
+		case QUITGAME: g_bQuitGame = true;
+			break;
 		}
 	}
 }
 
 void gameplay()            // gameplay logic
 {
-    processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
-    moveCharacter();    // moves the character, collision detection, physics, etc
+	processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
+	moveCharacter();    // moves the character, collision detection, physics, etc
 	music();                   // sound can be played here too.
 
 	detectMazeEnd();
@@ -257,75 +257,75 @@ void gameplay()            // gameplay logic
 
 void moveCharacter()
 {
-    bool bSomethingHappened = false;
-    if (g_dBounceTime > g_dElapsedTime)
-        return;
+	bool bSomethingHappened = false;
+	if (g_dBounceTime > g_dElapsedTime)
+		return;
 
-    // Updating the location of the character based on the key press
-    // providing a beep sound whenver we shift the character
-    if (g_abKeyPressed[K_UP])
+	// Updating the location of the character based on the key press
+	// providing a beep sound whenver we shift the character
+	if (g_abKeyPressed[K_UP])
 	{
 		//Beep(1440, 30);
 
 		switch (g_eGameState)
 		{
-			case S_SPLASHSCREEN:
-				if (IsCurrentState() == QUITGAME)
-					IsCurrentState(INSTRUCTION);
-				else if (IsCurrentState() == INSTRUCTION)
-					IsCurrentState(STARTGAME);
-				break;
+		case S_SPLASHSCREEN:
+			if (IsCurrentState() == QUITGAME)
+				IsCurrentState(INSTRUCTION);
+			else if (IsCurrentState() == INSTRUCTION)
+				IsCurrentState(STARTGAME);
+			break;
 
-			case S_GAME:
-				if (g_sChar.m_cLocation.Y > OffsetBoundary && !checkMazeDisplay(g_sChar.m_cLocation, '*', 0, (-1)))
-					g_sChar.m_cLocation.Y--;
-				break;
+		case S_GAME:
+			if (g_sChar.m_cLocation.Y > OffsetBoundary && !checkMazeDisplay(g_sChar.m_cLocation, '*', 0, (-1)))
+				g_sChar.m_cLocation.Y--;
+			break;
 
-			case S_PUZZLE:
-				break;
+		case S_PUZZLE:
+			break;
 
-			case S_PICTURES:
-				break;
+		case S_PICTURES:
+			break;
 		}
 
 		bSomethingHappened = true;
-    }
+	}
 	if (g_abKeyPressed[K_LEFT])
 	{
-        //Beep(1440, 30);
+		//Beep(1440, 30);
 
 		if (g_eGameState == S_GAME && g_sChar.m_cLocation.X > OffsetBoundary && !checkMazeDisplay(g_sChar.m_cLocation, '*', (-1)))
 			g_sChar.m_cLocation.X--;
 
-        bSomethingHappened = true;
-    }
+		bSomethingHappened = true;
+	}
 	if (g_abKeyPressed[K_DOWN])
 	{
 		//Beep(1440, 30);
 
 		switch (g_eGameState)
 		{
-			case S_SPLASHSCREEN:
-				if (IsCurrentState() == STARTGAME)
-					IsCurrentState(INSTRUCTION);
-				else if (IsCurrentState() == INSTRUCTION)
-					IsCurrentState(QUITGAME);
-				break;
+		case S_SPLASHSCREEN:
+			if (IsCurrentState() == STARTGAME)
+				IsCurrentState(INSTRUCTION);
+			else if (IsCurrentState() == INSTRUCTION)
+				IsCurrentState(QUITGAME);
+			break;
 
-			case S_GAME:
-				if (g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 2 && !checkMazeDisplay(g_sChar.m_cLocation, '*', 0, 1))
-					g_sChar.m_cLocation.Y++;
-				break;
+		case S_GAME:
+			if (g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 2 && !checkMazeDisplay(g_sChar.m_cLocation, '*', 0, 1))
+				g_sChar.m_cLocation.Y++;
+			break;
 
-			case S_PUZZLE:
-				break;
+		case S_PUZZLE:
+			break;
 
-			case S_PICTURES:
-				break;
+		case S_PICTURES:
+			break;
 		}
-		
+
 		bSomethingHappened = true;
-    }
+	}
 	if (g_abKeyPressed[K_RIGHT])
 	{
 		//Beep(1440, 30);
@@ -334,41 +334,41 @@ void moveCharacter()
 			g_sChar.m_cLocation.X++;
 
 		bSomethingHappened = true;
-    }
+	}
 	if (g_abKeyPressed[K_SPACE])
 	{
 		switch (g_eGameState)
 		{
-			case S_SPLASHSCREEN:
-				IsSelectionMade(true);
-				break;
+		case S_SPLASHSCREEN:
+			IsSelectionMade(true);
+			break;
 
-			case S_INSTRUCTIONS:
-				g_eGameState = S_SPLASHSCREEN;
-				IsSelectionMade(false);
-				break;
+		case S_INSTRUCTIONS:
+			g_eGameState = S_SPLASHSCREEN;
+			IsSelectionMade(false);
+			break;
 		}
 
 		//g_sChar.m_bActive = !g_sChar.m_bActive;
 		bSomethingHappened = true;
 	}
 
-    if (bSomethingHappened)
-    {
-        // set the bounce time to some time in the future to prevent accidental triggers
-        g_dBounceTime = g_dElapsedTime + 0.125; // 125ms should be enough
-    }
+	if (bSomethingHappened)
+	{
+		// set the bounce time to some time in the future to prevent accidental triggers
+		g_dBounceTime = g_dElapsedTime + 0.125; // 125ms should be enough
+	}
 }
 void processUserInput()
 {
-    // quits the game if player hits the escape key
-    if (g_abKeyPressed[K_ESCAPE])
-        g_bQuitGame = true;    
+	// quits the game if player hits the escape key
+	if (g_abKeyPressed[K_ESCAPE])
+		g_bQuitGame = true;
 }
 
 void clearScreen()
 {
-    // Clears the buffer with this colour attribute
+	// Clears the buffer with this colour attribute
 	g_Console.clearBuffer(bgColor);
 }
 
@@ -379,8 +379,8 @@ void renderSplashScreen()  // renders the splash screen
 
 void renderGame()
 {
-    renderMap();        // renders the map to the buffer first
-    renderCharacter();  // renders the character into the buffer
+	renderMap();        // renders the map to the buffer first
+	renderCharacter();  // renders the character into the buffer
 }
 
 void renderMap()
@@ -399,7 +399,7 @@ void renderMap()
 
 void renderCharacter()
 {
-    // Draw the location of the character
+	// Draw the location of the character
 	WORD charColor[] = { 0x0A, 0xAA };
 
 	if (t_charBlink < g_dElapsedTime)
@@ -422,21 +422,21 @@ void renderCharacter()
 
 void renderFramerate()
 {
-    COORD c;
-    // displays the framerate
-    std::ostringstream ss;
-    ss << std::fixed << std::setprecision(3);
-    ss << 1.0 / g_dDeltaTime << "fps";
-    c.X = g_Console.getConsoleSize().X - 9;
-    c.Y = 0;
-    g_Console.writeToBuffer(c, ss.str(),0x09);
+	COORD c;
+	// displays the framerate
+	std::ostringstream ss;
+	ss << std::fixed << std::setprecision(3);
+	ss << 1.0 / g_dDeltaTime << "fps";
+	c.X = g_Console.getConsoleSize().X - 9;
+	c.Y = 0;
+	g_Console.writeToBuffer(c, ss.str(), 0x09);
 
 	ss.str("");
 	ss << playerHealth << " Lives";
 	c.X = 15;
 	c.Y = 0;
 	g_Console.writeToBuffer(c, ss.str(), 0x09);
-	
+
 	if (g_dElapsedTime > (1 + timer) && g_dElapsedTime < (1.01 + timer) && playerHealth>0)
 	{
 		timer = timer + 2;
@@ -448,10 +448,10 @@ void renderFramerate()
 	}
 
 	// displays the elapsed time
-    ss.str("");
-    ss << g_dElapsedTime << "secs";
-    c.X = 0;
-    c.Y = 0;
+	ss.str("");
+	ss << g_dElapsedTime << "secs";
+	c.X = 0;
+	c.Y = 0;
 	g_Console.writeToBuffer(c, ss.str(), 0x09);
 
 	ScoreDisplay();
@@ -459,8 +459,8 @@ void renderFramerate()
 
 void renderToScreen()
 {
-    // Writes the buffer to the console, hence you will see what you have written
-    g_Console.flushBufferToConsole();
+	// Writes the buffer to the console, hence you will see what you have written
+	g_Console.flushBufferToConsole();
 }
 
 void initConsole(bool input)
@@ -479,7 +479,7 @@ void initConsole(bool input)
 
 void detectMazeEnd()
 {
-	if (checkMazeDisplay(g_sChar.m_cLocation ,'E'))
+	if (checkMazeDisplay(g_sChar.m_cLocation, 'E'))
 	{
 		IsMazeGenerated(false);
 		TriggerMiniGames();
@@ -494,7 +494,7 @@ void TriggerMiniGames()
 	i = 1; // For debugging
 	if (i % 2 == 1)
 	{
-		InitPuzzle = false;
+		InitPuzzle = true;
 		g_eGameState = S_PUZZLE;
 	}
 	else
@@ -575,137 +575,137 @@ void Typing()
 	bool bSomethingHappened = false;
 	if (g_dBounceTime > g_dElapsedTime)
 		return;
-	/*if (g_abKeyPressed[K_A])
+	if (g_abKeyPressed[K_A])
 	{
-	Input += "a";
-	bSomethingHappened = true;
+		Input += "a";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_B])
 	{
-	Input += "b";
-	bSomethingHappened = true;
+		Input += "b";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_C])
 	{
-	Input += "c";
-	bSomethingHappened = true;
+		Input += "c";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_D])
 	{
-	Input += "d";
-	bSomethingHappened = true;
+		Input += "d";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_E])
 	{
-	Input += "e";
-	bSomethingHappened = true;
+		Input += "e";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_F])
 	{
-	Input += "f";
-	bSomethingHappened = true;
+		Input += "f";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_G])
 	{
-	Input += "g";
-	bSomethingHappened = true;
+		Input += "g";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_H])
 	{
-	Input += "h";
-	bSomethingHappened = true;
+		Input += "h";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_I])
 	{
-	Input += "i";
-	bSomethingHappened = true;
+		Input += "i";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_J])
 	{
-	Input += "j";
-	bSomethingHappened = true;
+		Input += "j";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_K])
 	{
-	Input += "k";
-	bSomethingHappened = true;
+		Input += "k";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_L])
 	{
-	Input += "l";
-	bSomethingHappened = true;
+		Input += "l";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_M])
 	{
-	Input += "m";
-	bSomethingHappened = true;
+		Input += "m";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_N])
 	{
-	Input += "n";
-	bSomethingHappened = true;
+		Input += "n";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_O])
 	{
-	Input += "o";
-	bSomethingHappened = true;
+		Input += "o";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_P])
 	{
-	Input += "p";
-	bSomethingHappened = true;
+		Input += "p";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_Q])
 	{
-	Input += "q";
-	bSomethingHappened = true;
+		Input += "q";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_R])
 	{
-	Input += "r";
-	bSomethingHappened = true;
+		Input += "r";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_S])
 	{
-	Input += "s";
-	bSomethingHappened = true;
+		Input += "s";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_T])
 	{
-	Input += "t";
-	bSomethingHappened = true;
+		Input += "t";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_U])
 	{
-	Input += "u";
-	bSomethingHappened = true;
+		Input += "u";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_V])
 	{
-	Input += "v";
-	bSomethingHappened = true;
+		Input += "v";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_W])
 	{
-	Input += "w";
-	bSomethingHappened = true;
+		Input += "w";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_X])
 	{
-	Input += "x";
-	bSomethingHappened = true;
+		Input += "x";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_Y])
 	{
-	Input += "y";
-	bSomethingHappened = true;
+		Input += "y";
+		bSomethingHappened = true;
 	}
 	else if (g_abKeyPressed[K_Z])
 	{
-	Input += "z";
-	bSomethingHappened = true;
-	}*/
-	/*else*/ if (g_abKeyPressed[K_1] || g_abKeyPressed[K_NUM1])
+		Input += "z";
+		bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_1] || g_abKeyPressed[K_NUM1])
 	{
 		Input += "1";
 		bSomethingHappened = true;

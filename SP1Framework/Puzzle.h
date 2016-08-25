@@ -6,15 +6,15 @@
 #include <string>
 #include <ctime>
 
-#define LOGIC 3
+#define LOGIC 15
 #define ASCII 97
 #define RANGE 26
 #define ONE 1
 #define LIMIT 100
 #define TOTALPATTERNS 10
 #define RIDDLES 15
-#define GAME rand()
 #define GAME_TOTAL 5
+#define ASCIILAST 122
 
 using namespace std;
 
@@ -36,13 +36,27 @@ enum ePatterns {
 	PatternSEVEN,
 	PatternEIGHT,
 	PatternNINE,
-	PatternTEN
+	PatternTEN,
+	PatternTOTAL
 };
 
 enum eLogic{
 	LogicONE,
 	LogicTWO,
-	LogicTHREE
+	LogicTHREE,
+	LogicFOUR,
+	LogicFIVE,
+	LogicSIX,
+	LogicSEVEN,
+	LogicEIGHT,
+	LogicNINE,
+	LogicTEN,
+	LogicELEVEN,
+	LogicTWELVE,
+	LogicTHIRTEEN,
+	LogicFOURTEEN,
+	LogicFIFTEEN,
+	LogicTOTAL
 };
 
 enum eRiddles{
@@ -60,7 +74,8 @@ enum eRiddles{
 	RiddleTWELVE,
 	RiddleTHIRTEEN,
 	RiddleFOURTEEN,
-	RiddleFIFTEEN
+	RiddleFIFTEEN,
+	RiddleTOTAL
 };
 void initPuzPtr(Console &input);
 void initCurrentAnswer();
@@ -72,8 +87,8 @@ void AddGuesses();
 int AddScore();
 void AddScore(int input);
 void Puzzle();
-int random_alphabet();
+void random_alphabet();
 void random_number_game();
-int random_pattern();
-int Riddles();
-int logic_game();
+void random_pattern();
+void Riddles();
+void logic_game();

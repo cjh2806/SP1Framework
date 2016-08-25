@@ -11,6 +11,9 @@ int score;
 int Minigames;
 int Guesses;
 bool IsPuzzleFinished;
+int Pattern;
+int Correct;
+
 
 void transferUserInput(string input) { confirmUserInput = input; }	// Transfer userInput from game.cpp to here
 bool isPuzzleFinished() { return IsPuzzleFinished; }
@@ -34,20 +37,22 @@ void initCurrentAnswer()	// Run this function once. It will set the current puzz
 	confirmUserInput = "";
 	score = 0;
 	Minigames = rand();
-	Minigames %= 3;
+	Minigames %= GAME_TOTAL;
 	IsPuzzleFinished = false;
 	Guesses = 0;
-	switch (/*Minigames*/ 0)	// Checks minigame state and sets the answer according to the minigame state to the currentRandomAnswer variable
+	Correct = 0;
+	switch (Minigames)	// Checks minigame state and sets the answer according to the minigame state to the currentRandomAnswer variable
 	{
 	case eGame::GAME_ONE: currentRandomAnswer = rand() % 100 + 1;
 		break;
 	case eGame::GAME_TWO: currentRandomAnswer = rand() % 26 + 97;
 		break;
 	case eGame::GAME_THREE: currentRandomAnswer = rand() % 100 + 1;
+		Pattern = rand();
 		break;
-	case eGame::GAME_FOUR:;
+	case eGame::GAME_FOUR: Pattern = rand();
 		break;
-	case eGame::GAME_FIVE:;
+	case eGame::GAME_FIVE: Pattern = rand();
 		break;
 	}
 	// Reset any variable that needs reseting here
@@ -59,7 +64,7 @@ void Puzzle()	// Function will be called to run in game.cpp (somewhere that is a
 
 	/////////////////////////////////////
 
-	switch (/*Minigames*/ 0)		// For debugging
+	switch (Minigames)		// For debugging
 	{
 	case eGame::GAME_ONE: random_number_game();
 		break;
@@ -97,7 +102,7 @@ void random_number_game()
 		display = "Number over the range";
 		ptrPuzCon->writeToBuffer(c, display, 0x0F);
 	}
-	if (atoi(confirmUserInput.c_str()) < currentRandomAnswer && confirmUserInput != "")
+	else if (atoi(confirmUserInput.c_str()) < currentRandomAnswer && confirmUserInput != "")
 	{
 		//cout << "Wrong, gimme a bigger number" << endl;
 		display = "Wrong, gimme a bigger number";
@@ -139,1117 +144,2284 @@ void random_number_game()
 	}
 }
 
-int random_alphabet()
+void random_alphabet()
 {
-	int AsciiCharacter = rand() % RANGE + ASCII;
-	int Score;
-	char UserAnswer;
-	int guesses = 0;
-	int x = 1;
-	cout << "From a to z , guess the letter" << endl;
-	while (x != 0)
+	COORD c = { 1, 1 };
+
+	display = "From a to z, guess the letter.";
+	ptrPuzCon->writeToBuffer(c, display, 0x0F);
+	c = { 1, 2 };
+	ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+
+	c = { 1, 10 };
+
+	if ((confirmUserInput[0] < ASCII || confirmUserInput[0] > ASCIILAST) && confirmUserInput != "")
 	{
-		cin >> UserAnswer;
-		if (UserAnswer >= 65 && UserAnswer <= 90)
+		display = "Invalid Character";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+	}
+	else if (confirmUserInput[0] < currentRandomAnswer && confirmUserInput != "")
+	{
+		display = "Wrong character! The letter is closer to z";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+	}
+	else if (confirmUserInput[0] > currentRandomAnswer && confirmUserInput != "")
+	{
+		display = "Wrong character! The letter is closer to a";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+	}
+	else if (confirmUserInput[0] == currentRandomAnswer && confirmUserInput != "")
+	{
+		if (Guesses < 5)
+			score += 100;
+		else if (Guesses < 10)
+			score += 50;
+		else
+			score += 0;
+
+		IsPuzzleFinished = true;
+
+		clock_t startTime = clock();
+		double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+		double delay = 1.0;
+
+		while (duration < delay)
 		{
-			UserAnswer += 32;
-		}
-		else if (UserAnswer < 65 || UserAnswer > 90 && UserAnswer < 97 || UserAnswer >122)
-		{
-			cout << "Invalid Character" << endl;
-		}
-		if ((int)UserAnswer > AsciiCharacter)
-		{
-			cout << "Wrong, gimme an alphabet nearer to a" << endl;
-			guesses++;
-		}
-		else if ((int)UserAnswer < AsciiCharacter)
-		{
-			cout << "Wrong, gimme an alphabet nearer to z" << endl;
-			guesses++;
-		}
-		else if ((int)UserAnswer == AsciiCharacter)
-		{
-			break;
+			duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+			display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+			ptrPuzCon->flushBufferToConsole();
 		}
 	}
-	cout << "Correct! It only took you " << guesses << " times to guess!" << endl;
-	if (guesses < 5)
-	{
-		Score = 100;
-	}
-	else if (guesses < 10)
-	{
-		Score = 50;
-	}
-	else
-	{
-		Score = 0;
-	}
-	return Score;
 }
-int random_pattern()
+void random_pattern()
 {
 	srand(time(NULL));
-	int Variable = rand() % LIMIT;
-	int Pattern = rand();
-	int UserAnswer;
-	int Score;
-	int guesses = 1;
-	cout << "Enter the next number in the pattern" << endl;
-	while (true)
+	COORD c = { 1, 1 };
+	display = "Enter the next number in the pattern";
+	ptrPuzCon->writeToBuffer(c, display, 0x0F);
+	c = { 1, 3 };
+	ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+	c = { 1, 2 };
+	if (Pattern % TOTALPATTERNS == PatternONE)
 	{
-		if (Pattern % TOTALPATTERNS == PatternONE)
+		display = to_string(currentRandomAnswer) + ", " + to_string(currentRandomAnswer + 2) + ", " + to_string(currentRandomAnswer + 4) + ", " + to_string(currentRandomAnswer + 6) + ", " + to_string(currentRandomAnswer + 8);
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) != currentRandomAnswer + 10 && confirmUserInput != "")
 		{
-			cout << Variable << " " << Variable + 2 << " " << Variable + 4 << " " << Variable + 6 << " " << Variable + 8 << endl;
-			cin >> UserAnswer;
-			if (UserAnswer == Variable + 10)
-			{
-				break;
-			}
-			else
-			{
-				cout << "Try again" << endl;
-				guesses++;
-			}
+			display = "Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 		}
-		else if (Pattern % TOTALPATTERNS == PatternTWO)
+		else if (atoi(confirmUserInput.c_str()) == currentRandomAnswer + 10 && confirmUserInput != "")
 		{
-			cout << Variable << ", " << Variable * 2 << ", " << Variable * 4 << ", " << Variable * 6 << ", " << Variable * 8 << endl;
-			cin >> UserAnswer;
-			if (UserAnswer == Variable * 10)
-			{
-				break;
-			}
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
 			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Try again" << endl;
-				guesses++;
-			}
-		}
-		else if (Pattern % TOTALPATTERNS == PatternTHREE)
-		{
-			cout << Variable << ", " << Variable + 2 << ", " << Variable + 6 << ", " << Variable + 12 << ", " << Variable + 20 << endl;
-			cin >> UserAnswer;
-			if (UserAnswer == Variable + 30)
-			{
-				break;
-			}
-			else
-			{
-				cout << "Try again" << endl;
-				guesses++;
-			}
-		}
-		else if (Pattern % TOTALPATTERNS == PatternFOUR)
-		{
-			cout << Variable << ", " << Variable + 1 << ", " << Variable - 2 << ", " << Variable + 3 << ", " << Variable - 4 << ", " << Variable + 5 << endl;
-			cin >> UserAnswer;
-			if (UserAnswer == Variable - 6)
-			{
-				break;
-			}
-			else
-			{
-				cout << "Try again" << endl;
-				guesses++;
-			}
-		}
-		else if (Pattern % TOTALPATTERNS == PatternFIVE)
-		{
-			cout << Variable << ", " << Variable - 1 << ", " << Variable - 2 << ", " << Variable - 3 << ", " << Variable - 4 << endl;
-			cin >> UserAnswer;
-			if (UserAnswer == Variable - 5)
-			{
-				break;
-			}
-			else
-			{
-				cout << "Try again" << endl;
-				guesses++;
-			}
-		}
-		else if (Pattern % TOTALPATTERNS == PatternSIX)
-		{
-			cout << Variable << ", " << Variable * 2 << ", " << (Variable * 2) + 1 << ", " << ((Variable * 2) + 1) * 2 << ", " << (((Variable * 2) + 1) * 2) + 2 << ", " << ((((Variable * 2) + 1) * 2) + 2) * 2 << ", " << (((((Variable * 2) + 1) * 2) + 2) * 2) + 3 << ", " << ((((((Variable * 2) + 1) * 2) + 2) * 2) + 3) * 2 << endl;
-			cin >> UserAnswer;
-			if (UserAnswer == (((((((Variable * 2) + 1) * 2) + 2) * 2) + 3) * 2) + 4)
-			{
-				break;
-			}
-			else
-			{
-				cout << "Try again" << endl;
-				guesses++;
-			}
-		}
-		else if (Pattern % TOTALPATTERNS == PatternSEVEN)
-		{
-			cout << Variable << ", " << Variable + 8 << ", " << (Variable + 8) - 3 << ", " << ((Variable + 8) - 3) + 9 << ", " << (((Variable + 8) - 3) + 9) - 2 << endl;
-			cin >> UserAnswer;
-			if (UserAnswer == ((((Variable + 8) - 3) + 9) - 2) + 10)
-			{
-				break;
-			}
-			else
-			{
-				cout << "Try again" << endl;
-				guesses++;
-			}
-		}
-		else if (Pattern % TOTALPATTERNS == PatternEIGHT)
-		{
-			cout << Variable << ", " << Variable + 10 << ", " << (Variable + 10) - 5 << ", " << ((Variable + 10) - 5) + 20 << ", " << (((Variable + 10) - 5) + 20) - 10 << endl;
-			cin >> UserAnswer;
-			if (UserAnswer == ((((Variable + 10) - 5) + 20) - 10) + 30)
-			{
-				break;
-			}
-			else
-			{
-				cout << "Try again" << endl;
-				guesses++;
-			}
-		}
-		else if (Pattern % TOTALPATTERNS == PatternNINE)
-		{
-			cout << Variable << ", " << Variable * 2 << ", " << (Variable * 2) / 2 << ", " << ((Variable * 2) / 2) * 4 << ", " << (((Variable * 2) / 2) * 4) / 2 << ", " << ((((Variable * 2) / 2) * 4) / 2) * 6 << endl;
-			cin >> UserAnswer;
-			if (UserAnswer == (((((Variable * 2) / 2) * 4) / 2) * 6) / 2)
-			{
-				break;
-			}
-			else
-			{
-				cout << "Try again" << endl;
-				guesses++;
-			}
-		}
-		else if (Pattern % TOTALPATTERNS == PatternTEN)
-		{
-			cout << Variable << ", " << Variable + 10 << ", " << (Variable + 10) - 5 << ", " << ((Variable + 10) - 5) + 20 << ", " << (((Variable + 10) - 5) + 20) - 4 << ", " << ((((Variable + 10) - 5) + 20) - 4) + 30 << ", " << (((((Variable + 10) - 5) + 20) - 4) + 30) - 3 << endl;
-			cin >> UserAnswer;
-			if (UserAnswer == ((((((Variable + 10) - 5) + 20) - 4) + 30) - 3) + 40)
-			{
-				break;
-			}
-			else
-			{
-				cout << "Try again" << endl;
-				guesses++;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
 		}
 	}
-	cout << "Correct! It only took " << guesses << " guesses" << endl;
-	if (guesses < 5)
+	else if (Pattern % TOTALPATTERNS == PatternTWO)
 	{
-		Score = 50;
+		display = to_string(currentRandomAnswer) + ", " + to_string(currentRandomAnswer * 2) + ", " + to_string(currentRandomAnswer * 4) + ", " + to_string(currentRandomAnswer * 6) + ", " + to_string(currentRandomAnswer * 8);
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) != currentRandomAnswer * 10 && confirmUserInput != "")
+		{
+			display = "Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (atoi(confirmUserInput.c_str()) == currentRandomAnswer * 10 && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
+			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
 	}
-	else
+	else if (Pattern % TOTALPATTERNS == PatternTHREE)
 	{
-		Score = 0;
+		display = to_string(currentRandomAnswer) + ", " + to_string(currentRandomAnswer + 2) + ", " + to_string(currentRandomAnswer + 6) + ", " + to_string(currentRandomAnswer + 12) + ", " + to_string(currentRandomAnswer + 20);
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) != currentRandomAnswer + 30 && confirmUserInput != "")
+		{
+			display = "Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (atoi(confirmUserInput.c_str()) == currentRandomAnswer + 30 && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
+			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
 	}
-	return Score;
+	else if (Pattern % TOTALPATTERNS == PatternFOUR)
+	{
+		display = to_string(currentRandomAnswer) + ", " + to_string(currentRandomAnswer + 1) + ", " + to_string(currentRandomAnswer - 2) + ", " + to_string(currentRandomAnswer + 3) + ", " + to_string(currentRandomAnswer - 4) + ", " + to_string(currentRandomAnswer + 5);
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) != currentRandomAnswer - 6 && confirmUserInput != "")
+		{
+			display = "Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (atoi(confirmUserInput.c_str()) == currentRandomAnswer - 6 && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
+			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+	}
+	else if (Pattern % TOTALPATTERNS == PatternFIVE)
+	{
+		display = to_string(currentRandomAnswer) + ", " + to_string(currentRandomAnswer - 1) + ", " + to_string(currentRandomAnswer - 2) + ", " + to_string(currentRandomAnswer - 3) + ", " + to_string(currentRandomAnswer - 4);
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) != currentRandomAnswer - 5 && confirmUserInput != "")
+		{
+			display = "Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (atoi(confirmUserInput.c_str()) == currentRandomAnswer - 5 && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
+			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+	}
+	else if (Pattern % TOTALPATTERNS == PatternSIX)
+	{
+		display = to_string(currentRandomAnswer) + ", " + to_string(currentRandomAnswer * 2) + ", " + to_string((currentRandomAnswer * 2) + 1) + ", " + to_string(((currentRandomAnswer * 2) + 1) * 2) + ", " + to_string((((currentRandomAnswer * 2) + 1) * 2) + 2);
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) != (((((currentRandomAnswer * 2) + 1) * 2) + 2) * 2) && confirmUserInput != "")
+		{
+			display = "Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (atoi(confirmUserInput.c_str()) == (((((currentRandomAnswer * 2) + 1) * 2) + 2) * 2) && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
+			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+	}
+	else if (Pattern % TOTALPATTERNS == PatternSEVEN)
+	{
+		display = to_string(currentRandomAnswer) + ", " + to_string(currentRandomAnswer + 8) + ", " + to_string(currentRandomAnswer + 5) + ", " + to_string(currentRandomAnswer + 14) + ", " + to_string(currentRandomAnswer + 12);
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) != (currentRandomAnswer + 22) && confirmUserInput != "")
+		{
+			display = "Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (atoi(confirmUserInput.c_str()) == (currentRandomAnswer + 22) && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
+			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+	}
+	else if (Pattern % TOTALPATTERNS == PatternEIGHT)
+	{
+		display = to_string(currentRandomAnswer) + ", " + to_string(currentRandomAnswer + 10) + ", " + to_string(currentRandomAnswer + 5) + ", " + to_string(currentRandomAnswer + 25) + ", " + to_string(currentRandomAnswer + 15);
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) != (currentRandomAnswer + 15) && confirmUserInput != "")
+		{
+			display = "Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (atoi(confirmUserInput.c_str()) == (currentRandomAnswer + 15) && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
+			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+	}
+	else if (Pattern % TOTALPATTERNS == PatternNINE)
+	{
+		display = to_string(currentRandomAnswer) + ", " + to_string(currentRandomAnswer * 2) + ", " + to_string((currentRandomAnswer * 2) / 2) + ", " + to_string(((currentRandomAnswer * 2) / 2) * 4) + ", " + to_string((((currentRandomAnswer * 2) / 2) * 4) / 2);
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) != (((((currentRandomAnswer * 2) / 2) * 4) / 2) * 6) && confirmUserInput != "")
+		{
+			display = "Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (atoi(confirmUserInput.c_str()) == (((((currentRandomAnswer * 2) / 2) * 4) / 2) * 6) && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
+			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+	}
+	else if (Pattern % TOTALPATTERNS == PatternTEN)
+	{
+		display = to_string(currentRandomAnswer) + ", " + to_string(currentRandomAnswer + 10) + ", " + to_string(currentRandomAnswer + 5) + ", " + to_string(currentRandomAnswer + 25) + ", " + to_string(currentRandomAnswer + 21);
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) != (currentRandomAnswer + 51) && confirmUserInput != "")
+		{
+			display = "Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (atoi(confirmUserInput.c_str()) == (currentRandomAnswer + 51) && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
+			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+	}
 }
-int logic_game()
+void logic_game()
 {
-	int Logic_Game = rand();
-	int score;
-	int UserAnswer;
-	int correct = 0;
-	if (Logic_Game % LOGIC == LogicONE)
+	COORD c = { 1, 1 };
+	if (Pattern % LOGIC == LogicONE)
 	{
-		cout << "There are 12 pens on the table, you took 3, how many do you have?" << endl;
-		cout << "1) 12" << endl;
-		cout << "2) 9" << endl;
-		cout << "3) 0" << endl;
-		cout << "4) 3" << endl;
+		display = "There are 12 pens on the table, you took 3, how many do you have?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		display = "1) 12";
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 4 };
+		display = "2) 9";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 5 };
+		display = "3) 0";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 6 };
+		display = "4) 3";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
 
-		cin >> UserAnswer;
-		if (UserAnswer != 4)
+		c = { 1, 7 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) > 4 && confirmUserInput != "")
 		{
-			cout << "Wrong, you took 3 pens so you have 3 pens" << endl;
+			display = "Answer Invalid! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 		}
-		else
+		else if (atoi(confirmUserInput.c_str()) != 4 && confirmUserInput != "")
 		{
-			cout << "Correct" << endl;
-			correct++;
-		}
+			score = 0;
+			IsPuzzleFinished = true;
 
-		cout << "If an electric train is traveling from the east to the west, which direction is the smoke traveling?" << endl;
-		cout << "1) East" << endl;
-		cout << "2) West" << endl;
-		cout << "3) Up" << endl;
-		cout << "4) None of the above" << endl;
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 2.0;
 
-		cin >> UserAnswer;
-		if (UserAnswer != 4)
-		{
-			cout << "Wrong, an electric train does not produse smoke" << endl;
-		}
-		else
-		{
-			cout << "Correct" << endl;
-			correct++;
-		}
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 
-		cout << "There are 100 birds on a tree" << endl;
-		cout << "*BANG*" << endl;
-		cout << "you shot and killed 1 bird" << endl;
-		cout << "How many birds are left on the tree?" << endl;
-		cout << "1) 0" << endl;
-		cout << "2) 100" << endl;
-		cout << "3) 99" << endl;
-		cout << "4) 1" << endl;
+				display = "Wrong, you took 3 pens so you have 3 pens";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+		else if (atoi(confirmUserInput.c_str()) == 4 && confirmUserInput != "")
+		{
+			score = 10;
+			IsPuzzleFinished = true;
 
-		cin >> UserAnswer;
-		if (UserAnswer != 1)
-		{
-			cout << "Wrong, if you fired a gun and killed a bird the other birds will fly away" << endl;
-		}
-		else
-		{
-			cout << "Correct" << endl;
-			correct++;
-		}
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
 
-		cout << "If you are in a race, what place are you in if you take over the person who is in second place?" << endl;
-		cout << "1) First" << endl;
-		cout << "2) Second" << endl;
-		cout << "3) Third" << endl;
-		cout << "4) Last" << endl;
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 
-		cin >> UserAnswer;
-		if (UserAnswer != 2)
-		{
-			cout << "Wrong! If you overtake second, you are now second" << endl;
-		}
-		else
-		{
-			cout << "Correct!" << endl;
-			correct++;
-		}
-		cout << "1 is 3, 3 is 5, 5 is 4, 7 is 5. What is 9?" << endl;
-		cout << "1) 5" << endl;
-		cout << "2) 4" << endl;
-		cout << "3) 6" << endl;
-		cout << "4) 3" << endl;
-
-		cin >> UserAnswer;
-		if (UserAnswer != 2)
-		{
-			cout << "Wrong! 9 is 4 as there are 4 letters in nine" << endl;
-		}
-		else
-		{
-			cout << "Correct!" << endl;
-			correct++;
+				display = "Correct!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
 		}
 	}
-	else if (Logic_Game % LOGIC == LogicTWO)
+	else if (Pattern % LOGIC == LogicTWO)
 	{
-		cout << "If LOVE is coded as NRZJ, what is FIRE coded as?" << endl;
-		cout << "1) HLVJ" << endl;
-		cout << "2) GKUI" << endl;
-		cout << "3) HKVJ" << endl;
-		cout << "4) GLUJ" << endl;
+		display = "If an electric train is traveling from the east to the west, which direction is the smoke traveling?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		display = "1) East";
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 4 };
+		display = "2) West";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 5 };
+		display = "3) Up";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 6 };
+		display = "4) None of the above";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
 
-		cin >> UserAnswer;
-		if (UserAnswer != 2)
+		c = { 1, 7 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) > 4 && confirmUserInput != "")
 		{
-			cout << "Wrong! In the code, the first letter is the second alphabet, the second letter is the third alphabet, the third letter is the fourth alphabet and so on after the corresponding letter in the word. " << endl;
+			display = "Answer Invalid! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 		}
-		else
+		else if (atoi(confirmUserInput.c_str()) != 4 && confirmUserInput != "")
 		{
-			cout << "Correct!" << endl;
-			correct++;
-		}
+			score = 0;
+			IsPuzzleFinished = true;
 
-		cout << "Banks is related to Money in the same way as Transport is the related to ____" << endl;
-		cout << "1) Traffic" << endl;
-		cout << "2) Goods" << endl;
-		cout << "3) Speed" << endl;
-		cout << "4) Road" << endl;
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 2.0;
 
-		cin >> UserAnswer;
-		if (UserAnswer != 2)
-		{
-			cout << "Wrong! Bank deals with transaction of Money.Likewise Transport deals with the movement of Goods." << endl;
-		}
-		else
-		{
-			cout << "Correct!" << endl;
-			correct++;
-		}
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 
-		cout << "Find the odd one out." << endl;
-		cout << "1) Vapour" << endl;
-		cout << "2) Mist" << endl;
-		cout << "3) Hailstone" << endl;
-		cout << "4) Fog" << endl;
-
-		cin >> UserAnswer;
-		if (UserAnswer != 1)
-		{
-			cout << "Wrong! All except Vapour are different forms of Precipitation." << endl;
+				display = "Wrong, an electric train does not produse smoke";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
 		}
-		else
+		else if (atoi(confirmUserInput.c_str()) == 4 && confirmUserInput != "")
 		{
-			cout << "Correct!" << endl;
-			correct++;
-		}
+			score = 10;
+			IsPuzzleFinished = true;
 
-		cout << " F is the brother of A, C is the daughter of A, K is the sister of F and G is the brother of C then who is the uncle of G?" << endl;
-		cout << "1) C" << endl;
-		cout << "2) A" << endl;
-		cout << "3) K" << endl;
-		cout << "4) None of the above" << endl;
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
 
-		cin >> UserAnswer;
-		if (UserAnswer != 2)
-		{
-			cout << "Wrong! C & J are childern of A and F is the brother of A. So, F is uncle of C & J. " << endl;
-		}
-		else
-		{
-			cout << "Correct!" << endl;
-			correct++;
-		}
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 
-		cout << "JE, LH, OL, SQ, ?" << endl;
-		cout << "1) WV" << endl;
-		cout << "2) WX" << endl;
-		cout << "3) VW" << endl;
-		cout << "4) XW" << endl;
-
-		cin >> UserAnswer;
-		if (UserAnswer != 4)
-		{
-			cout << "Wrong! The first letter moves forward 2,3,4 ...... steps. The second letter moves forward 3,4,5 ...... steps." << endl;
-		}
-		else
-		{
-			cout << "Correct!" << endl;
-			correct++;
+				display = "Correct!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
 		}
 	}
-	else if (Logic_Game % LOGIC == LogicTHREE)
+	else if (Pattern % LOGIC == LogicTHREE)
 	{
-		cout << "Words from an artifical language. agnoscrenia means poisonous spider delanocrenia means poisonous snake agnosdeery means brown spider Which word could mean 'black widow spider'?" << endl;
-		cout << "1) deeryclostagnos" << endl;
-		cout << "2) agnosdelano" << endl;
-		cout << "3) agnosvitriblunin" << endl;
-		cout << "4) trymuttiagnos" << endl;
+		display = "There are 100 birds on a tree, *BANG*, you shot and killed 1 bird. How many birds are left on the tree?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		display = "1) 0";
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 4 };
+		display = "2) 100";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 5 };
+		display = "3) 99";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 6 };
+		display = "4) 1";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
 
-		cin >> UserAnswer;
-		if (UserAnswer != 3)
+		c = { 1, 7 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) > 4 && confirmUserInput != "")
 		{
-			cout << "Wrong! In this language, the noun appears first and the adjectives follow. Since agnos means spider and should appear first, choices 1 and 4 can be ruled out. Choice 2 can be ruled out because delano means snake. " << endl;
+			display = "Answer Invalid! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 		}
-		else
+		else if (atoi(confirmUserInput.c_str()) != 1 && confirmUserInput != "")
 		{
-			cout << "Correct" << endl;
-			correct++;
-		}
+			score = 0;
+			IsPuzzleFinished = true;
 
-		cout << "Statements: All fishes are grey in colour. Some fishes are heavy. Conclusions: All heavy fishes are grey in colour. All light fishes are not grey in colour." << endl;
-		cout << "1) Only conclusion I and II follows." << endl;
-		cout << "2) Only conclusion I follows." << endl;
-		cout << "3) Only conclusion II follows." << endl;
-		cout << "4) Neither conclusion I or II follows" << endl;
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 2.0;
 
-		cin >> UserAnswer;
-		if (UserAnswer != 2)
-		{
-			cout << "Wrong! Only conclusion I follows." << endl;
-		}
-		else
-		{
-			cout << "Correct!" << endl;
-			correct++;
-		}
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 
-		cout << "What has a head, tail, is brown and has no legs?" << endl;
-		cout << "1) An apple" << endl;
-		cout << "2) An ant" << endl;
-		cout << "3) A penny" << endl;
-		cout << "4) A stalk of an apple" << endl;
-
-		cin >> UserAnswer;
-		if (UserAnswer != 3)
-		{
-			cout << "Wrong! A penny has a head and tail and it's also brown" << endl;
+				display = "Wrong, if you fired a gun and killed a bird the other birds will fly away";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
 		}
-		else
+		else if (atoi(confirmUserInput.c_str()) == 1 && confirmUserInput != "")
 		{
-			cout << "Correct!" << endl;
-			correct++;
-		}
+			score = 10;
+			IsPuzzleFinished = true;
 
-		cout << "Adriana's mom had four kids: Marta, Anna, Justina..." << endl;
-		cout << "1) Cleopatra" << endl;
-		cout << "2) Annabell" << endl;
-		cout << "3) Adriana" << endl;
-		cout << "4) Christina" << endl;
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
 
-		cin >> UserAnswer;
-		if (UserAnswer != 3)
-		{
-			cout << "Wrong! Adriana is her mother's child too" << endl;
-		}
-		else
-		{
-			cout << "Correct!" << endl;
-			correct++;
-		}
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 
-		cout << "Imagine you're in a dark room that is perfectly empty with nothing in it. There are no windows or doors. What is the easiest way to escape?" << endl;
-		cout << "1) Die" << endl;
-		cout << "2) Wait" << endl;
-		cout << "3) Dig a hole in the ground with your hands" << endl;
-		cout << "4) Stop imagining" << endl;
-
-		cin >> UserAnswer;
-		if (UserAnswer != 4)
-		{
-			cout << "Wrong! Just stop imagining and you will leave the room" << endl;
-		}
-		else
-		{
-			cout << "Correct!" << endl;
-			correct++;
+				display = "Correct!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
 		}
 	}
-	if (correct == 0 || correct == 1)
+	else if (Pattern % LOGIC == LogicFOUR)
 	{
-		cout << "You aren't that great with this are you?" << endl;
-		score = 0;
+		display = "If you are in a race, what place are you in if you take over the person who is in second place?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		display = "1) First";
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 4 };
+		display = "2) Second";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 5 };
+		display = "3) Third";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 6 };
+		display = "4) Last";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+
+		c = { 1, 7 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) > 4 && confirmUserInput != "")
+		{
+			display = "Answer Invalid! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (atoi(confirmUserInput.c_str()) != 2 && confirmUserInput != "")
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 2.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Wrong, if you overtake second, you are now second";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+		else if (atoi(confirmUserInput.c_str()) == 2 && confirmUserInput != "")
+		{
+			score = 10;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
 	}
-	else if (correct == 2 || correct == 3)
+	else if (Pattern % LOGIC == LogicFIVE)
 	{
-		cout << "You are pretttttty average at this." << endl;
-		score = 50;
+		display = "1 is 3, 3 is 5, 5 is 4, 7 is 5. What is 9?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		display = "1) 5";
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 4 };
+		display = "2) 4";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 5 };
+		display = "3) 6";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 6 };
+		display = "4) 3";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+
+		c = { 1, 7 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) > 4 && confirmUserInput != "")
+		{
+			display = "Answer Invalid! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (atoi(confirmUserInput.c_str()) != 2 && confirmUserInput != "")
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 2.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Wrong, 9 is 4 as there are 4 letters in 9.";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+		else if (atoi(confirmUserInput.c_str()) == 2 && confirmUserInput != "")
+		{
+			score = 10;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
 	}
-	else
+	else if (Pattern % LOGIC == LogicSIX)
 	{
-		cout << "YOU SIR, are a genius!" << endl;
-		score = 100;
+		display = "If LOVE is coded as NRZJ, what is FIRE coded as?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		display = "1) HLVJ";
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 4 };
+		display = "2) GKUI";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 5 };
+		display = "3) HKVI";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 6 };
+		display = "4) GLUJ";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+
+		c = { 1, 7 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) > 4 && confirmUserInput != "")
+		{
+			display = "Answer Invalid! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (atoi(confirmUserInput.c_str()) != 2 && confirmUserInput != "")
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 2.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Wrong! In the code, the first letter is the second alphabet, the second letter is the third alphabet, the third letter is the fourth alphabet and so on after the corresponding letter in the word.";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+		else if (atoi(confirmUserInput.c_str()) == 2 && confirmUserInput != "")
+		{
+			score = 10;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
 	}
-	return score;
+	else if (Pattern % LOGIC == LogicSEVEN)
+	{
+		display = "Banks is related to Money in the same way as Transport is the related to ____?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		display = "1) Traffic";
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 4 };
+		display = "2) Goods";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 5 };
+		display = "3) Speed";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 6 };
+		display = "4) Road";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+
+		c = { 1, 7 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) > 4 && confirmUserInput != "")
+		{
+			display = "Answer Invalid! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (atoi(confirmUserInput.c_str()) != 2 && confirmUserInput != "")
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 2.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Wrong! Bank deals with the transaction of Money. Likewise Transport deals with the movement of Goods.";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+		else if (atoi(confirmUserInput.c_str()) == 2 && confirmUserInput != "")
+		{
+			score = 10;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+	}
+	else if (Pattern % LOGIC == LogicEIGHT)
+	{
+		display = "Find the odd one out.";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		display = "1) Vapour";
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 4 };
+		display = "2) Mist";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 5 };
+		display = "3) Hailstone";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 6 };
+		display = "4) Fog";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+
+		c = { 1, 7 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) > 4 && confirmUserInput != "")
+		{
+			display = "Answer Invalid! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (atoi(confirmUserInput.c_str()) != 1 && confirmUserInput != "")
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 2.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Wrong! All except Vapour are different forms of Precipitation.";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+		else if (atoi(confirmUserInput.c_str()) == 1 && confirmUserInput != "")
+		{
+			score = 10;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+	}
+	else if (Pattern % LOGIC == LogicNINE)
+	{
+		display = "F is the brother of A, C is the daughter of A, K is the sister of F and G is the brother of C then who is the uncle of G?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		display = "1) C";
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 4 };
+		display = "2) A";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 5 };
+		display = "3) K";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 6 };
+		display = "4) None of the above";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+
+		c = { 1, 7 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) > 4 && confirmUserInput != "")
+		{
+			display = "Answer Invalid! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (atoi(confirmUserInput.c_str()) != 2 && confirmUserInput != "")
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Wrong! C & J are childern of A and F is the brother of A.So, F is uncle of C & J. ";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+		else if (atoi(confirmUserInput.c_str()) == 2 && confirmUserInput != "")
+		{
+			score = 10;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 2.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+	}
+	else if (Pattern % LOGIC == LogicTEN)
+	{
+		display = "JE, LH, OL, SQ, ?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		display = "1) WV";
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 4 };
+		display = "2) WX";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 5 };
+		display = "3) VW";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 6 };
+		display = "4) XW";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+
+		c = { 1, 7 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) > 4 && confirmUserInput != "")
+		{
+			display = "Answer Invalid! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (atoi(confirmUserInput.c_str()) != 4 && confirmUserInput != "")
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 2.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Wrong! The first letter moves forward 2,3,4 ...... steps. The second letter moves forward 3,4,5 ...... steps.";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+		else if (atoi(confirmUserInput.c_str()) == 4 && confirmUserInput != "")
+		{
+			score = 10;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 2.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+	}
+	else if (Pattern % LOGIC == LogicELEVEN)
+	{
+		display = "Words from an artifical language.agnoscrenia means poisonous spider delanocrenia means poisonous snake agnosdeery means brown spider Which word could mean 'black widow spider'?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		display = "1) deeryclostagnos";
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 4 };
+		display = "2) agnosdelano";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 5 };
+		display = "3) agnosvitriblunin";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 6 };
+		display = "4) trymuttiagnos";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+
+		c = { 1, 7 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) > 4 && confirmUserInput != "")
+		{
+			display = "Answer Invalid! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (atoi(confirmUserInput.c_str()) != 3 && confirmUserInput != "")
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 2.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Wrong! In this language, the noun appears first and the adjectives follow. Since agnos means spider and should appear first, choices 1 and 4 can be ruled out. Choice 2 can be ruled out because delano means snake.";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+		else if (atoi(confirmUserInput.c_str()) == 3 && confirmUserInput != "")
+		{
+			score = 10;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+	}
+	else if (Pattern % LOGIC == LogicTWELVE)
+	{
+		display = "Statements: All fishes are grey in colour.Some fishes are heavy.Conclusions : All heavy fishes are grey in colour.All light fishes are not grey in colour. ? ";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		display = "1) Only conclusion I and II follows.";
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 4 };
+		display = "2) Only conclusion I follows.";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 5 };
+		display = "3) Only conclusion II follows.";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 6 };
+		display = "4) Neither conclusion I or II follows";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+
+		c = { 1, 7 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) > 4 && confirmUserInput != "")
+		{
+			display = "Answer Invalid! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (atoi(confirmUserInput.c_str()) != 2 && confirmUserInput != "")
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Wrong! Only conclusion I follows.";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+		else if (atoi(confirmUserInput.c_str()) == 2 && confirmUserInput != "")
+		{
+			score = 10;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 2.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+	}
+	else if (Pattern % LOGIC == LogicTHIRTEEN)
+	{
+		display = "What has a head, tail, is brown and has no legs?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		display = "1) An Apple";
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 4 };
+		display = "2) An Ant";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 5 };
+		display = "3) A Penny";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 6 };
+		display = "4) A Stalk of an Apple";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+
+		c = { 1, 7 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) > 4 && confirmUserInput != "")
+		{
+			display = "Answer Invalid! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (atoi(confirmUserInput.c_str()) != 3 && confirmUserInput != "")
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 2.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Wrong! A penny has a head and tail and it's also brown";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+		else if (atoi(confirmUserInput.c_str()) == 3 && confirmUserInput != "")
+		{
+			score = 10;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+	}
+	else if (Pattern % LOGIC == LogicFOURTEEN)
+	{
+		display = "Adriana's mom had four kids: Marta, Anna, Justina...";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		display = "1) Cleopatra";
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 4 };
+		display = "2) Adriana";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 5 };
+		display = "3) Annabell";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 6 };
+		display = "4) Christina";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+
+		c = { 1, 7 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+		c = { 1, 10 };
+		if (atoi(confirmUserInput.c_str()) > 4 && confirmUserInput != "")
+		{
+			display = "Answer Invalid! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (atoi(confirmUserInput.c_str()) != 2 && confirmUserInput != "")
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 2.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Wrong! Adriana is her mother's child too";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+		else if (atoi(confirmUserInput.c_str()) == 2 && confirmUserInput != "")
+		{
+			score = 10;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+	}
+	else if (Pattern % LOGIC == LogicFIFTEEN)
+	{
+		display = "Imagine you're in a dark room that is perfectly empty with nothing in it. There are no windows or doors. What is the easiest way to escape?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		display = "1) Die";
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 4 };
+		display = "2) Wait";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 5 };
+		display = "3) Dig a hole in the ground with your hands";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 6 };
+		display = "4) Stop imagining";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+
+		c = { 1, 7 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+		c = { 1, 10 };
+
+		if (atoi(confirmUserInput.c_str()) > 4 && confirmUserInput != "")
+		{
+			display = "Answer Invalid! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (atoi(confirmUserInput.c_str()) != 4 && confirmUserInput != "")
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 2.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Wrong! Just stop imagining and you will leave the room";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+		else if (atoi(confirmUserInput.c_str()) == 4 && confirmUserInput != "")
+		{
+			score = 10;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+	}
 }
 
-int Riddles()
+void Riddles()
 {
-	int Score;
-	int Riddle = rand();
-	int Tries = 1;
-	int x = 1;
-	string Answer;
-	if (Riddle % RIDDLES == RiddleONE)
+	COORD c = { 1, 1 };
+	if (Pattern % RIDDLES == RiddleONE)
 	{
-		cout << "What is black when you buy it, red when you use it, and gray when you throw it away?" << endl;
-		while (x != 0)
-		{
-			cin >> Answer;
-			if (Tries == 5)
-			{
-				cout << "Tip: The word is 8 characters long and is used as energy for cooking" << endl;
-			}
-			if (Answer == "Charcoal" || Answer == "charcoal")
-			{
-				cout << "Correct! It only took you " << Tries << " tries!" << endl;
-				break;
-			}
-			else if (Tries == 10)
-			{
-				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
-				break;
-			}
-			else
-			{
-				cout << "Wrong Answer! Try Again" << endl;
-				Tries++;
-			}
+		display = "What is black when you buy it, red when you use it, and gray when you throw it away?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
 
-		}
-		if (Tries < 5)
+		COORD c = { 1, 6 };
+		if (Guesses >= 5)
 		{
-			Score = 100;
+			COORD c = { 1, 5 };
+			display = "Tip: The word is 8 characters long and is used as energy for cooking";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 		}
-		else if (Tries < 10)
+		else if (Guesses == 10)
 		{
-			Score = 50;
-		}
-		else
-		{
-			Score = 0;
-		}
-		return Score;
-	}
-	else if (Riddle % RIDDLES == RiddleTWO)
-	{
-		cout << "If I drink, I die. If I eat, I am fine. What am I?" << endl;
-		while (x != 0)
-		{
-			cin >> Answer;
-			if (Tries == 5)
-			{
-				cout << "Hint: The word is normally orange in colour and rhymes with dire" << endl;
-			}
-			if (Answer == "Fire" || Answer == "fire")
-			{
-				cout << "Correct! It only took you " << Tries << " tries!" << endl;
-				break;
-			}
-			else if (Tries == 10)
-			{
-				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
-				break;
-			}
-			else
-			{
-				cout << "Wrong Answer! Try Again" << endl;
-				Tries++;
-			}
+			score = 0;
+			IsPuzzleFinished = true;
 
-		}
-		if (Tries < 5)
-		{
-			Score = 100;
-		}
-		else if (Tries < 10)
-		{
-			Score = 50;
-		}
-		else
-		{
-			Score = 0;
-		}
-		return Score;
-	}
-	else if (Riddle % RIDDLES == RiddleTHREE)
-	{
-		cout << "I'm the part of the bird that's not in the sky. I can swim in the ocean and yet remain dry. What am I?" << endl;
-		while (x != 0)
-		{
-			cin >> Answer;
-			if (Tries == 5)
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Hint: Every living creature has this during the day but not at night" << endl;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "That's too bad! You used up all of your ten attempts";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
-			if (Answer == "Shadow" || Answer == "shadow")
-			{
-				cout << "Correct! It only took you " << Tries << " tries!" << endl;
-				break;
-			}
-			else if (Tries == 10)
-			{
-				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
-				break;
-			}
-			else if (Answer == "Shishanth")
-			{
-				cout << "Close but not quite and also who?" << endl;
-				Tries++;
-			}
+		}
+		if (confirmUserInput == "charcoal" && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
 			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Wrong Answer! Try Again" << endl;
-				Tries++;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
 		}
-		if (Tries < 5)
+		else if (confirmUserInput != "charcoal" && confirmUserInput != "")
 		{
-			Score = 100;
+			display = "Wrong Answer! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 		}
-		else if (Tries < 10)
-		{
-			Score = 50;
-		}
-		else
-		{
-			Score = 0;
-		}
-		return Score;
 	}
-	else if (Riddle % RIDDLES == RiddleFOUR)
+	else if (Pattern % RIDDLES == RiddleTWO)
 	{
-		cout << "I never was, am always to be, No one ever saw me, nor ever will, And yet I am the confidence of all To live and breathe on this terrestrial ball. What am I?" << endl;
-		while (x != 0)
+		display = "If I drink, I die. If I eat, I am fine. What am I?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+
+		COORD c = { 1, 6 };
+		if (Guesses >= 5)
 		{
-			cin >> Answer;
-			if (Tries == 5)
+			COORD c = { 1, 5 };
+			display = "Hint: The word is normally orange in colour and rhymes with dire";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (Guesses == 10)
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Hint: It's related to day and it's the future" << endl;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "That's too bad! You used up all of your ten attempts";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
-			if (Answer == "Tomorrow" || Answer == "tomorrow")
-			{
-				cout << "Correct! It only took you " << Tries << " tries!" << endl;
-				break;
-			}
-			else if (Tries == 10)
-			{
-				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
-				break;
-			}
+		}
+		if (confirmUserInput == "fire" && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
 			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Wrong Answer! Try Again" << endl;
-				Tries++;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
 		}
-		if (Tries < 5)
+		else if (confirmUserInput != "fire" && confirmUserInput != "")
 		{
-			Score = 100;
+			display = "Wrong Answer! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 		}
-		else if (Tries < 10)
-		{
-			Score = 50;
-		}
-		else
-		{
-			Score = 0;
-		}
-		return Score;
 	}
-	else if (Riddle % RIDDLES == RiddleFIVE)
+	else if (Pattern % RIDDLES == RiddleTHREE)
 	{
-		cout << "I have many feathers to help me fly. I have a body and head, but I'm not alive. It is your strength which determines how far I go. You can hold me in your hand, but I'm never thrown. What am I?" << endl;
-		while (x != 0)
+		display = "I'm the part of the bird that's not in the sky. I can swim in the ocean and yet remain dry. What am I?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+
+		COORD c = { 1, 6 };
+		if (Guesses >= 5)
 		{
-			cin >> Answer;
-			if (Tries == 5)
+			COORD c = { 1, 5 };
+			display = "Hint: Every living creature has this during the day but not at night";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (Guesses == 10)
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Hint: It's the name of Superhero Show and it is used with a weapon" << endl;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "That's too bad! You used up all of your ten attempts";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
-			if (Answer == "Arrow" || Answer == "arrow")
-			{
-				cout << "Correct! It only took you " << Tries << " tries!" << endl;
-				break;
-			}
-			else if (Tries == 10)
-			{
-				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
-				break;
-			}
+		}
+		if (confirmUserInput == "shadow" && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
 			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Wrong Answer! Try Again" << endl;
-				Tries++;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
 		}
-		if (Tries < 5)
+		else if (confirmUserInput != "shadow" && confirmUserInput != "")
 		{
-			Score = 100;
+			display = "Wrong Answer! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 		}
-		else if (Tries < 10)
-		{
-			Score = 50;
-		}
-		else
-		{
-			Score = 0;
-		}
-		return Score;
 	}
-	else if (Riddle % RIDDLES == RiddleSIX)
+	else if (Pattern % RIDDLES == RiddleFOUR)
 	{
-		cout << "If I have it, I don't share it. If I share it, I don't have it. What is it?" << endl;
-		while (x != 0)
+		display = "I never was, am always to be, No one ever saw me, nor ever will, And yet I am the confidence of all To live and breathe on this terrestrial ball. What am I?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+
+		COORD c = { 1, 6 };
+		if (Guesses >= 5)
 		{
-			cin >> Answer;
-			if (Tries == 5)
+			COORD c = { 1, 5 };
+			display = "Hint: It's related to day and it's the future";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (Guesses == 10)
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Hint: It's something that you want to hide from other and mostly written inside a diary." << endl;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "That's too bad! You used up all of your ten attempts";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
-			if (Answer == "Secret" || Answer == "secret")
-			{
-				cout << "Correct! It only took you " << Tries << " tries!" << endl;
-				break;
-			}
-			else if (Tries == 10)
-			{
-				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
-				break;
-			}
+		}
+		if (confirmUserInput == "tomorrow" && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
 			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Wrong Answer! Try Again" << endl;
-				Tries++;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
 		}
-		if (Tries < 5)
+		else if (confirmUserInput != "tomorrow" && confirmUserInput != "")
 		{
-			Score = 100;
+			display = "Wrong Answer! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 		}
-		else if (Tries < 10)
-		{
-			Score = 50;
-		}
-		else
-		{
-			Score = 0;
-		}
-		return Score;
 	}
-	else if (Riddle % RIDDLES == RiddleSEVEN)
+	else if (Pattern % RIDDLES == RiddleFIVE)
 	{
-		cout << "A little pool with two layers of wall around it. One white and soft and the other dark and hard, amidst a light brown grassy lawn with an outline of a green grass. What am I?" << endl;
-		while (x != 0)
+		display = "I have many feathers to help me fly. I have a body and head, but I'm not alive. It is your strength which determines how far I go. You can hold me in your hand, but I'm never thrown. What am I?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+
+		COORD c = { 1, 6 };
+		if (Guesses >= 5)
 		{
-			cin >> Answer;
-			if (Tries == 5)
+			COORD c = { 1, 5 };
+			display = "Hint: It's the name of Superhero Show and it is used with a weapon";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (Guesses == 10)
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Hint: It's a fruit and can be made into a drink." << endl;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "That's too bad! You used up all of your ten attempts";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
-			if (Answer == "Coconut" || Answer == "coconut")
-			{
-				cout << "Correct! It only took you " << Tries << " tries!" << endl;
-				break;
-			}
-			else if (Tries == 10)
-			{
-				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
-				break;
-			}
+		}
+		if (confirmUserInput == "arrow" && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
 			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Wrong Answer! Try Again" << endl;
-				Tries++;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
 		}
-		if (Tries < 5)
+		else if (confirmUserInput != "arrow" && confirmUserInput != "")
 		{
-			Score = 100;
+			display = "Wrong Answer! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 		}
-		else if (Tries < 10)
-		{
-			Score = 50;
-		}
-		else
-		{
-			Score = 0;
-		}
-		return Score;
 	}
-	else if (Riddle % RIDDLES == RiddleEIGHT)
+	else if (Pattern % RIDDLES == RiddleSIX)
 	{
-		cout << "They come out at night without being called, and are lost in the day without being stolen. What are they?" << endl;
-		while (x != 0)
+		display = "If I have it, I don't share it. If I share it, I don't have it. What is it?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+
+		COORD c = { 1, 6 };
+		if (Guesses >= 5)
 		{
-			cin >> Answer;
-			if (Tries == 5)
+			COORD c = { 1, 5 };
+			display = "Hint: It's something that you want to hide from other and mostly written inside a diary.";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (Guesses == 10)
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Hint: It's related to space." << endl;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "That's too bad! You used up all of your ten attempts";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
-			if (Answer == "Stars" || Answer == "stars")
-			{
-				cout << "Correct! It only took you " << Tries << " tries!" << endl;
-				break;
-			}
-			else if (Tries == 10)
-			{
-				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
-				break;
-			}
+		}
+		if (confirmUserInput == "secret" && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
 			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Wrong Answer! Try Again" << endl;
-				Tries++;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
 		}
-		if (Tries < 5)
+		else if (confirmUserInput != "secret" && confirmUserInput != "")
 		{
-			Score = 100;
+			display = "Wrong Answer! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 		}
-		else if (Tries < 10)
-		{
-			Score = 50;
-		}
-		else
-		{
-			Score = 0;
-		}
-		return Score;
 	}
-	else if (Riddle % RIDDLES == RiddleNINE)
+	else if (Pattern % RIDDLES == RiddleSEVEN)
 	{
-		cout << "All about, but cannot be seen, Can be captured, cannot be held, No throat, but can be heard. What am I?" << endl;
-		while (x != 0)
+		display = "A little pool with two layers of wall around it. One white and soft and the other dark and hard, amidst a light brown grassy lawn with an outline of a green grass. What am I?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+
+		COORD c = { 1, 6 };
+		if (Guesses >= 5)
 		{
-			cin >> Answer;
-			if (Tries == 5)
+			COORD c = { 1, 5 };
+			display = "Hint: It's a fruit and can be made into a drink.";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (Guesses == 10)
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Hint: It's related to the weather." << endl;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "That's too bad! You used up all of your ten attempts";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
-			if (Answer == "Wind" || Answer == "wind")
-			{
-				cout << "Correct! It only took you " << Tries << " tries!" << endl;
-				break;
-			}
-			else if (Tries == 10)
-			{
-				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
-				break;
-			}
+		}
+		if (confirmUserInput == "coconut" && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
 			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Wrong Answer! Try Again" << endl;
-				Tries++;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
 		}
-		if (Tries < 5)
+		else if (confirmUserInput != "coconut" && confirmUserInput != "")
 		{
-			Score = 100;
+			display = "Wrong Answer! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 		}
-		else if (Tries < 10)
-		{
-			Score = 50;
-		}
-		else
-		{
-			Score = 0;
-		}
-		return Score;
 	}
-	else if (Riddle % RIDDLES == RiddleTEN)
+	else if (Pattern % RIDDLES == RiddleEIGHT)
 	{
-		cout << "I am a box that holds keys without locks, yet they can unlock your soul. What am I?" << endl;
-		while (x != 0)
+		display = "They come out at night without being called, and are lost in the day without being stolen. What are they?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+
+		COORD c = { 1, 6 };
+		if (Guesses >= 5)
 		{
-			cin >> Answer;
-			if (Tries == 5)
+			COORD c = { 1, 5 };
+			display = "Hint: It's related to space.";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (Guesses == 10)
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Hint: It's related to music" << endl;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "That's too bad! You used up all of your ten attempts";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
-			if (Answer == "Piano" || Answer == "piano")
-			{
-				cout << "Correct! It only took you " << Tries << " tries!" << endl;
-				break;
-			}
-			else if (Tries == 10)
-			{
-				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
-				break;
-			}
+		}
+		if (confirmUserInput == "stars" && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
 			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Wrong Answer! Try Again" << endl;
-				Tries++;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
 		}
-		if (Tries < 5)
+		else if (confirmUserInput != "stars" && confirmUserInput != "")
 		{
-			Score = 100;
+			display = "Wrong Answer! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 		}
-		else if (Tries < 10)
-		{
-			Score = 50;
-		}
-		else
-		{
-			Score = 0;
-		}
-		return Score;
 	}
-	else if (Riddle % RIDDLES == RiddleELEVEN)
+	else if (Pattern % RIDDLES == RiddleNINE)
 	{
-		cout << "You are in a cabin and it is pitch black. You have one match on you. Which do you light first, the newspaper, the lamp, the candle or the fire?" << endl;
-		while (x != 0)
+		display = "All about, but cannot be seen, Can be captured, cannot be held, No throat, but can be heard. What am I?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+
+		COORD c = { 1, 6 };
+		if (Guesses >= 5)
 		{
-			cin >> Answer;
-			if (Tries == 5)
+			COORD c = { 1, 5 };
+			display = "Hint: It's related to the weather.";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (Guesses == 10)
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Hint: What starts the fire" << endl;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "That's too bad! You used up all of your ten attempts";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
-			if (Answer == "Match" || Answer == "match")
-			{
-				cout << "Correct! It only took you " << Tries << " tries!" << endl;
-				break;
-			}
-			else if (Tries == 10)
-			{
-				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
-				break;
-			}
+		}
+		if (confirmUserInput == "wind" && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
 			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Wrong Answer! Try Again" << endl;
-				Tries++;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
 		}
-		if (Tries < 5)
+		else if (confirmUserInput != "wind" && confirmUserInput != "")
 		{
-			Score = 100;
+			display = "Wrong Answer! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 		}
-		else if (Tries < 10)
-		{
-			Score = 50;
-		}
-		else
-		{
-			Score = 0;
-		}
-		return Score;
 	}
-	else if (Riddle % RIDDLES == RiddleTWELVE)
+	else if (Pattern % RIDDLES == RiddleTEN)
 	{
-		cout << "Which word, if pronounced right, is wrong, but if pronounced wrong is right?" << endl;
-		while (x != 0)
+		display = "I am a box that holds keys without locks, yet they can unlock your soul. What am I?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+
+		COORD c = { 1, 6 };
+		if (Guesses >= 5)
 		{
-			cin >> Answer;
-			if (Tries == 5)
+			COORD c = { 1, 5 };
+			display = "Hint: It's related to music.";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (Guesses == 10)
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Hint: The word is in the riddle" << endl;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "That's too bad! You used up all of your ten attempts";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
-			if (Answer == "Wrong" || Answer == "wrong")
-			{
-				cout << "Correct! It only took you " << Tries << " tries!" << endl;
-				break;
-			}
-			else if (Tries == 10)
-			{
-				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
-				break;
-			}
+		}
+		if (confirmUserInput == "piano" && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
 			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Wrong Answer! Try Again" << endl;
-				Tries++;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
 		}
-		if (Tries < 5)
+		else if (confirmUserInput != "piano" && confirmUserInput != "")
 		{
-			Score = 100;
+			display = "Wrong Answer! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 		}
-		else if (Tries < 10)
-		{
-			Score = 50;
-		}
-		else
-		{
-			Score = 0;
-		}
-		return Score;
 	}
-	else if (Riddle % RIDDLES == RiddleTHIRTEEN)
+	else if (Pattern % RIDDLES == RiddleELEVEN)
 	{
-		cout << "Which word is the odd one out : First Second Third Forth Fifth Sixth Seventh Eighth" << endl;
-		while (x != 0)
+		display = "You are in a cabin and it is pitch black. You have one match on you. Which do you light first, the newspaper, the lamp, the candle or the fire?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+
+		COORD c = { 1, 6 };
+		if (Guesses >= 5)
 		{
-			cin >> Answer;
-			if (Tries == 5)
+			COORD c = { 1, 5 };
+			display = "Hint: What starts the fire.";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (Guesses == 10)
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Hint: 4" << endl;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "That's too bad! You used up all of your ten attempts";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
-			if (Answer == "Forth" || Answer == "forth")
-			{
-				cout << "Correct! It only took you " << Tries << " tries!" << endl;
-				break;
-			}
-			else if (Tries == 10)
-			{
-				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
-				break;
-			}
+		}
+		if (confirmUserInput == "match" && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
 			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Wrong Answer! Try Again" << endl;
-				Tries++;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
 		}
-		if (Tries < 5)
+		else if (confirmUserInput != "match" && confirmUserInput != "")
 		{
-			Score = 100;
+			display = "Wrong Answer! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 		}
-		else if (Tries < 10)
-		{
-			Score = 50;
-		}
-		else
-		{
-			Score = 0;
-		}
-		return Score;
 	}
-	else if (Riddle % RIDDLES == RiddleFOURTEEN)
+	else if (Pattern % RIDDLES == RiddleTWELVE)
 	{
-		cout << "A farmer has 17 sheep and all but 9 die. How many are left?" << endl;
-		while (x != 0)
+		display = "Which word, if pronounced right, is wrong, but if pronounced wrong is right?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+
+		COORD c = { 1, 6 };
+		if (Guesses >= 5)
 		{
-			cin >> Answer;
-			if (Tries == 5)
+			COORD c = { 1, 5 };
+			display = "Hint: The answer is in the riddle.";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (Guesses == 10)
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Hint: All died except 9" << endl;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "That's too bad! You used up all of your ten attempts";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
-			if (Answer == "Nine" || Answer == "nine" || Answer == "9")
-			{
-				cout << "Correct! It only took you " << Tries << " tries!" << endl;
-				break;
-			}
-			else if (Tries == 10)
-			{
-				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
-				break;
-			}
+		}
+		if (confirmUserInput == "wrong" && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
 			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Wrong Answer! Try Again" << endl;
-				Tries++;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
 		}
-		if (Tries < 5)
+		else if (confirmUserInput != "wrong" && confirmUserInput != "")
 		{
-			Score = 100;
+			display = "Wrong Answer! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 		}
-		else if (Tries < 10)
-		{
-			Score = 50;
-		}
-		else
-		{
-			Score = 0;
-		}
-		return Score;
 	}
-	else if (Riddle % RIDDLES == RiddleFIFTEEN)
+	else if (Pattern % RIDDLES == RiddleTHIRTEEN)
 	{
-		cout << "You will always find me in the past. I can be created in the present, But the future can never taint me. What am I?" << endl;
-		while (x != 0)
+		display = "Which word is the odd one out : First Second Third Forth Fifth Sixth Seventh Eighth";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+
+		COORD c = { 1, 6 };
+		if (Guesses >= 5)
 		{
-			cin >> Answer;
-			if (Tries == 5)
+			COORD c = { 1, 5 };
+			display = "Hint: 4";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (Guesses == 10)
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Hint: It 'was' a phase in time." << endl;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "That's too bad! You used up all of your ten attempts";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
-			if (Answer == "history" || Answer == "History")
-			{
-				cout << "Correct! It only took you " << Tries << " tries!" << endl;
-				break;
-			}
-			else if (Tries == 10)
-			{
-				cout << "You used up all 10 of your attempts! That's too bad!" << endl;
-				break;
-			}
+		}
+		if ((confirmUserInput == "forth" || confirmUserInput == "4") && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
 			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
 			{
-				cout << "Wrong Answer! Try Again" << endl;
-				Tries++;
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
 			}
 		}
-		if (Tries < 5)
+		else if ((confirmUserInput != "forth" || confirmUserInput != "4") && confirmUserInput != "")
 		{
-			Score = 100;
+			display = "Wrong Answer! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 		}
-		else if (Tries < 10)
+	}
+	else if (Pattern % RIDDLES == RiddleFOURTEEN)
+	{
+		display = "A farmer has 17 sheep and all but 9 die. How many are left?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+
+		COORD c = { 1, 6 };
+		if (Guesses >= 5)
 		{
-			Score = 50;
+			COORD c = { 1, 5 };
+			display = "Hint: All died except 9";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 		}
-		else
+		else if (Guesses == 10)
 		{
-			Score = 0;
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "That's too bad! You used up all of your ten attempts";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
 		}
-		return Score;
+		if ((confirmUserInput == "nine" || confirmUserInput == "9") && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
+			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+		else if ((confirmUserInput != "nine" || confirmUserInput != "9") && confirmUserInput != "")
+		{
+			display = "Wrong Answer! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+	}
+	else if (Pattern % RIDDLES == RiddleFIFTEEN)
+	{
+		display = "You will always find me in the past. I can be created in the present, But the future can never taint me. What am I?";
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		c = { 1, 3 };
+		ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+
+		COORD c = { 1, 6 };
+		if (Guesses >= 5)
+		{
+			COORD c = { 1, 5 };
+			display = "Hint: It 'was' a phase in time.";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
+		else if (Guesses == 10)
+		{
+			score = 0;
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "That's too bad! You used up all of your ten attempts";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+		if (confirmUserInput == "history" && confirmUserInput != "")
+		{
+			if (Guesses < 5)
+				score += 100;
+			else if (Guesses < 10)
+				score += 50;
+			else
+				score += 0;
+
+			IsPuzzleFinished = true;
+
+			clock_t startTime = clock();
+			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+			double delay = 1.0;
+
+			while (duration < delay)
+			{
+				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
+				ptrPuzCon->writeToBuffer(c, display, 0x0F);
+				ptrPuzCon->flushBufferToConsole();
+			}
+		}
+		else if (confirmUserInput != "history" && confirmUserInput != "")
+		{
+			display = "Wrong Answer! Try again";
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
 	}
 }
