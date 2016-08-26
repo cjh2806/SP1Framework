@@ -19,6 +19,6 @@ int SettingSelection();
 void SettingSelection(int input);
 bool MusicSelection();
 void MusicSelection(bool input);
-void optionScreen();
-void renderOptionMenu(Console &refCon);
+void settingScreen();
+void renderSettingMenu(Console &refCon);
 void renderMusicSetting(Console &refCon, COORD &c, string str);

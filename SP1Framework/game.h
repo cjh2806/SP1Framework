@@ -5,6 +5,7 @@
 #include "sound.h"
 #include "Menu\startMenu.h"
 #include "instructions.h"
+#include "Menu\settingMenu.h"
 #include "Maze\maze.h"
 #include "Highscore.h"
 #include "Pictures.h"
@@ -121,12 +122,13 @@ enum EKEYS
 enum EGAMESTATES
 {
 	S_SPLASHSCREEN,
+	S_INSTRUCTIONS,
+	S_SETTING,
 	S_GAME,
 	S_COUNT,
 	S_PUZZLE,
 	S_PICTURES,
-	S_ENDMENU,
-	S_INSTRUCTIONS
+	S_ENDMENU
 };
 
 enum CharState

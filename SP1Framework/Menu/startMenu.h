@@ -12,13 +12,14 @@ enum MENUSELECT
 {
 	M_STARTGAME,
 	M_INSTRUCTION,
-	M_OPTION,
-	M_QUITGAME
+	M_SETTING,
+	M_QUITGAME,
+	M_TOTAL
 };
 
-MENUSELECT IsCurrentState();
-void IsCurrentState(MENUSELECT input);
-bool IsSelectionMade();
-void IsSelectionMade(bool input);
+bool IsStartSelectionMade();
+void IsStartSelectionMade(bool input);
+int StartMenuSelection();
+void StartMenuSelection(int input);
 void initMenuTitle();
 void startMenu(Console &conPtr);

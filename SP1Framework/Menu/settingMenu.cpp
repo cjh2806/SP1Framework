@@ -1,20 +1,20 @@
 #include "settingMenu.h"
 
 string display[] = { "     back    >", "<   Music   >", "< Work In Progress >", "< Work In Progress  " };
-bool optionSelectionMade = false;
+bool settingSelectionMade = false;
 bool musicSetting = true;
-int optionSelection = 0;
+int settingSelection = 0;
 
-bool IsSettingSelectionMade() { return optionSelectionMade; }
-void IsSettingSelectionMade(bool input) { optionSelectionMade = input; }
-int SettingSelection() { return optionSelection; }
-void SettingSelection(int input) { optionSelection += input; }
+bool IsSettingSelectionMade() { return settingSelectionMade; }
+void IsSettingSelectionMade(bool input) { settingSelectionMade = input; }
+int SettingSelection() { return settingSelection; }
+void SettingSelection(int input) { settingSelection += input; }
 bool MusicSelection() { return musicSetting; }
 void MusicSelection(bool input) { musicSetting = input; }
 
-void optionScreen()
+void settingScreen()
 {
-	switch (optionSelection)
+	switch (settingSelection)
 	{
 		case SETTINGSELECT::SET_MUSIC:
 			musicSetting ? (resumeMusic()) : (pauseMusic());
@@ -28,11 +28,11 @@ void optionScreen()
 	}
 }
 
-void renderOptionMenu(Console &refCon)
+void renderSettingMenu(Console &refCon)
 {
 	COORD c;
 
-	switch (optionSelection)
+	switch (settingSelection)
 	{
 		case SETTINGSELECT::SET_BACK:
 			c = refCon.getConsoleSize();

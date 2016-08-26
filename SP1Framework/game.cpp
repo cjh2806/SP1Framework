@@ -189,6 +189,8 @@ void update(double dt)
 	{
 	case S_SPLASHSCREEN: splashScreen(); // game logic for the splash screen
 		break;
+	case S_SETTING: splashScreen();
+		break;
 	case S_GAME: gameplay(); // gameplay logic when we are in the game
 		break;
 	case S_PUZZLE: RunPuzzle();
@@ -212,6 +214,10 @@ void render()
 	{
 	case S_SPLASHSCREEN: renderSplashScreen();
 		break;
+	case S_INSTRUCTIONS: instructionScreen();
+		break;
+	case S_SETTING: renderSettingMenu(g_Console);
+		break;
 	case S_GAME: renderGame();
 		break;
 	case S_PUZZLE: Puzzle();
@@ -220,8 +226,6 @@ void render()
 		break;
 	case S_ENDMENU: endScreen();
 		break;
-	case S_INSTRUCTIONS: instructionScreen();
-		break;
 	}
 	renderFramerate();  // renders debug information, frame rate, elapsed time, etc
 	renderToScreen();   // dump the contents of the buffer to the screen, one frame worth of game
@@ -229,23 +233,44 @@ void render()
 
 void splashScreen()
 {
-	splashScreenWait();
-	moveCharacter();
+	switch (g_eGameState)
+	{
+	case S_SPLASHSCREEN:
+		splashScreenWait();
+		moveCharacter();
+		break;
+	case S_SETTING:
+		splashScreenWait();
+		moveCharacter();
+		settingScreen();
+		break;
+	}
 }
 
 void splashScreenWait()    // waits for time to pass in splash screen
 {
-	if (IsSelectionMade())
+	if (IsStartSelectionMade())
 	{
-		switch (IsCurrentState())
+		switch (StartMenuSelection())
 		{
-		case M_STARTGAME: g_eGameState = S_GAME;
+		case MENUSELECT::M_STARTGAME: g_eGameState = S_GAME;
 			break;
-		case M_INSTRUCTION: g_eGameState = S_INSTRUCTIONS;
+		case MENUSELECT::M_INSTRUCTION: g_eGameState = S_INSTRUCTIONS;
 			break;
-		case M_QUITGAME: g_bQuitGame = true;
+		case MENUSELECT::M_SETTING: g_eGameState = S_SETTING;
+			break;
+		case MENUSELECT::M_QUITGAME: g_bQuitGame = true;
 			break;
 		}
+
+		IsStartSelectionMade(false);
+	}
+	else if (IsSettingSelectionMade())
+	{
+		if (SettingSelection() == 0)
+			g_eGameState = S_SPLASHSCREEN;
+
+		IsSettingSelectionMade(false);
 	}
 }
 
@@ -266,64 +291,97 @@ void moveCharacter()
 
 	// Updating the location of the character based on the key press and providing a beep sound whenver we shift the character
 	if (g_abKeyPressed[K_UP])
-	{	//Beep(1440, 30);
+	{	
+		//Beep(1440, 30);
+
 		switch (g_eGameState)
 		{
-		case S_SPLASHSCREEN:
-			if (IsCurrentState() == M_QUITGAME)
-				IsCurrentState(M_INSTRUCTION);
-			else if (IsCurrentState() == M_INSTRUCTION)
-				IsCurrentState(M_STARTGAME);
-			break;
+			case S_SETTING:
+				MusicSelection(true);
+				break;
 
-		case S_GAME:
-			if (g_sChar.m_cLocation.Y > OffsetBoundary && !checkMazeDisplay(g_sChar.m_cLocation, '*', 0, (-1)))
-				g_sChar.m_cLocation.Y--;
-			break;
+			case S_GAME:
+				if (g_sChar.m_cLocation.Y > OffsetBoundary && !checkMazeDisplay(g_sChar.m_cLocation, '*', 0, (-1)))
+					g_sChar.m_cLocation.Y--;
+				break;
 
-		case S_PUZZLE:
-			break;
+			case S_PUZZLE:
+				break;
 
-		case S_PICTURES:
-			break;
+			case S_PICTURES:
+				break;
 		}
+
 		bSomethingHappened = true;
 	}
 	if (g_abKeyPressed[K_LEFT])
-	{	//Beep(1440, 30);
-		if (g_eGameState == S_GAME && g_sChar.m_cLocation.X > OffsetBoundary && !checkMazeDisplay(g_sChar.m_cLocation, '*', (-1)))
-			g_sChar.m_cLocation.X--;
+	{
+		//Beep(1440, 30);
+
+		switch (g_eGameState)
+		{
+			case S_SPLASHSCREEN:
+				if (StartMenuSelection() > 0)
+					StartMenuSelection(-1);
+				break;
+			case S_SETTING:
+				if (SettingSelection() > 0)
+					SettingSelection(-1);
+				break;
+
+			case S_GAME:
+				if (g_sChar.m_cLocation.X > OffsetBoundary && !checkMazeDisplay(g_sChar.m_cLocation, '*', (-1)))
+					g_sChar.m_cLocation.X--;
+				break;
+		}
 
 		bSomethingHappened = true;
 	}
 	if (g_abKeyPressed[K_DOWN])
-	{	//Beep(1440, 30);
+	{
+		//Beep(1440, 30);
+
 		switch (g_eGameState)
 		{
-		case S_SPLASHSCREEN:
-			if (IsCurrentState() == M_STARTGAME)
-				IsCurrentState(M_INSTRUCTION);
-			else if (IsCurrentState() == M_INSTRUCTION)
-				IsCurrentState(M_QUITGAME);
-			break;
+			case S_SETTING:
+				MusicSelection(false);
+				break;
 
-		case S_GAME:
-			if (g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 2 && !checkMazeDisplay(g_sChar.m_cLocation, '*', 0, 1))
-				g_sChar.m_cLocation.Y++;
-			break;
+			case S_GAME:
+				if (g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 2 && !checkMazeDisplay(g_sChar.m_cLocation, '*', 0, 1))
+					g_sChar.m_cLocation.Y++;
+				break;
 
-		case S_PUZZLE:
-			break;
+			case S_PUZZLE:
+				break;
 
-		case S_PICTURES:
-			break;
+			case S_PICTURES:
+				break;
 		}
+
 		bSomethingHappened = true;
 	}
 	if (g_abKeyPressed[K_RIGHT])
-	{	//Beep(1440, 30);
-		if (g_eGameState == S_GAME && g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 2 && !checkMazeDisplay(g_sChar.m_cLocation, '*', 1))
-			g_sChar.m_cLocation.X++;
+	{
+		//Beep(1440, 30);
+
+		switch (g_eGameState)
+		{
+			case S_SPLASHSCREEN:
+				if (StartMenuSelection() < MENUSELECT::M_TOTAL - 1)
+					StartMenuSelection(1);
+				break;
+
+			case S_SETTING:
+				if (SettingSelection() < SETTINGSELECT::SET_TOTAL - 1)
+					SettingSelection(1);
+				break;
+
+			case S_GAME:
+				if (g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 2 && !checkMazeDisplay(g_sChar.m_cLocation, '*', 1))
+					g_sChar.m_cLocation.X++;
+				break;
+		}
 
 		bSomethingHappened = true;
 	}
@@ -331,20 +389,22 @@ void moveCharacter()
 	{
 		switch (g_eGameState)
 		{
-		case S_SPLASHSCREEN:
-			IsSelectionMade(true);
-			break;
+			case S_SPLASHSCREEN: IsStartSelectionMade(true);
+				break;
 
-		case S_INSTRUCTIONS:
-			g_eGameState = S_SPLASHSCREEN;
-			IsSelectionMade(false);
-			break;
+			case S_SETTING: IsSettingSelectionMade(true);
+				break;
+
+			case S_INSTRUCTIONS: g_eGameState = S_SPLASHSCREEN;
+				break;
 		}
+
 		bSomethingHappened = true;	//g_sChar.m_bActive = !g_sChar.m_bActive;
 	}
 
 	if (bSomethingHappened)
-	{	// set the bounce time to some time in the future to prevent accidental triggers
+	{	
+		// set the bounce time to some time in the future to prevent accidental triggers
 		g_dBounceTime = g_dElapsedTime + 0.125; // 125ms should be enough
 	}
 }
@@ -380,6 +440,7 @@ void renderMap()
 
 		IsMazeGenerated(true);
 	}
+
 	bufferMaze(g_Console);
 }
 
@@ -446,20 +507,6 @@ void renderToScreen()
 	g_Console.flushBufferToConsole();	// Writes the buffer to the console, hence you will see what you have written
 }
 
-void initConsole(bool input)
-{
-	if (input)
-	{
-		g_Console.initConsole(ScreenReso, "Maze Thinker");
-		g_Console.setConsoleFont(0, 16, L"Raster Consolas");
-	}
-	else
-	{
-		shutdown();
-		g_Console.~Console();
-	}
-}
-
 void detectMazeEnd()
 {
 	if (checkMazeDisplay(g_sChar.m_cLocation, 'E'))
@@ -495,12 +542,14 @@ void RunPuzzle()
 		initCurrentAnswer();
 		InitPuzzle = false;
 	}
+
 	if (isPuzzleFinished())
 	{
 		Score += AddScore();
 		AddScore(0);
 		g_eGameState = S_GAME;
 	}
+
 	t_charBlink = g_dElapsedTime;
 }
 
@@ -513,12 +562,14 @@ void RunPictures()
 		initPictures();
 		InitPictures = false;
 	}
+
 	if (isPicturesFinished())
 	{
 		Score += AddScore();
 		AddScore(0);
 		g_eGameState = S_GAME;
 	}
+
 	t_charBlink = g_dElapsedTime;
 }
 
