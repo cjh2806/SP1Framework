@@ -64,7 +64,7 @@ void Puzzle()	// Function will be called to run in game.cpp (somewhere that is a
 
 	/////////////////////////////////////
 
-	switch (Minigames)		// For debugging
+	switch (Minigames)
 	{
 	case eGame::GAME_ONE: random_number_game();
 		break;

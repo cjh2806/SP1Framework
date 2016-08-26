@@ -169,5 +169,6 @@ void instructionScreen();
 void numbers();
 void music();
 void Typing();
+void PictureControl();
 
 #endif // _GAME_H

@@ -1,4 +1,4 @@
-1)                              
+1)                       
   `-:`  ``           ``.      
     -:.```          ...       
    `./:----.s`-:```...`````   
@@ -9,7 +9,8 @@
      `.--.`                   
   `...`                       
  ``                           
-                              
+ 
+                             
 2)      `.mm:`:mm.`       
       sNMMm+++++mMMNs     
      -MMddhooooohddMM-    
@@ -22,15 +23,20 @@
      .Nm/:hMMMMMh:/mN.    
       /NMdyyyyyyydMN/     
      +Ny:         :yN+    
-
-3)        `:::::::://.                     
+ 
+3)
+        `:::::::://.                     
            -//++///++/                     
            :/:`/       ````                
  .-///:::::`..`````````````.`````..        
  .....--:-------------------::+/`        
  `/////+osssssssssssssssssssss+-           
   :osssyyyyyhhhhyyyyyyyyyyso:`
-
+ 
+ 
+ 
+ 
+ 
 4)
       ``..--:::/oosooo+/:.``                 
     `.:+so++++++//++++///:/+oo+-``             
@@ -40,4 +46,9 @@ syhhosssossssssoooooosdyy+os///:.-----///+oo
 :sso++dsoooooooooooooyds+/+yh++++oooo+ossyys   
  `++/sNdo///++++sso++os///+hmyysssooyhddy+:.   
   `-::-`        ```   `:++syo.``````.--.`      
+ 
+ 
+ 
+ 
 Which of the four transportation is a car?
+ 

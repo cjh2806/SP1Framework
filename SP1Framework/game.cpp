@@ -16,6 +16,7 @@ const char CharacterType = 64;
 
 CharState charState;
 
+bool InitPictures;
 bool InitPuzzle;
 double t_charBlink;
 int playerHealth;
@@ -214,6 +215,8 @@ void render()
 	case S_GAME: renderGame();
 		break;
 	case S_PUZZLE: Puzzle();
+		break;
+	case S_PICTURES: Picture_Puzzle();
 		break;
 	case S_ENDMENU: endScreen();
 		break;
@@ -491,7 +494,6 @@ void TriggerMiniGames()
 {
 	srand(time(NULL));
 	int i = rand();
-	i = 1; // For debugging
 	if (i % 2 == 1)
 	{
 		InitPuzzle = true;
@@ -499,6 +501,7 @@ void TriggerMiniGames()
 	}
 	else
 	{
+		InitPictures = true;
 		g_eGameState = S_PICTURES;
 	}
 }
@@ -525,10 +528,21 @@ void RunPuzzle()
 
 void RunPictures()
 {
-	//initConsole(false);
-	Score += Picture_Puzzle();
-	g_eGameState = S_GAME;
-	//initConsole(true);
+	PictureControl();
+
+	if (InitPictures)
+	{
+		initPictures();
+		InitPictures = false;
+	}
+
+	if (isPicturesFinished())
+	{
+		Score += AddScore();
+		AddScore(0);
+		g_eGameState = S_GAME;
+	}
+
 	t_charBlink = g_dElapsedTime;
 }
 
@@ -764,7 +778,7 @@ void Typing()
 	{
 		if (Input != "")
 		{
-			transferUserInput(Input);
+			TransferUserInput(Input);
 			Input = "";
 			AddGuesses();
 		}
@@ -776,4 +790,30 @@ void Typing()
 	}
 
 	CurrentUserInput(Input);
+}
+
+void PictureControl()
+{
+	bool bSomethingHappened = false;
+	if (g_dBounceTime > g_dElapsedTime)
+		return;
+	if (g_abKeyPressed[K_LEFT] && atoi(currentUserInput().c_str()) > 0)
+	{
+		currentUserInput(to_string(atoi(currentUserInput().c_str()) - 1));
+		bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_RIGHT] && atoi(currentUserInput().c_str()) < 4)
+	{
+		currentUserInput(to_string(atoi(currentUserInput().c_str()) + 1));
+		bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_RETURN])
+	{
+		TransferUserInput(currentUserInput());
+	}
+	if (bSomethingHappened)
+	{
+		// set the bounce time to some time in the future to prevent accidental triggers
+		g_dBounceTime = g_dElapsedTime + 0.125; // 125ms should be enough
+	}
 }

@@ -17,5 +17,18 @@ enum ePICTURES{
 };
 
 void initPicCon(Console &input);
-int Picture_Puzzle();
-string getFileContents(ifstream&);
+void initPictures();
+bool isPicturesFinished();
+void isPicturesFinished(int input);
+void Picture_Puzzle();
+void PictureOne();
+void currentUserInput(string input);
+string currentUserInput();
+void AddScores(int input);
+int AddScores();
+void TransferUserInput(string input);
+
+void PictureTwo();
+void PictureThree();
+void PictureFour();
+void PictureFive();
