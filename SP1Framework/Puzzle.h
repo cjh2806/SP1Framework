@@ -1,5 +1,7 @@
 #include "Framework\console.h"
 #include "Framework\timer.h"
+#include "riddlestorage.h"
+#include "logicstorage.h"
 #include <iostream>
 #include <iomanip>
 #include <sstream>

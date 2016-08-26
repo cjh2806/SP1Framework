@@ -71,6 +71,8 @@ void init(void)
 	initPuzPtr(g_Console);
 
 	music();
+	riddlestorage();
+	logicstorage();
 }
 
 //--------------------------------------------------------------

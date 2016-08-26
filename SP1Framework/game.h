@@ -9,6 +9,8 @@
 #include "Highscore.h"
 #include "Pictures.h"
 #include "Puzzle.h"
+#include "riddlestorage.h"
+#include "logicstorage.h"
 
 extern CStopWatch g_swTimer;
 extern bool g_bQuitGame;
