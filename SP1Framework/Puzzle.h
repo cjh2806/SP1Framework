@@ -42,43 +42,6 @@ enum ePatterns {
 	PatternTOTAL
 };
 
-enum eLogic{
-	LogicONE,
-	LogicTWO,
-	LogicTHREE,
-	LogicFOUR,
-	LogicFIVE,
-	LogicSIX,
-	LogicSEVEN,
-	LogicEIGHT,
-	LogicNINE,
-	LogicTEN,
-	LogicELEVEN,
-	LogicTWELVE,
-	LogicTHIRTEEN,
-	LogicFOURTEEN,
-	LogicFIFTEEN,
-	LogicTOTAL
-};
-
-enum eRiddles{
-	RiddleONE,
-	RiddleTWO,
-	RiddleTHREE,
-	RiddleFOUR,
-	RiddleFIVE,
-	RiddleSIX,
-	RiddleSEVEN,
-	RiddleEIGHT,
-	RiddleNINE,
-	RiddleTEN,
-	RiddleELEVEN,
-	RiddleTWELVE,
-	RiddleTHIRTEEN,
-	RiddleFOURTEEN,
-	RiddleFIFTEEN,
-	RiddleTOTAL
-};
 void initPuzPtr(Console &input);
 void initCurrentAnswer();
 bool isPuzzleFinished();

@@ -83,8 +83,7 @@ void Initialize(Cell Level[][YSIZE])
 	for (int i = 1; i < XSIZE - 1; i++)
 	{
 		for (int j = 1; j < YSIZE - 1; j++)
-		{
-			// Border Cells have fewer accessible walls
+		{	// Border Cells have fewer accessible walls
 			Level[1][j].top_wall = false;
 			Level[XSIZE - 2][j].bot_wall = false;
 			Level[i][1].left_wall = false;
@@ -138,7 +137,6 @@ void GenerateMaze(Cell Level[][YSIZE], int &posX, int &posY, int &goalX, int &go
 				else
 					continue;
 			}
-
 			// GO DOWN
 			else if ((random == 2) && (randomX < XSIZE - 2)) {
 				if (Level[randomX + 2][randomY].visited == false) {	// If not visited
@@ -158,7 +156,6 @@ void GenerateMaze(Cell Level[][YSIZE], int &posX, int &posY, int &goalX, int &go
 				else
 					continue;
 			}
-
 			// GO RIGHT
 			else if ((random == 3) && (randomY < YSIZE - 2)) {
 				if (Level[randomX][randomY + 2].visited == false) {	// If not visited
@@ -178,7 +175,6 @@ void GenerateMaze(Cell Level[][YSIZE], int &posX, int &posY, int &goalX, int &go
 				else
 					continue;
 			}
-
 			// GO LEFT
 			else if ((random == 4) && (randomY > 1)) {
 				if (Level[randomX][randomY - 2].visited == false) {	// If not visited
@@ -207,7 +203,6 @@ void GenerateMaze(Cell Level[][YSIZE], int &posX, int &posY, int &goalX, int &go
 			back_trackY.pop();
 		}
 	}
-
 	goalX = randomY;
 	goalY = randomX;
 	Level[goalY][goalX].display = 'E';

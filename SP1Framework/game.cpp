@@ -1,6 +1,4 @@
 // This is the main file for the game logic and function
-//
-//
 #include "game.h"
 #include <iostream>
 #include <iomanip>
@@ -182,8 +180,7 @@ void numbers(void)
 // Output   : void
 //--------------------------------------------------------------
 void update(double dt)
-{
-	// get the delta time
+{	// get the delta time
 	g_dElapsedTime += dt;
 	g_dDeltaTime = dt;
 
@@ -255,7 +252,7 @@ void gameplay()            // gameplay logic
 {
 	processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
 	moveCharacter();    // moves the character, collision detection, physics, etc
-	music();                   // sound can be played here too.
+	music();            // sound can be played here too.
 
 	detectMazeEnd();
 }
@@ -266,12 +263,9 @@ void moveCharacter()
 	if (g_dBounceTime > g_dElapsedTime)
 		return;
 
-	// Updating the location of the character based on the key press
-	// providing a beep sound whenver we shift the character
+	// Updating the location of the character based on the key press and providing a beep sound whenver we shift the character
 	if (g_abKeyPressed[K_UP])
-	{
-		//Beep(1440, 30);
-
+	{	//Beep(1440, 30);
 		switch (g_eGameState)
 		{
 		case S_SPLASHSCREEN:
@@ -292,22 +286,17 @@ void moveCharacter()
 		case S_PICTURES:
 			break;
 		}
-
 		bSomethingHappened = true;
 	}
 	if (g_abKeyPressed[K_LEFT])
-	{
-		//Beep(1440, 30);
-
+	{	//Beep(1440, 30);
 		if (g_eGameState == S_GAME && g_sChar.m_cLocation.X > OffsetBoundary && !checkMazeDisplay(g_sChar.m_cLocation, '*', (-1)))
 			g_sChar.m_cLocation.X--;
 
 		bSomethingHappened = true;
 	}
 	if (g_abKeyPressed[K_DOWN])
-	{
-		//Beep(1440, 30);
-
+	{	//Beep(1440, 30);
 		switch (g_eGameState)
 		{
 		case S_SPLASHSCREEN:
@@ -328,13 +317,10 @@ void moveCharacter()
 		case S_PICTURES:
 			break;
 		}
-
 		bSomethingHappened = true;
 	}
 	if (g_abKeyPressed[K_RIGHT])
-	{
-		//Beep(1440, 30);
-
+	{	//Beep(1440, 30);
 		if (g_eGameState == S_GAME && g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 2 && !checkMazeDisplay(g_sChar.m_cLocation, '*', 1))
 			g_sChar.m_cLocation.X++;
 
@@ -353,28 +339,23 @@ void moveCharacter()
 			IsSelectionMade(false);
 			break;
 		}
-
-		//g_sChar.m_bActive = !g_sChar.m_bActive;
-		bSomethingHappened = true;
+		bSomethingHappened = true;	//g_sChar.m_bActive = !g_sChar.m_bActive;
 	}
 
 	if (bSomethingHappened)
-	{
-		// set the bounce time to some time in the future to prevent accidental triggers
+	{	// set the bounce time to some time in the future to prevent accidental triggers
 		g_dBounceTime = g_dElapsedTime + 0.125; // 125ms should be enough
 	}
 }
 void processUserInput()
 {
-	// quits the game if player hits the escape key
-	if (g_abKeyPressed[K_ESCAPE])
+	if (g_abKeyPressed[K_ESCAPE])	// quits the game if player hits the escape key
 		g_bQuitGame = true;
 }
 
 void clearScreen()
 {
-	// Clears the buffer with this colour attribute
-	g_Console.clearBuffer(bgColor);
+	g_Console.clearBuffer(bgColor);		// Clears the buffer with this colour attribute
 }
 
 void renderSplashScreen()  // renders the splash screen
@@ -398,7 +379,6 @@ void renderMap()
 
 		IsMazeGenerated(true);
 	}
-
 	bufferMaze(g_Console);
 }
 
@@ -428,8 +408,7 @@ void renderCharacter()
 void renderFramerate()
 {
 	COORD c;
-	// displays the framerate
-	std::ostringstream ss;
+	std::ostringstream ss;	// displays the framerate
 	ss << std::fixed << std::setprecision(3);
 	ss << 1.0 / g_dDeltaTime << "fps";
 	c.X = g_Console.getConsoleSize().X - 9;
@@ -452,8 +431,7 @@ void renderFramerate()
 		g_eGameState = S_ENDMENU;
 	}
 
-	// displays the elapsed time
-	ss.str("");
+	ss.str("");		// displays the elapsed time
 	ss << g_dElapsedTime << "secs";
 	c.X = 0;
 	c.Y = 0;
@@ -464,8 +442,7 @@ void renderFramerate()
 
 void renderToScreen()
 {
-	// Writes the buffer to the console, hence you will see what you have written
-	g_Console.flushBufferToConsole();
+	g_Console.flushBufferToConsole();	// Writes the buffer to the console, hence you will see what you have written
 }
 
 void initConsole(bool input)
@@ -517,14 +494,12 @@ void RunPuzzle()
 		initCurrentAnswer();
 		InitPuzzle = false;
 	}
-
 	if (isPuzzleFinished())
 	{
 		Score += AddScore();
 		AddScore(0);
 		g_eGameState = S_GAME;
 	}
-
 	t_charBlink = g_dElapsedTime;
 }
 
@@ -537,14 +512,12 @@ void RunPictures()
 		initPictures();
 		InitPictures = false;
 	}
-
 	if (isPicturesFinished())
 	{
 		Score += AddScore();
 		AddScore(0);
 		g_eGameState = S_GAME;
 	}
-
 	t_charBlink = g_dElapsedTime;
 }
 
@@ -790,7 +763,6 @@ void Typing()
 		// set the bounce time to some time in the future to prevent accidental triggers
 		g_dBounceTime = g_dElapsedTime + 0.125; // 125ms should be enough
 	}
-
 	CurrentUserInput(Input);
 }
 
@@ -814,8 +786,7 @@ void PictureControl()
 		TransferUserInput(currentUserInput());
 	}
 	if (bSomethingHappened)
-	{
-		// set the bounce time to some time in the future to prevent accidental triggers
+	{	// set the bounce time to some time in the future to prevent accidental triggers
 		g_dBounceTime = g_dElapsedTime + 0.125; // 125ms should be enough
 	}
 }

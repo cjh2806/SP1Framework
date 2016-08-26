@@ -83,11 +83,13 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="Highscore.cpp" />
     <ClCompile Include="instructions.cpp" />
+    <ClCompile Include="logicstorage.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Maze\maze.cpp" />
     <ClCompile Include="Menu\startMenu.cpp" />
     <ClCompile Include="Pictures.cpp" />
     <ClCompile Include="Puzzle.cpp" />
+    <ClCompile Include="riddlestorage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="endMenu.h" />
@@ -96,10 +98,12 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="Highscore.h" />
     <ClInclude Include="instructions.h" />
+    <ClInclude Include="logicstorage.h" />
     <ClInclude Include="Maze\maze.h" />
     <ClInclude Include="Menu\startMenu.h" />
     <ClInclude Include="Pictures.h" />
     <ClInclude Include="Puzzle.h" />
+    <ClInclude Include="riddlestorage.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\endMenu.txt" />

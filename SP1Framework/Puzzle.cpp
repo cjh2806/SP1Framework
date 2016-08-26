@@ -14,7 +14,6 @@ bool IsPuzzleFinished;
 int Pattern;
 int Correct;
 
-
 void transferUserInput(string input) { confirmUserInput = input; }	// Transfer userInput from game.cpp to here
 bool isPuzzleFinished() { return IsPuzzleFinished; }
 void isPuzzleFinished(bool input) { IsPuzzleFinished = input; }
@@ -29,8 +28,7 @@ void initPuzPtr(Console &input)
 }
 
 void initCurrentAnswer()	// Run this function once. It will set the current puzzle and current answer
-{
-	// Set which minigame to run first
+{	// Set which minigame to run first
 	srand(time(NULL));
 	ptrPuzCon->clearBuffer(0x1F);
 	ptrPuzCon->flushBufferToConsole();
@@ -41,7 +39,7 @@ void initCurrentAnswer()	// Run this function once. It will set the current puzz
 	IsPuzzleFinished = false;
 	Guesses = 0;
 	Correct = 0;
-	switch (Minigames)	// Checks minigame state and sets the answer according to the minigame state to the currentRandomAnswer variable
+	switch (/*Minigames*/4)	// Checks minigame state and sets the answer according to the minigame state to the currentRandomAnswer variable
 	{
 	case eGame::GAME_ONE: currentRandomAnswer = rand() % 100 + 1;
 		break;
@@ -54,17 +52,12 @@ void initCurrentAnswer()	// Run this function once. It will set the current puzz
 		break;
 	case eGame::GAME_FIVE: Pattern = rand();
 		break;
-	}
-	// Reset any variable that needs reseting here
+	}// Reset any variable that needs reseting here
 }
 
 void Puzzle()	// Function will be called to run in game.cpp (somewhere that is able to connect to render function)
 {
-	// These will transfer to initCurrentAnswer(). Some tweaking is required to make it work.
-
-	/////////////////////////////////////
-
-	switch (Minigames)
+	switch (/*Minigames*/4) // These will transfer to initCurrentAnswer(). Some tweaking is required to make it work.
 	{
 	case eGame::GAME_ONE: random_number_game();
 		break;
@@ -82,41 +75,30 @@ void Puzzle()	// Function will be called to run in game.cpp (somewhere that is a
 void random_number_game()
 {
 	// Conditions in this function have to check against confirmUserInput
-	// 
 
 	COORD c = { 1, 1 };		// Used for display position
-	//ptrPuzCon->clearBuffer(0x1F);	// Clears console screen
 
 	display = "From 1 to " + to_string(LIMIT) + ", guess the number";
 	ptrPuzCon->writeToBuffer(c, display, 0x0F);
 	c = { 1, 2 };
-	ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
-
-	// Detect input here
+	ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);// Detect input here
 
 	c = { 1, 10 };	// Change display position
 
 	if (atoi(confirmUserInput.c_str()) > LIMIT)
 	{
-		//cout << "Number over the range" << endl;
 		display = "Number over the range";
 		ptrPuzCon->writeToBuffer(c, display, 0x0F);
 	}
 	else if (atoi(confirmUserInput.c_str()) < currentRandomAnswer && confirmUserInput != "")
 	{
-		//cout << "Wrong, gimme a bigger number" << endl;
 		display = "Wrong, gimme a bigger number";
 		ptrPuzCon->writeToBuffer(c, display, 0x0F);
-
-		//Guesses++;
 	}
 	else if (atoi(confirmUserInput.c_str()) > currentRandomAnswer && confirmUserInput != "")
 	{
-		//cout << "Wrong, gimme a smaller number" << endl;
 		display = "Wrong, gimme a smaller number";
 		ptrPuzCon->writeToBuffer(c, display, 0x0F);
-
-		//Guesses++;
 	}
 	else if (atoi(confirmUserInput.c_str()) == currentRandomAnswer && confirmUserInput != "")
 	{
