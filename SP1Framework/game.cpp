@@ -778,7 +778,7 @@ void Typing()
 	{
 		if (Input != "")
 		{
-			TransferUserInput(Input);
+			transferUserInput(Input);
 			Input = "";
 			AddGuesses();
 		}
