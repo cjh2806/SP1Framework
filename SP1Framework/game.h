@@ -1,16 +1,17 @@
 #ifndef _GAME_H
 #define _GAME_H
-#include "instructions.h"
 #include "Framework\timer.h"
 #include "Framework\console.h"
-#include "endMenu.h"
+#include "sound.h"
 #include "Menu\startMenu.h"
+#include "instructions.h"
 #include "Maze\maze.h"
 #include "Highscore.h"
 #include "Pictures.h"
 #include "Puzzle.h"
 #include "riddlestorage.h"
 #include "logicstorage.h"
+#include "endMenu.h"
 
 extern CStopWatch g_swTimer;
 extern bool g_bQuitGame;
@@ -169,7 +170,6 @@ void endScreen();
 void Alphabets();
 void instructionScreen();
 void numbers();
-void music();
 void Typing();
 void PictureControl();
 

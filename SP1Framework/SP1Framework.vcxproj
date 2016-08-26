@@ -86,11 +86,13 @@
     <ClCompile Include="logicstorage.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Maze\maze.cpp" />
+    <ClCompile Include="Menu\settingMenu.cpp" />
     <ClCompile Include="Menu\startMenu.cpp" />
     <ClCompile Include="pattern_storage.cpp" />
     <ClCompile Include="Pictures.cpp" />
     <ClCompile Include="Puzzle.cpp" />
     <ClCompile Include="riddlestorage.cpp" />
+    <ClCompile Include="sound.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="endMenu.h" />
@@ -101,16 +103,21 @@
     <ClInclude Include="instructions.h" />
     <ClInclude Include="logicstorage.h" />
     <ClInclude Include="Maze\maze.h" />
+    <ClInclude Include="Menu\settingMenu.h" />
     <ClInclude Include="Menu\startMenu.h" />
     <ClInclude Include="pattern_storage.h" />
     <ClInclude Include="Pictures.h" />
     <ClInclude Include="Puzzle.h" />
     <ClInclude Include="riddlestorage.h" />
+    <ClInclude Include="sound.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\endMenu.txt" />
     <Text Include="Resources\instructionScreen.txt" />
     <Text Include="Resources\MenuTitle.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Sound\Nyan.mp3" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
