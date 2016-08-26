@@ -4,7 +4,7 @@
 #include "Framework\timer.h"
 #include "Framework\console.h"
 #include "endMenu.h"
-#include "StartMenu\startMenu.h"
+#include "Menu\startMenu.h"
 #include "Maze\maze.h"
 #include "Highscore.h"
 #include "Pictures.h"

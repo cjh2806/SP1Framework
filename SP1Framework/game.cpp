@@ -239,11 +239,11 @@ void splashScreenWait()    // waits for time to pass in splash screen
 	{
 		switch (IsCurrentState())
 		{
-		case STARTGAME: g_eGameState = S_GAME;
+		case M_STARTGAME: g_eGameState = S_GAME;
 			break;
-		case INSTRUCTION: g_eGameState = S_INSTRUCTIONS;
+		case M_INSTRUCTION: g_eGameState = S_INSTRUCTIONS;
 			break;
-		case QUITGAME: g_bQuitGame = true;
+		case M_QUITGAME: g_bQuitGame = true;
 			break;
 		}
 	}
@@ -273,10 +273,10 @@ void moveCharacter()
 		switch (g_eGameState)
 		{
 		case S_SPLASHSCREEN:
-			if (IsCurrentState() == QUITGAME)
-				IsCurrentState(INSTRUCTION);
-			else if (IsCurrentState() == INSTRUCTION)
-				IsCurrentState(STARTGAME);
+			if (IsCurrentState() == M_QUITGAME)
+				IsCurrentState(M_INSTRUCTION);
+			else if (IsCurrentState() == M_INSTRUCTION)
+				IsCurrentState(M_STARTGAME);
 			break;
 
 		case S_GAME:
@@ -309,10 +309,10 @@ void moveCharacter()
 		switch (g_eGameState)
 		{
 		case S_SPLASHSCREEN:
-			if (IsCurrentState() == STARTGAME)
-				IsCurrentState(INSTRUCTION);
-			else if (IsCurrentState() == INSTRUCTION)
-				IsCurrentState(QUITGAME);
+			if (IsCurrentState() == M_STARTGAME)
+				IsCurrentState(M_INSTRUCTION);
+			else if (IsCurrentState() == M_INSTRUCTION)
+				IsCurrentState(M_QUITGAME);
 			break;
 
 		case S_GAME:

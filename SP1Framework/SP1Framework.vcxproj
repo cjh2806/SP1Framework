@@ -85,9 +85,9 @@
     <ClCompile Include="instructions.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Maze\maze.cpp" />
+    <ClCompile Include="Menu\startMenu.cpp" />
     <ClCompile Include="Pictures.cpp" />
     <ClCompile Include="Puzzle.cpp" />
-    <ClCompile Include="StartMenu\startMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="endMenu.h" />
@@ -97,13 +97,13 @@
     <ClInclude Include="Highscore.h" />
     <ClInclude Include="instructions.h" />
     <ClInclude Include="Maze\maze.h" />
+    <ClInclude Include="Menu\startMenu.h" />
     <ClInclude Include="Pictures.h" />
     <ClInclude Include="Puzzle.h" />
-    <ClInclude Include="StartMenu\startMenu.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\Resources\endMenu.txt" />
-    <Text Include="..\Resources\instructionScreen.txt" />
+    <Text Include="Resources\endMenu.txt" />
+    <Text Include="Resources\instructionScreen.txt" />
     <Text Include="Resources\MenuTitle.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

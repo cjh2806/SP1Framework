@@ -25,11 +25,11 @@
     <Filter Include="Header Files\Maze">
       <UniqueIdentifier>{69c3ed9d-755a-40c7-8a9c-d04fca6dd578}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\StartMenu">
-      <UniqueIdentifier>{c531023d-df41-4abe-90d9-b00b28918ba2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\StartMenu">
+    <Filter Include="Header Files\Menu">
       <UniqueIdentifier>{5524784b-3971-40b6-bfb9-7460e4878309}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Menu">
+      <UniqueIdentifier>{c531023d-df41-4abe-90d9-b00b28918ba2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -44,9 +44,6 @@
     </ClCompile>
     <ClCompile Include="Maze\maze.cpp">
       <Filter>Source Files\Maze</Filter>
-    </ClCompile>
-    <ClCompile Include="StartMenu\startMenu.cpp">
-      <Filter>Source Files\StartMenu</Filter>
     </ClCompile>
     <ClCompile Include="Highscore.cpp">
       <Filter>Source Files</Filter>
@@ -66,6 +63,9 @@
     <ClCompile Include="instructions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Menu\startMenu.cpp">
+      <Filter>Source Files\Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\console.h">
@@ -76,9 +76,6 @@
     </ClInclude>
     <ClInclude Include="Maze\maze.h">
       <Filter>Header Files\Maze</Filter>
-    </ClInclude>
-    <ClInclude Include="StartMenu\startMenu.h">
-      <Filter>Header Files\StartMenu</Filter>
     </ClInclude>
     <ClInclude Include="Puzzle.h">
       <Filter>Header Files</Filter>
@@ -98,15 +95,18 @@
     <ClInclude Include="instructions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Menu\startMenu.h">
+      <Filter>Header Files\Menu</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\MenuTitle.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="..\Resources\endMenu.txt">
+    <Text Include="Resources\endMenu.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="..\Resources\instructionScreen.txt">
+    <Text Include="Resources\instructionScreen.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
