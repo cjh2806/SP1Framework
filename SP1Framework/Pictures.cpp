@@ -37,7 +37,7 @@ void initPictures()	// Run this function once. It will set the current puzzle an
 
 void Picture_Puzzle()
 {
-	switch (/*Pictures*/ 2)
+	switch (Pictures)
 	{
 	case ePICTURES::PictureONE: PictureOne();
 		break;
@@ -77,7 +77,9 @@ void PictureOne()
 	{
 		ptrPicCon->writeToBuffer(c, PicDisplay[/*atoi(CurrentUserInput.c_str()) - 1*/test][i], 0x0F);
 	}
-
+	c = { 1, 16 };
+	ptrPicCon->writeToBuffer(c, PicDisplay[4][0], 0x0F);
+	c = { 1, 17 };
 	if (atoi(ConfirmUserInput.c_str()) != 3 && ConfirmUserInput != "")
 	{
 		IsPictureFinished = true;
@@ -140,7 +142,9 @@ void PictureTwo()
 	{
 		ptrPicCon->writeToBuffer(c, PicDisplay[/*atoi(CurrentUserInput.c_str()) - 1*/test][i], 0x0F);
 	}
-
+	c = { 1, 28 };
+	ptrPicCon->writeToBuffer(c, PicDisplay[4][0], 0x0F);
+	c = { 1, 29 };
 	if (atoi(ConfirmUserInput.c_str()) != 2 && ConfirmUserInput != "")
 	{
 		IsPictureFinished = true;
@@ -204,6 +208,9 @@ void PictureThree()
 		ptrPicCon->writeToBuffer(c, PicDisplay[/*atoi(CurrentUserInput.c_str()) - 1*/test][i], 0x0F);
 	}
 
+	c = { 1, 24 };
+	ptrPicCon->writeToBuffer(c, PicDisplay[4][0], 0x0F);
+	c = { 1, 25 };
 	if (atoi(ConfirmUserInput.c_str()) != 0 && ConfirmUserInput != "")
 	{
 		IsPictureFinished = true;
@@ -266,7 +273,9 @@ void PictureFour()
 	{
 		ptrPicCon->writeToBuffer(c, PicDisplay[/*atoi(CurrentUserInput.c_str()) - 1*/test][i], 0x0F);
 	}
-
+	c = { 1, 29 };
+	ptrPicCon->writeToBuffer(c, PicDisplay[4][0], 0x0F);
+	c = { 1, 30 };
 	if (atoi(ConfirmUserInput.c_str()) != 3 && ConfirmUserInput != "")
 	{
 		IsPictureFinished = true;
@@ -329,7 +338,9 @@ void PictureFive()
 	{
 		ptrPicCon->writeToBuffer(c, PicDisplay[/*atoi(CurrentUserInput.c_str()) - 1*/test][i], 0x0F);
 	}
-
+	c = { 1, 31 };
+	ptrPicCon->writeToBuffer(c, PicDisplay[4][0], 0x0F);
+	c = { 1, 32 };
 	if (atoi(ConfirmUserInput.c_str()) != 1 && ConfirmUserInput != "")
 	{
 		IsPictureFinished = true;
