@@ -71,6 +71,7 @@ void init(void)
 	music();
 	riddlestorage();
 	logicstorage();
+	pattern_Storage();
 }
 
 //--------------------------------------------------------------

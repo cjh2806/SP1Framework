@@ -1,5 +1,6 @@
 #include "Framework\console.h"
 #include "Framework\timer.h"
+#include "pattern_storage.h"
 #include "riddlestorage.h"
 #include "logicstorage.h"
 #include <iostream>
@@ -15,6 +16,7 @@
 #define LIMIT 100
 #define TOTALPATTERNS 10
 #define RIDDLES 15
+#define LOGIC 15
 #define GAME_TOTAL 5
 #define ASCIILAST 122
 
@@ -28,19 +30,6 @@ enum eGame {
 	GAME_FIVE
 };
 
-enum ePatterns {
-	PatternONE,
-	PatternTWO,
-	PatternTHREE,
-	PatternFOUR,
-	PatternFIVE,
-	PatternSIX,
-	PatternSEVEN,
-	PatternEIGHT,
-	PatternNINE,
-	PatternTEN,
-	PatternTOTAL
-};
 
 void initPuzPtr(Console &input);
 void initCurrentAnswer();

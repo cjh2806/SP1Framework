@@ -39,25 +39,24 @@ void initCurrentAnswer()	// Run this function once. It will set the current puzz
 	IsPuzzleFinished = false;
 	Guesses = 0;
 	Correct = 0;
-	switch (/*Minigames*/4)	// Checks minigame state and sets the answer according to the minigame state to the currentRandomAnswer variable
+	switch (Minigames)	// Checks minigame state and sets the answer according to the minigame state to the currentRandomAnswer variable
 	{
 	case eGame::GAME_ONE: currentRandomAnswer = rand() % 100 + 1;
 		break;
 	case eGame::GAME_TWO: currentRandomAnswer = rand() % 26 + 97;
 		break;
-	case eGame::GAME_THREE: currentRandomAnswer = rand() % 100 + 1;
-		Pattern = rand();
+	case eGame::GAME_THREE: Pattern = rand() % TOTALPATTERNS;
 		break;
-	case eGame::GAME_FOUR: Pattern = rand();
+	case eGame::GAME_FOUR: Pattern = rand() % LOGIC;
 		break;
-	case eGame::GAME_FIVE: Pattern = rand();
+	case eGame::GAME_FIVE: Pattern = rand() % RIDDLES;
 		break;
 	}// Reset any variable that needs reseting here
 }
 
 void Puzzle()	// Function will be called to run in game.cpp (somewhere that is able to connect to render function)
 {
-	switch (/*Minigames*/4) // These will transfer to initCurrentAnswer(). Some tweaking is required to make it work.
+	switch (Minigames) // These will transfer to initCurrentAnswer(). Some tweaking is required to make it work.
 	{
 	case eGame::GAME_ONE: random_number_game();
 		break;
@@ -179,360 +178,47 @@ void random_alphabet()
 }
 void random_pattern()
 {
+	string *patterndata = getpatterndata();
+	string **getpatterndata = (string **)patterndata;
 	COORD c = { 1, 1 };
-	display = "Enter the next number in the pattern";
+	display = getpatterndata[10][0];
 	ptrPuzCon->writeToBuffer(c, display, 0x0F);
 	c = { 1, 3 };
 	ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
-	c = { 1, 2 };
-	if (Pattern % TOTALPATTERNS == PatternONE)
+	for (int i = 0, spacing = 0; i < 5; i++, spacing += 4)
 	{
-		display = to_string(currentRandomAnswer) + ", " + to_string(currentRandomAnswer + 2) + ", " + to_string(currentRandomAnswer + 4) + ", " + to_string(currentRandomAnswer + 6) + ", " + to_string(currentRandomAnswer + 8);
+		c = { spacing + 1, 2 };
+		display = getpatterndata[Pattern][i];
 		ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		c = { 1, 10 };
-		if (atoi(confirmUserInput.c_str()) != currentRandomAnswer + 10 && confirmUserInput != "")
-		{
-			display = "Try again";
-			ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		}
-		else if (atoi(confirmUserInput.c_str()) == currentRandomAnswer + 10 && confirmUserInput != "")
-		{
-			if (Guesses < 5)
-				score += 100;
-			else if (Guesses < 10)
-				score += 50;
-			else
-				score += 0;
-
-			IsPuzzleFinished = true;
-
-			clock_t startTime = clock();
-			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-			double delay = 1.0;
-
-			while (duration < delay)
-			{
-				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-
-				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
-				ptrPuzCon->writeToBuffer(c, display, 0x0F);
-				ptrPuzCon->flushBufferToConsole();
-			}
-		}
 	}
-	else if (Pattern % TOTALPATTERNS == PatternTWO)
+	c = { 1, 10 };
+	if ((confirmUserInput) != getpatterndata[Pattern][5] && confirmUserInput != "")
 	{
-		display = to_string(currentRandomAnswer) + ", " + to_string(currentRandomAnswer * 2) + ", " + to_string(currentRandomAnswer * 4) + ", " + to_string(currentRandomAnswer * 6) + ", " + to_string(currentRandomAnswer * 8);
+		display = getpatterndata[10][1];
 		ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		c = { 1, 10 };
-		if (atoi(confirmUserInput.c_str()) != currentRandomAnswer * 10 && confirmUserInput != "")
-		{
-			display = "Try again";
-			ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		}
-		else if (atoi(confirmUserInput.c_str()) == currentRandomAnswer * 10 && confirmUserInput != "")
-		{
-			if (Guesses < 5)
-				score += 100;
-			else if (Guesses < 10)
-				score += 50;
-			else
-				score += 0;
-
-			IsPuzzleFinished = true;
-
-			clock_t startTime = clock();
-			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-			double delay = 1.0;
-
-			while (duration < delay)
-			{
-				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-
-				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
-				ptrPuzCon->writeToBuffer(c, display, 0x0F);
-				ptrPuzCon->flushBufferToConsole();
-			}
-		}
 	}
-	else if (Pattern % TOTALPATTERNS == PatternTHREE)
+	else if (confirmUserInput == getpatterndata[Pattern][5] && confirmUserInput != "")
 	{
-		display = to_string(currentRandomAnswer) + ", " + to_string(currentRandomAnswer + 2) + ", " + to_string(currentRandomAnswer + 6) + ", " + to_string(currentRandomAnswer + 12) + ", " + to_string(currentRandomAnswer + 20);
-		ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		c = { 1, 10 };
-		if (atoi(confirmUserInput.c_str()) != currentRandomAnswer + 30 && confirmUserInput != "")
+		if (Guesses < 5)
+			score += 100;
+		else if (Guesses < 10)
+			score += 50;
+		else
+			score += 0;
+
+		IsPuzzleFinished = true;
+
+		clock_t startTime = clock();
+		double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+		double delay = 1.0;
+
+		while (duration < delay)
 		{
-			display = "Try again";
+			duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+			display = getpatterndata[10][2] + to_string(Guesses) + getpatterndata[10][3];
 			ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		}
-		else if (atoi(confirmUserInput.c_str()) == currentRandomAnswer + 30 && confirmUserInput != "")
-		{
-			if (Guesses < 5)
-				score += 100;
-			else if (Guesses < 10)
-				score += 50;
-			else
-				score += 0;
-
-			IsPuzzleFinished = true;
-
-			clock_t startTime = clock();
-			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-			double delay = 1.0;
-
-			while (duration < delay)
-			{
-				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-
-				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
-				ptrPuzCon->writeToBuffer(c, display, 0x0F);
-				ptrPuzCon->flushBufferToConsole();
-			}
-		}
-	}
-	else if (Pattern % TOTALPATTERNS == PatternFOUR)
-	{
-		display = to_string(currentRandomAnswer) + ", " + to_string(currentRandomAnswer + 1) + ", " + to_string(currentRandomAnswer - 2) + ", " + to_string(currentRandomAnswer + 3) + ", " + to_string(currentRandomAnswer - 4) + ", " + to_string(currentRandomAnswer + 5);
-		ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		c = { 1, 10 };
-		if (atoi(confirmUserInput.c_str()) != currentRandomAnswer - 6 && confirmUserInput != "")
-		{
-			display = "Try again";
-			ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		}
-		else if (atoi(confirmUserInput.c_str()) == currentRandomAnswer - 6 && confirmUserInput != "")
-		{
-			if (Guesses < 5)
-				score += 100;
-			else if (Guesses < 10)
-				score += 50;
-			else
-				score += 0;
-
-			IsPuzzleFinished = true;
-
-			clock_t startTime = clock();
-			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-			double delay = 1.0;
-
-			while (duration < delay)
-			{
-				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-
-				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
-				ptrPuzCon->writeToBuffer(c, display, 0x0F);
-				ptrPuzCon->flushBufferToConsole();
-			}
-		}
-	}
-	else if (Pattern % TOTALPATTERNS == PatternFIVE)
-	{
-		display = to_string(currentRandomAnswer) + ", " + to_string(currentRandomAnswer - 1) + ", " + to_string(currentRandomAnswer - 2) + ", " + to_string(currentRandomAnswer - 3) + ", " + to_string(currentRandomAnswer - 4);
-		ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		c = { 1, 10 };
-		if (atoi(confirmUserInput.c_str()) != currentRandomAnswer - 5 && confirmUserInput != "")
-		{
-			display = "Try again";
-			ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		}
-		else if (atoi(confirmUserInput.c_str()) == currentRandomAnswer - 5 && confirmUserInput != "")
-		{
-			if (Guesses < 5)
-				score += 100;
-			else if (Guesses < 10)
-				score += 50;
-			else
-				score += 0;
-
-			IsPuzzleFinished = true;
-
-			clock_t startTime = clock();
-			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-			double delay = 1.0;
-
-			while (duration < delay)
-			{
-				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-
-				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
-				ptrPuzCon->writeToBuffer(c, display, 0x0F);
-				ptrPuzCon->flushBufferToConsole();
-			}
-		}
-	}
-	else if (Pattern % TOTALPATTERNS == PatternSIX)
-	{
-		display = to_string(currentRandomAnswer) + ", " + to_string(currentRandomAnswer * 2) + ", " + to_string((currentRandomAnswer * 2) + 1) + ", " + to_string(((currentRandomAnswer * 2) + 1) * 2) + ", " + to_string((((currentRandomAnswer * 2) + 1) * 2) + 2);
-		ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		c = { 1, 10 };
-		if (atoi(confirmUserInput.c_str()) != (((((currentRandomAnswer * 2) + 1) * 2) + 2) * 2) && confirmUserInput != "")
-		{
-			display = "Try again";
-			ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		}
-		else if (atoi(confirmUserInput.c_str()) == (((((currentRandomAnswer * 2) + 1) * 2) + 2) * 2) && confirmUserInput != "")
-		{
-			if (Guesses < 5)
-				score += 100;
-			else if (Guesses < 10)
-				score += 50;
-			else
-				score += 0;
-
-			IsPuzzleFinished = true;
-
-			clock_t startTime = clock();
-			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-			double delay = 1.0;
-
-			while (duration < delay)
-			{
-				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-
-				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
-				ptrPuzCon->writeToBuffer(c, display, 0x0F);
-				ptrPuzCon->flushBufferToConsole();
-			}
-		}
-	}
-	else if (Pattern % TOTALPATTERNS == PatternSEVEN)
-	{
-		display = to_string(currentRandomAnswer) + ", " + to_string(currentRandomAnswer + 8) + ", " + to_string(currentRandomAnswer + 5) + ", " + to_string(currentRandomAnswer + 14) + ", " + to_string(currentRandomAnswer + 12);
-		ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		c = { 1, 10 };
-		if (atoi(confirmUserInput.c_str()) != (currentRandomAnswer + 22) && confirmUserInput != "")
-		{
-			display = "Try again";
-			ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		}
-		else if (atoi(confirmUserInput.c_str()) == (currentRandomAnswer + 22) && confirmUserInput != "")
-		{
-			if (Guesses < 5)
-				score += 100;
-			else if (Guesses < 10)
-				score += 50;
-			else
-				score += 0;
-
-			IsPuzzleFinished = true;
-
-			clock_t startTime = clock();
-			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-			double delay = 1.0;
-
-			while (duration < delay)
-			{
-				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-
-				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
-				ptrPuzCon->writeToBuffer(c, display, 0x0F);
-				ptrPuzCon->flushBufferToConsole();
-			}
-		}
-	}
-	else if (Pattern % TOTALPATTERNS == PatternEIGHT)
-	{
-		display = to_string(currentRandomAnswer) + ", " + to_string(currentRandomAnswer + 10) + ", " + to_string(currentRandomAnswer + 5) + ", " + to_string(currentRandomAnswer + 25) + ", " + to_string(currentRandomAnswer + 15);
-		ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		c = { 1, 10 };
-		if (atoi(confirmUserInput.c_str()) != (currentRandomAnswer + 15) && confirmUserInput != "")
-		{
-			display = "Try again";
-			ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		}
-		else if (atoi(confirmUserInput.c_str()) == (currentRandomAnswer + 15) && confirmUserInput != "")
-		{
-			if (Guesses < 5)
-				score += 100;
-			else if (Guesses < 10)
-				score += 50;
-			else
-				score += 0;
-
-			IsPuzzleFinished = true;
-
-			clock_t startTime = clock();
-			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-			double delay = 1.0;
-
-			while (duration < delay)
-			{
-				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-
-				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
-				ptrPuzCon->writeToBuffer(c, display, 0x0F);
-				ptrPuzCon->flushBufferToConsole();
-			}
-		}
-	}
-	else if (Pattern % TOTALPATTERNS == PatternNINE)
-	{
-		display = to_string(currentRandomAnswer) + ", " + to_string(currentRandomAnswer * 2) + ", " + to_string((currentRandomAnswer * 2) / 2) + ", " + to_string(((currentRandomAnswer * 2) / 2) * 4) + ", " + to_string((((currentRandomAnswer * 2) / 2) * 4) / 2);
-		ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		c = { 1, 10 };
-		if (atoi(confirmUserInput.c_str()) != (((((currentRandomAnswer * 2) / 2) * 4) / 2) * 6) && confirmUserInput != "")
-		{
-			display = "Try again";
-			ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		}
-		else if (atoi(confirmUserInput.c_str()) == (((((currentRandomAnswer * 2) / 2) * 4) / 2) * 6) && confirmUserInput != "")
-		{
-			if (Guesses < 5)
-				score += 100;
-			else if (Guesses < 10)
-				score += 50;
-			else
-				score += 0;
-
-			IsPuzzleFinished = true;
-
-			clock_t startTime = clock();
-			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-			double delay = 1.0;
-
-			while (duration < delay)
-			{
-				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-
-				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
-				ptrPuzCon->writeToBuffer(c, display, 0x0F);
-				ptrPuzCon->flushBufferToConsole();
-			}
-		}
-	}
-	else if (Pattern % TOTALPATTERNS == PatternTEN)
-	{
-		display = to_string(currentRandomAnswer) + ", " + to_string(currentRandomAnswer + 10) + ", " + to_string(currentRandomAnswer + 5) + ", " + to_string(currentRandomAnswer + 25) + ", " + to_string(currentRandomAnswer + 21);
-		ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		c = { 1, 10 };
-		if (atoi(confirmUserInput.c_str()) != (currentRandomAnswer + 51) && confirmUserInput != "")
-		{
-			display = "Try again";
-			ptrPuzCon->writeToBuffer(c, display, 0x0F);
-		}
-		else if (atoi(confirmUserInput.c_str()) == (currentRandomAnswer + 51) && confirmUserInput != "")
-		{
-			if (Guesses < 5)
-				score += 100;
-			else if (Guesses < 10)
-				score += 50;
-			else
-				score += 0;
-
-			IsPuzzleFinished = true;
-
-			clock_t startTime = clock();
-			double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-			double delay = 1.0;
-
-			while (duration < delay)
-			{
-				duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-
-				display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
-				ptrPuzCon->writeToBuffer(c, display, 0x0F);
-				ptrPuzCon->flushBufferToConsole();
-			}
+			ptrPuzCon->flushBufferToConsole();
 		}
 	}
 }
@@ -542,20 +228,12 @@ void logic_game()
 	string **getlogicdata = (string **)logicdata;
 	COORD c = { 1, 1 };
 
-	display = getlogicdata[Pattern][0];
-	ptrPuzCon->writeToBuffer(c, display, 0x0F);
-	display = getlogicdata[Pattern][1];
-	c = { 1, 3 };
-	ptrPuzCon->writeToBuffer(c, display, 0x0F);
-	c = { 1, 4 };
-	display = getlogicdata[Pattern][2];
-	ptrPuzCon->writeToBuffer(c, display, 0x0F);
-	c = { 1, 5 };
-	display = getlogicdata[Pattern][3];
-	ptrPuzCon->writeToBuffer(c, display, 0x0F);
-	c = { 1, 6 };
-	display = getlogicdata[Pattern][4];
-	ptrPuzCon->writeToBuffer(c, display, 0x0F);
+	for (int i = 0, spacing = 0; i < 5; i++, spacing += 2)
+	{
+		display = getlogicdata[Pattern][i];
+		c = { 1, 1 + spacing };
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+	}
 
 	c = { 1, 7 };
 	ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
