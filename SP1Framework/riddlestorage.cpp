@@ -26,12 +26,12 @@ void riddlestorage()
 		"shadow",
 		"" },
 
-		{ "I never was, am always to be, No one ever saw me, nor ever will, And yet I am the confidence of all To live and breathe on this terrestrial ball. What am I?",
+		{ "I never was, am always to be, No one ever saw me, nor ever will, And yet I am the confidence of all To\nlive and breathe on this terrestrial ball. What am I?",
 		"Hint: It's related to day and it's the future",
 		"tomorrow",
 		"" },
 
-		{ "I have many feathers to help me fly. I have a body and head, but I'm not alive. It is your strength which determines how far I go. You can hold me in your hand, but I'm never thrown. What am I?",
+		{ "I have many feathers to help me fly. I have a body and head, but I'm not alive. It is your strength which\ndetermines how far I go. You can hold me in your hand, but I'm never thrown. What am I?",
 		"Hint: It's the name of Superhero Show and it is used with a weapon",
 		"arrow",
 		"" },
@@ -41,7 +41,7 @@ void riddlestorage()
 		"secret",
 		"" },
 
-		{ "A little pool with two layers of wall around it. One white and soft and the other dark and hard, amidst a light brown grassy lawn with an outline of a green grass. What am I?",
+		{ "A little pool with two layers of wall around it. One white and soft and the other dark and hard, amidst a\nlight brown grassy lawn with an outline of a green grass. What am I?",
 		"Hint: It's a fruit and can be made into a drink.",
 		"coconut",
 		"" },
@@ -61,7 +61,7 @@ void riddlestorage()
 		"piano",
 		"" },
 
-		{ "You are in a cabin and it is pitch black. You have one match on you. Which do you light first, the newspaper, the lamp, the candle or the fire?",
+		{ "You are in a cabin and it is pitch black. You have one match on you. Which do you light first, the\nnewspaper, the lamp, the candle or the fire?",
 		"Hint: What starts the fire",
 		"match",
 		"" },

@@ -528,6 +528,7 @@ void TriggerMiniGames()
 {
 	srand((unsigned)time(NULL));
 	int i = rand();
+	//i = 1;
 	if (i % 2 == 1)
 	{
 		g_eGameState = S_PUZZLE;
