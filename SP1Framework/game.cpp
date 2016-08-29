@@ -807,7 +807,7 @@ void Typing()
 	if (bSomethingHappened)
 	{
 		// set the bounce time to some time in the future to prevent accidental triggers
-		g_dBounceTime = g_dElapsedTime + 0.125; // 125ms should be enough
+		g_dBounceTime = g_dElapsedTime + 0.25; // 125ms should be enough
 	}
 	CurrentUserInput(Input);
 }
@@ -822,7 +822,7 @@ void PictureControl()
 		currentUserInput(to_string(atoi(currentUserInput().c_str()) - 1));
 		bSomethingHappened = true;
 	}
-	else if (g_abKeyPressed[K_RIGHT] && atoi(currentUserInput().c_str()) < 4)
+	else if (g_abKeyPressed[K_RIGHT] && atoi(currentUserInput().c_str()) < 3)
 	{
 		currentUserInput(to_string(atoi(currentUserInput().c_str()) + 1));
 		bSomethingHappened = true;
