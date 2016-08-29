@@ -2,9 +2,9 @@
 
 void instructions(Console &refCon)
 {
-	COORD c = { 10, 6 };
-
-	INSTRUCTIONSELECT currentState = BACK;
+	COORD c = refCon.getConsoleSize();
+	c.X = (c.X / 2) - 24;
+	c.Y = (c.Y / 2) - 5;
 
 	ifstream endFile("Resources/instructionScreen.txt");
 	string endTitle;
@@ -15,14 +15,7 @@ void instructions(Console &refCon)
 		c.Y += 1;
 	}
 
-	c = refCon.getConsoleSize();
-
-	switch (currentState)
-	{
-	case BACK:
-		c.X = c.X / 2 - 10;
-		c.Y = c.Y / 2 + 6;
-		refCon.writeToBuffer(c, " - Back - ", 0xF0);
-		break;
-	}
+	c.X = (refCon.getConsoleSize().X / 2) - 2;
+	c.Y += 3;
+	refCon.writeToBuffer(c, "Back", 0x0F);
 }

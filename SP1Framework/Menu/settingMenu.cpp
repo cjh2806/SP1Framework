@@ -1,6 +1,6 @@
 #include "settingMenu.h"
 
-string display[] = { "     back    >", "<   Music   >", "< Work In Progress >", "< Work In Progress  " };
+string display[] = { "     Back    >", "<   Music   >", "< Work In Progress >", "< Work In Progress  " };
 bool settingSelectionMade = false;
 bool musicSetting = true;
 int settingSelection = 0;

@@ -14,21 +14,19 @@ bool IsPuzzleFinished;
 int Pattern;
 int Correct;
 
-void transferUserInput(string input) { confirmUserInput = input; }	// Transfer userInput from game.cpp to here
+void transferUserInput(string input) { confirmUserInput = input; }
 bool isPuzzleFinished() { return IsPuzzleFinished; }
 void isPuzzleFinished(bool input) { IsPuzzleFinished = input; }
 void CurrentUserInput(string input) { currentUserInput = input; }
 void AddGuesses() { Guesses++; }
 int AddScore() { return score; }
 void AddScore(int input) { score = input; }
-
-void initPuzPtr(Console &input)
-{
-	ptrPuzCon = &input;
-}
+void initPuzPtr(Console &input) { ptrPuzCon = &input; }
 
 void initCurrentAnswer()	// Run this function once. It will set the current puzzle and current answer
-{	// Set which minigame to run first
+{	
+	// Set which minigame to run first
+	// Reset any variable that needs reseting in here
 	srand(time(NULL));
 	ptrPuzCon->clearBuffer(0x1F);
 	ptrPuzCon->flushBufferToConsole();
@@ -39,35 +37,36 @@ void initCurrentAnswer()	// Run this function once. It will set the current puzz
 	IsPuzzleFinished = false;
 	Guesses = 0;
 	Correct = 0;
+
 	switch (Minigames)	// Checks minigame state and sets the answer according to the minigame state to the currentRandomAnswer variable
 	{
-	case eGame::GAME_ONE: currentRandomAnswer = rand() % 100 + 1;
-		break;
-	case eGame::GAME_TWO: currentRandomAnswer = rand() % 26 + 97;
-		break;
-	case eGame::GAME_THREE: Pattern = rand() % TOTALPATTERNS;
-		break;
-	case eGame::GAME_FOUR: Pattern = rand() % LOGIC;
-		break;
-	case eGame::GAME_FIVE: Pattern = rand() % RIDDLES;
-		break;
-	}// Reset any variable that needs reseting here
+		case eGame::GAME_ONE: currentRandomAnswer = rand() % 100 + 1;
+			break;
+		case eGame::GAME_TWO: currentRandomAnswer = rand() % 26 + 97;
+			break;
+		case eGame::GAME_THREE: Pattern = rand() % TOTALPATTERNS;
+			break;
+		case eGame::GAME_FOUR: Pattern = rand() % LOGIC;
+			break;
+		case eGame::GAME_FIVE: Pattern = rand() % RIDDLES;
+			break;
+	}
 }
 
 void Puzzle()	// Function will be called to run in game.cpp (somewhere that is able to connect to render function)
 {
 	switch (Minigames) // These will transfer to initCurrentAnswer(). Some tweaking is required to make it work.
 	{
-	case eGame::GAME_ONE: random_number_game();
-		break;
-	case eGame::GAME_TWO: random_alphabet();
-		break;
-	case eGame::GAME_THREE: random_pattern();
-		break;
-	case eGame::GAME_FOUR: logic_game();
-		break;
-	case eGame::GAME_FIVE: Riddles();
-		break;
+		case eGame::GAME_ONE: random_number_game();
+			break;
+		case eGame::GAME_TWO: random_alphabet();
+			break;
+		case eGame::GAME_THREE: random_pattern();
+			break;
+		case eGame::GAME_FOUR: logic_game();
+			break;
+		case eGame::GAME_FIVE: Riddles();
+			break;
 	}
 }
 
@@ -75,28 +74,34 @@ void random_number_game()
 {
 	// Conditions in this function have to check against confirmUserInput
 
-	COORD c = { 1, 1 };		// Used for display position
+	COORD c;		// Used for display position
 
 	display = "From 1 to " + to_string(LIMIT) + ", guess the number";
+	c.X = (ptrPuzCon->getConsoleSize().X / 2) - (display.length() / 2);
+	c.Y = (ptrPuzCon->getConsoleSize().Y / 2) - 5;
 	ptrPuzCon->writeToBuffer(c, display, 0x0F);
-	c = { 1, 2 };
-	ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);// Detect input here
-
-	c = { 1, 10 };	// Change display position
+	c.Y += 3;
+	ptrPuzCon->writeToBuffer(c, "Input: " + currentUserInput, 0x0F);// Detect input here
 
 	if (atoi(confirmUserInput.c_str()) > LIMIT)
 	{
 		display = "Number over the range";
+		c.X = (ptrPuzCon->getConsoleSize().X / 2) - (display.length() / 2);
+		c.Y += 3;
 		ptrPuzCon->writeToBuffer(c, display, 0x0F);
 	}
 	else if (atoi(confirmUserInput.c_str()) < currentRandomAnswer && confirmUserInput != "")
 	{
 		display = "Wrong, gimme a bigger number";
+		c.X = (ptrPuzCon->getConsoleSize().X / 2) - (display.length() / 2);
+		c.Y += 3;
 		ptrPuzCon->writeToBuffer(c, display, 0x0F);
 	}
 	else if (atoi(confirmUserInput.c_str()) > currentRandomAnswer && confirmUserInput != "")
 	{
 		display = "Wrong, gimme a smaller number";
+		c.X = (ptrPuzCon->getConsoleSize().X / 2) - (display.length() / 2);
+		c.Y += 3;
 		ptrPuzCon->writeToBuffer(c, display, 0x0F);
 	}
 	else if (atoi(confirmUserInput.c_str()) == currentRandomAnswer && confirmUserInput != "")
@@ -112,7 +117,7 @@ void random_number_game()
 
 		clock_t startTime = clock();
 		double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-		double delay = 1.0;
+		double delay = 2.0;
 
 		while (duration < delay)
 		{
@@ -127,28 +132,31 @@ void random_number_game()
 
 void random_alphabet()
 {
-	COORD c = { 1, 1 };
+	COORD c;
 
 	display = "From a to z, guess the letter.";
+	c.X = (ptrPuzCon->getConsoleSize().X / 2) - (display.length() / 2);
+	c.Y = (ptrPuzCon->getConsoleSize().Y / 2) - 5;
 	ptrPuzCon->writeToBuffer(c, display, 0x0F);
-	c = { 1, 2 };
-	ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
-
-	c = { 1, 10 };
+	c.Y += 3;
+	ptrPuzCon->writeToBuffer(c, "Input: " + currentUserInput, 0x0F);
 
 	if ((confirmUserInput[0] < ASCII || confirmUserInput[0] > ASCIILAST) && confirmUserInput != "")
 	{
 		display = "Invalid Character";
+		c.Y += 3;
 		ptrPuzCon->writeToBuffer(c, display, 0x0F);
 	}
 	else if (confirmUserInput[0] < currentRandomAnswer && confirmUserInput != "")
 	{
 		display = "Wrong character! The letter is closer to z";
+		c.Y += 3;
 		ptrPuzCon->writeToBuffer(c, display, 0x0F);
 	}
 	else if (confirmUserInput[0] > currentRandomAnswer && confirmUserInput != "")
 	{
 		display = "Wrong character! The letter is closer to a";
+		c.Y += 3;
 		ptrPuzCon->writeToBuffer(c, display, 0x0F);
 	}
 	else if (confirmUserInput[0] == currentRandomAnswer && confirmUserInput != "")
@@ -164,7 +172,8 @@ void random_alphabet()
 
 		clock_t startTime = clock();
 		double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-		double delay = 1.0;
+		double delay = 2.0;
+		c.Y += 3;
 
 		while (duration < delay)
 		{
@@ -176,21 +185,28 @@ void random_alphabet()
 		}
 	}
 }
+
 void random_pattern()
 {
 	string *patterndata = getpatterndata();
 	string **getpatterndata = (string **)patterndata;
-	COORD c = { 1, 1 };
+	COORD c = ptrPuzCon->getConsoleSize();
 	display = getpatterndata[10][0];
+	c.X = (c.X / 2) - (display.length() / 2);
+	c.Y = (c.Y / 2) - 5;
 	ptrPuzCon->writeToBuffer(c, display, 0x0F);
-	c = { 1, 3 };
-	ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+	c.Y += 3;
+	ptrPuzCon->writeToBuffer(c, "Input: " + currentUserInput, 0x0F);
+
+	c.Y += 3;
+
 	for (int i = 0, spacing = 0; i < 5; i++, spacing += 4)
 	{
-		c = { spacing + 1, 2 };
+		c = { c.X + spacing, c.Y };
 		display = getpatterndata[Pattern][i];
-		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		ptrPuzCon->writeToBuffer(c, display + ",", 0x0F);
 	}
+
 	c = { 1, 10 };
 	if ((confirmUserInput) != getpatterndata[Pattern][5] && confirmUserInput != "")
 	{
@@ -222,6 +238,7 @@ void random_pattern()
 		}
 	}
 }
+
 void logic_game()
 {
 	string *logicdata = getlogicdata();
