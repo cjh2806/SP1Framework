@@ -252,9 +252,9 @@ void logic_game()
 		ptrPuzCon->writeToBuffer(c, display, 0x0F);
 	}
 
-	c = { 1, 7 };
+	c = { 1, 12 };
 	ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
-	c = { 1, 10 };
+	c = { 1, 15 };
 	if (atoi(confirmUserInput.c_str()) > 4 && confirmUserInput != getlogicdata[15][2])
 	{
 		display = getlogicdata[15][0];
