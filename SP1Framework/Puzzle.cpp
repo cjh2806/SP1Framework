@@ -45,6 +45,7 @@ void initCurrentAnswer()	// Run this function once. It will set the current puzz
 		case eGame::GAME_TWO: currentRandomAnswer = rand() % 26 + 97;
 			break;
 		case eGame::GAME_THREE: Pattern = rand() % TOTALPATTERNS;
+			currentRandomAnswer = rand() % 101 + 1;
 			break;
 		case eGame::GAME_FOUR: Pattern = rand() % LOGIC;
 			break;
@@ -188,34 +189,29 @@ void random_alphabet()
 
 void random_pattern()
 {
-	string *patterndata = getpatterndata();
-	string **getpatterndata = (string **)patterndata;
 	COORD c = ptrPuzCon->getConsoleSize();
-	display = getpatterndata[10][0];
 	c.X = (c.X / 2) - (display.length() / 2);
 	c.Y = (c.Y / 2) - 5;
+	display = "Enter the next number in the pattern",
 	ptrPuzCon->writeToBuffer(c, display, 0x0F);
 
 	c.Y += 3;
 	COORD d = c;
-	for (int i = 0; i < 5; i++, d.X += 4)
-	{
-		display = getpatterndata[Pattern][i];
-		ptrPuzCon->writeToBuffer(d, display + ",", 0x0F);
-	}
+
+	display = CreatePattern(currentRandomAnswer,Pattern);
 	
-	ptrPuzCon->writeToBuffer(d, "__", 0x0F);
+	ptrPuzCon->writeToBuffer(d, display + "__", 0x0F);
 
 	c.Y += 3;
 	ptrPuzCon->writeToBuffer(c, "Input: " + currentUserInput, 0x0F);
 
 	c.Y += 3;
-	if ((confirmUserInput) != getpatterndata[Pattern][5] && confirmUserInput != "")
+	if (atoi(confirmUserInput.c_str()) != currentRandomAnswer && confirmUserInput != "")
 	{
-		display = getpatterndata[10][1];
+		display = "Try again";
 		ptrPuzCon->writeToBuffer(c, display, 0x0F);
 	}
-	else if (confirmUserInput == getpatterndata[Pattern][5] && confirmUserInput != "")
+	else if (atoi(confirmUserInput.c_str()) == currentRandomAnswer && confirmUserInput != "")
 	{
 		if (Guesses < 5)
 			score += 100;
@@ -234,7 +230,7 @@ void random_pattern()
 		{
 			duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 
-			display = getpatterndata[10][2] + to_string(Guesses) + getpatterndata[10][3];
+			display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
 			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 			ptrPuzCon->flushBufferToConsole();
 		}
