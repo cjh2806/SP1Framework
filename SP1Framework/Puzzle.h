@@ -8,6 +8,7 @@
 #include <sstream>
 #include <string>
 #include <ctime>
+#include <vector>
 
 #define LOGIC 15
 #define ASCII 97
@@ -46,3 +47,5 @@ void random_number_game();
 void random_pattern();
 void Riddles();
 void logic_game();
+void splitString(const string &s, char delim, vector<string> &elems);
+vector<string> splitString(const string &s, char delim);

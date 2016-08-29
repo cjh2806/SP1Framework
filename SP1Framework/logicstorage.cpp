@@ -19,7 +19,7 @@ void logicstorage()
 		"Wrong, you took 3 pens so you have 3 pens",
 		"4"},
 
-		{ "If an electric train is traveling from the east to the west, which direction is the smoke traveling?",
+		{ "If an electric train is traveling from the east to the west,\nwhich direction is the smoke traveling?",
 		"1) East",
 		"2) West",
 		"3) Up",
@@ -27,7 +27,7 @@ void logicstorage()
 		"Wrong, an electric train does not produse smoke",
 		"4" },
 
-		{ "There are 100 birds on a tree, *BANG*, you shot and killed 1 bird. How many birds are left on the tree?",
+		{ "There are 100 birds on a tree, *BANG*, you shot and killed 1 bird.\nHow many birds are left on the tree?",
 		"1) 0",
 		"2) 100",
 		"3) 99",
@@ -35,7 +35,7 @@ void logicstorage()
 		"Wrong, if you fired a gun and killed a bird the other birds will fly away" ,
 		"1" },
 
-		{ "If you are in a race, what place are you in if you take over the person who is in second place?",
+		{ "If you are in a race, what place are you in if you take over the\nperson who is in second place?",
 		"1) First",
 		"2) Second",
 		"3) Third",
@@ -56,7 +56,7 @@ void logicstorage()
 		"2) GLUI",
 		"3) HKVI",
 		"4) GKUJ",
-		"Wrong! In the code, the first letter is the second alphabet, the second letter is the third alphabet, the third letter is the fourth alphabet and so on after the corresponding letter in the word.",
+		"Wrong! In the code, the first letter is the second alphabet,\nthe second letter is the third alphabet, the third letter is the fourth alphabet and\nso on after the corresponding letter in the word.",
 		"2" },
 
 		{ "Banks is related to Money in the same way as Transport is the related to ____?",
@@ -64,7 +64,7 @@ void logicstorage()
 		"2) Goods",
 		"3) Speed",
 		"4) Road",
-		"Wrong! Bank deals with the transaction of Money. Likewise Transport deals with the movement of Goods.",
+		"Wrong! Bank deals with the transaction of Money. Likewise Transport\ndeals with the movement of Goods.",
 		"2" },
 
 		{ "Find the odd one out.",
@@ -75,7 +75,7 @@ void logicstorage()
 		"Wrong! All except Vapour are different forms of Precipitation.",
 		"1" },
 
-		{ "F is the brother of A, C is the daughter of A, K is the sister of F and G is the brother of C then who is the uncle of G?",
+		{ "F is the brother of A, C is the daughter of A, K is the sister of F and G is\nthe brother of C then who is the uncle of G?",
 		"1) C",
 		"2) F",
 		"3) K",
@@ -88,18 +88,18 @@ void logicstorage()
 		"2) WX",
 		"3) VW",
 		"4) XW",
-		"Wrong! The first letter moves forward 2,3,4 ...... steps. The second letter moves forward 3,4,5 ...... steps." ,
+		"Wrong! The first letter moves forward 2,3,4 ...... steps. The second letter moves\nforward 3,4,5 ...... steps." ,
 		"4" },
 
-		{ "Words from an artifical language.agnoscrenia means poisonous spider delanocrenia means poisonous snake agnosdeery means brown spider Which word could mean 'black widow spider'?",
+		{ "Words from an artifical language.agnoscrenia means poisonous spider delanocrenia means\npoisonous snake agnosdeery means brown spider Which word could mean 'black widow spider'?",
 		"1) deeryclostagnos",
 		"2) agnosdelano",
 		"3) agnosvitriblunin",
 		"4) trymuttiagnos",
-		"Wrong! In this language, the noun appears first and the adjectives follow. Since agnos means spider and should appear first, choices 1 and 4 can be ruled out. Choice 2 can be ruled out because delano means snake.",
+		"Wrong! In this language, the noun appears first and the adjectives follow. Since agnos\nmeans spider and should appear first, choices 1 and 4 can be ruled out.\nChoice 2 can be ruled out because delano means snake.",
 		"3" },
 
-		{ "Statements: All fishes are grey in colour.Some fishes are heavy.Conclusions : All heavy fishes are grey in colour.All light fishes are not grey in colour. ? ",
+		{ "Statements: All fishes are grey in colour.Some fishes are heavy.\nConclusion I: All heavy fishes are grey in colour.\nConclusion II: All light fishes are not grey in colour.",
 		"1) Only conclusion I and II follows.",
 		"2) Only conclusion I follows.",
 		"3) Only conclusion II follows.",
@@ -123,7 +123,7 @@ void logicstorage()
 		"Wrong! Adriana is her mother's child too" ,
 		"2" },
 
-		{ "Imagine you're in a dark room that is perfectly empty with nothing in it. There are no windows or doors. What is the easiest way to escape?",
+		{ "Imagine you're in a dark room that is perfectly empty with nothing in it.\nThere are no windows or doors. What is the easiest way to escape?",
 		"1) Die",
 		"2) Wait",
 		"3) Dig a hole in the ground with your hands",

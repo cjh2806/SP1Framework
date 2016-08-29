@@ -27,7 +27,7 @@ void initCurrentAnswer()	// Run this function once. It will set the current puzz
 {	
 	// Set which minigame to run first
 	// Reset any variable that needs reseting in here
-	srand(time(NULL));
+	srand((unsigned)time(NULL));
 	ptrPuzCon->clearBuffer(0x1F);
 	ptrPuzCon->flushBufferToConsole();
 	confirmUserInput = "";
@@ -195,19 +195,21 @@ void random_pattern()
 	c.X = (c.X / 2) - (display.length() / 2);
 	c.Y = (c.Y / 2) - 5;
 	ptrPuzCon->writeToBuffer(c, display, 0x0F);
+
+	c.Y += 3;
+	COORD d = c;
+	for (int i = 0; i < 5; i++, d.X += 4)
+	{
+		display = getpatterndata[Pattern][i];
+		ptrPuzCon->writeToBuffer(d, display + ",", 0x0F);
+	}
+	
+	ptrPuzCon->writeToBuffer(d, "__", 0x0F);
+
 	c.Y += 3;
 	ptrPuzCon->writeToBuffer(c, "Input: " + currentUserInput, 0x0F);
 
 	c.Y += 3;
-
-	for (int i = 0, spacing = 0; i < 5; i++, spacing += 4)
-	{
-		c = { c.X + spacing, c.Y };
-		display = getpatterndata[Pattern][i];
-		ptrPuzCon->writeToBuffer(c, display + ",", 0x0F);
-	}
-
-	c = { 1, 10 };
 	if ((confirmUserInput) != getpatterndata[Pattern][5] && confirmUserInput != "")
 	{
 		display = getpatterndata[10][1];
@@ -226,7 +228,7 @@ void random_pattern()
 
 		clock_t startTime = clock();
 		double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-		double delay = 1.0;
+		double delay = 2.0;
 
 		while (duration < delay)
 		{
@@ -243,18 +245,34 @@ void logic_game()
 {
 	string *logicdata = getlogicdata();
 	string **getlogicdata = (string **)logicdata;
-	COORD c = { 1, 1 };
+	COORD c;
+	c.Y = (ptrPuzCon->getConsoleSize().Y / 2) - 7;
 
-	for (int i = 0, spacing = 0; i < 5; i++, spacing += 2)
+	for (int i = 0; i < 5; i++)
 	{
 		display = getlogicdata[Pattern][i];
-		c = { 1, 1 + spacing };
-		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+
+		if (i == 0)
+		{
+			vector<string> tempDisplay = splitString(display, '\n');
+			c.X = (ptrPuzCon->getConsoleSize().X / 2) - (tempDisplay[0].length() / 2);
+			for (unsigned int i = 0; i < tempDisplay.size(); i++)
+			{
+				ptrPuzCon->writeToBuffer(c, tempDisplay[i], 0x0F);
+				c.Y += 1;
+			}
+		}
+		else
+		{
+			c.Y += 2;
+			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+		}
 	}
 
-	c = { 1, 12 };
-	ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
-	c = { 1, 15 };
+	c.Y += 3;
+	ptrPuzCon->writeToBuffer(c, "Input: " + currentUserInput, 0x0F);
+	c.Y += 2;
+
 	if (atoi(confirmUserInput.c_str()) > 4 && confirmUserInput != getlogicdata[15][2])
 	{
 		display = getlogicdata[15][0];
@@ -273,8 +291,14 @@ void logic_game()
 		{
 			duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 
-			display = getlogicdata[Pattern][5];
-			ptrPuzCon->writeToBuffer(c, display, 0x0F);
+			vector<string> tempDisplay = splitString(display, '\n');
+			for (unsigned int i = 0; i < tempDisplay.size(); i++)
+			{
+				ptrPuzCon->writeToBuffer(c, tempDisplay[i], 0x0F);
+				c.Y += 1;
+			}
+
+			c.Y -= tempDisplay.size();
 			ptrPuzCon->flushBufferToConsole();
 		}
 	}
@@ -285,7 +309,7 @@ void logic_game()
 
 		clock_t startTime = clock();
 		double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-		double delay = 1.0;
+		double delay = 2.0;
 
 		while (duration < delay)
 		{
@@ -302,17 +326,25 @@ void Riddles()
 {
 	string *riddledata = getriddledata();
 	string **getriddledata = (string **)riddledata;
-	COORD c = { 1, 1 };
+	COORD c;
 
 	display = getriddledata[Pattern][0];
-	ptrPuzCon->writeToBuffer(c, display, 0x0F);
-	c = { 1, 3 };
-	ptrPuzCon->writeToBuffer(c, currentUserInput, 0x0F);
+	c.Y = (ptrPuzCon->getConsoleSize().Y / 2) - 5;
+	vector<string> tempDisplay = splitString(display, '\n');
+	c.X = (ptrPuzCon->getConsoleSize().X / 2) - (tempDisplay[0].length() / 2);
+	for (unsigned int i = 0; i < tempDisplay.size(); i++)
+	{
+		ptrPuzCon->writeToBuffer(c, tempDisplay[i], 0x0F);
+		c.Y += 1;
+	}
+	c.Y += 2;
+	ptrPuzCon->writeToBuffer(c, "Input: " + currentUserInput, 0x0F);
 
-	c = { 1, 6 };
+	c.Y += 3;
+
 	if (Guesses >= 5)
 	{
-		c = { 1, 5 };
+		//c = { 1, 5 };
 		display = getriddledata[Pattern][1];
 		ptrPuzCon->writeToBuffer(c, display, 0x0F);
 	}
@@ -323,7 +355,7 @@ void Riddles()
 
 		clock_t startTime = clock();
 		double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-		double delay = 1.0;
+		double delay = 3.0;
 
 		while (duration < delay)
 		{
@@ -334,6 +366,9 @@ void Riddles()
 			ptrPuzCon->flushBufferToConsole();
 		}
 	}
+
+	c.Y += 3;
+
 	if (confirmUserInput == getriddledata[Pattern][2] && confirmUserInput != getriddledata[Pattern][3])
 	{
 		if (Guesses < 5)
@@ -347,7 +382,7 @@ void Riddles()
 
 		clock_t startTime = clock();
 		double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-		double delay = 1.0;
+		double delay = 2.0;
 
 		while (duration < delay)
 		{
@@ -363,4 +398,18 @@ void Riddles()
 		display = getriddledata[15][3];
 		ptrPuzCon->writeToBuffer(c, display, 0x0F);
 	}
+}
+
+void splitString(const string &s, char delim, vector<string> &elems) {
+	stringstream ss(s);
+	string item;
+	while (getline(ss, item, delim)) {
+		elems.push_back(item);
+	}
+}
+
+vector<string> splitString(const string &s, char delim) {
+	vector<string> elems;
+	splitString(s, delim, elems);
+	return elems;
 }
