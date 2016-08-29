@@ -140,9 +140,4 @@
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
-  <ItemGroup>
-    <Media Include="Sound\Nyan.mp3">
-      <Filter>Resource Files</Filter>
-    </Media>
-  </ItemGroup>
 </Project>
