@@ -13,8 +13,6 @@ const char CharacterType = 64;
 
 CharState charState;
 
-bool InitPictures;
-bool InitPuzzle;
 double t_charBlink;
 int playerHealth;
 int highscore;
@@ -405,7 +403,16 @@ void moveCharacter()
 	if (bSomethingHappened)
 	{	
 		// set the bounce time to some time in the future to prevent accidental triggers
-		g_dBounceTime = g_dElapsedTime + 0.125; // 125ms should be enough
+		switch (g_eGameState)
+		{
+			case S_GAME:
+				g_dBounceTime = g_dElapsedTime + 0.125; // 125ms should be enough
+				break;
+
+			default:
+				g_dBounceTime = g_dElapsedTime + 0.25;
+				break;
+		}
 	}
 }
 void processUserInput()
@@ -519,30 +526,22 @@ void detectMazeEnd()
 
 void TriggerMiniGames()
 {
-	srand(time(NULL));
+	srand((unsigned)time(NULL));
 	int i = rand();
 	if (i % 2 == 1)
 	{
-		InitPuzzle = true;
 		g_eGameState = S_PUZZLE;
+		initCurrentAnswer();
 	}
 	else
 	{
-		InitPictures = true;
 		g_eGameState = S_PICTURES;
+		initPictures();
 	}
 }
 
 void RunPuzzle()
 {
-	Typing();
-
-	if (InitPuzzle)
-	{
-		initCurrentAnswer();
-		InitPuzzle = false;
-	}
-
 	if (isPuzzleFinished())
 	{
 		Score += AddScore();
@@ -550,25 +549,21 @@ void RunPuzzle()
 		g_eGameState = S_GAME;
 	}
 
+	Typing();
+
 	t_charBlink = g_dElapsedTime;
 }
 
 void RunPictures()
 {
-	PictureControl();
-
-	if (InitPictures)
-	{
-		initPictures();
-		InitPictures = false;
-	}
-
 	if (isPicturesFinished())
 	{
 		Score += AddScore();
 		AddScore(0);
 		g_eGameState = S_GAME;
 	}
+
+	PictureControl();
 
 	t_charBlink = g_dElapsedTime;
 }
@@ -807,7 +802,7 @@ void Typing()
 	if (bSomethingHappened)
 	{
 		// set the bounce time to some time in the future to prevent accidental triggers
-		g_dBounceTime = g_dElapsedTime + 0.25; // 125ms should be enough
+		g_dBounceTime = g_dElapsedTime + 0.175; // 125ms should be enough
 	}
 	CurrentUserInput(Input);
 }
@@ -833,6 +828,6 @@ void PictureControl()
 	}
 	if (bSomethingHappened)
 	{	// set the bounce time to some time in the future to prevent accidental triggers
-		g_dBounceTime = g_dElapsedTime + 0.125; // 125ms should be enough
+		g_dBounceTime = g_dElapsedTime + 0.25; // 125ms should be enough
 	}
 }
