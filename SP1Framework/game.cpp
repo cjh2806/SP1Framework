@@ -376,8 +376,7 @@ void moveCharacter()
 				break;
 
 			case S_SETTING:
-				if (SettingSelection() < SETTINGSELECT::SET_TOTAL - 1)
-					SettingSelection(1);
+				SettingSelection(1);
 				break;
 
 			case S_GAME:

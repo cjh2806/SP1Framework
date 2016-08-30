@@ -16,12 +16,12 @@ enum SETTINGSELECT
 bool IsSettingSelectionMade();
 void IsSettingSelectionMade(bool input);
 int SettingSelection();
-void SettingSelection(int input);
 bool MusicSelection();
 void MusicSelection(bool input);
 char* CharacterSelection();
+void IsStartMenu(bool input);
+void SettingSelection(int input);
 void CharacterSelection(int input);
-int CharacterSelectionLimit();
 void settingScreen();
 void renderSettingMenu(Console &refCon);
 void renderMusicSetting(Console &refCon, COORD &c, string str);
