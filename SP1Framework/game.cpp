@@ -19,7 +19,8 @@ double t_charBlink;
 int playerHealth;
 int highscore;
 int Score;
-int timer;
+double timer;
+double StartTime;
 
 double  g_dElapsedTime;
 double  g_dDeltaTime;
@@ -45,6 +46,7 @@ void init(void)
 	// Set precision for floating point output
 	g_dElapsedTime = 0.0;
 	g_dBounceTime = 0.0;
+	timer = 60.0;
 	// sets the initial state for the game
 	g_eGameState = S_SPLASHSCREEN;
 
@@ -263,6 +265,7 @@ void splashScreenWait()    // waits for time to pass in splash screen
 			switch (StartMenuSelection())
 			{
 			case MENUSELECT::M_STARTGAME: g_eGameState = S_GAME;
+				StartTime = g_dElapsedTime;
 				break;
 			case MENUSELECT::M_INSTRUCTION: g_eGameState = S_INSTRUCTIONS;
 				break;
@@ -540,10 +543,10 @@ void renderFramerate()
 	c.Y = 0;
 	g_Console.writeToBuffer(c, ss.str(), 0x09);
 
-	if (g_dElapsedTime > (1 + timer) && g_dElapsedTime < (1.01 + timer) && playerHealth>0)
+	if (g_dElapsedTime > (1 + timer + StartTime) && g_dElapsedTime < (1.01 + timer + StartTime) && playerHealth>0)
 	{
-		timer = timer + 2;
-		//playerHealth--;
+		timer = timer + 60;
+		playerHealth--;
 	}
 	if (playerHealth <= 0)
 	{
