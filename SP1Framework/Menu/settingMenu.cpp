@@ -38,8 +38,6 @@ void settingScreen()
 		break;
 	case SETTINGSELECT::SET_CHARACTER: characterSetting = characterAvatar[characterSelection];
 		break;
-	case SETTINGSELECT::SET_QUITGAME:
-		break;
 	}
 }
 
