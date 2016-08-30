@@ -834,6 +834,11 @@ void TypingNumbers()
 			AddGuesses();
 		}
 	}
+	if (bSomethingHappened)
+	{	// set the bounce time to some time in the future to prevent accidental triggers
+		g_dBounceTime = g_dElapsedTime + 0.175; // 125ms should be enough
+	}
+	CurrentUserInput(Input);
 }
 
 void PictureControl()
