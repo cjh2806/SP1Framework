@@ -9,7 +9,7 @@
 const WORD bgColor = 0x0F;
 const double DelayCharBlink = 0.5;
 const unsigned int PlayerHealth = 3;
-const double LiveDelay = 60.0;
+const double LiveDelay = 30.0;
 char* CharacterType = CharacterSelection();
 
 CharState charState;
@@ -605,6 +605,8 @@ void RunPuzzle()
 	if (isPuzzleFinished())
 	{
 		Score += AddScore();
+		playerHealth -= Lives();
+		Lives(0);
 		AddScore(0);
 		g_eGameState = S_GAME;
 	}
@@ -931,5 +933,6 @@ void LiveTime()
 	{
 		playerHealth--;
 		LiveTimer = clock();
+		Difference = 0.0;
 	}
 }

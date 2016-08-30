@@ -43,6 +43,8 @@ void transferUserInput(string input);
 void AddGuesses();
 int AddScore();
 void AddScore(int input);
+int Lives();
+void Lives(int input);
 void Puzzle();
 void random_alphabet();
 void random_number_game();

@@ -14,6 +14,7 @@ bool IsPuzzleFinished;
 bool Gametype;
 int Pattern;
 int Correct;
+int Live;
 
 void transferUserInput(string input) { confirmUserInput = input; }
 bool isPuzzleFinished() { return IsPuzzleFinished; }
@@ -24,6 +25,8 @@ void CurrentUserInput(string input) { currentUserInput = input; }
 void AddGuesses() { Guesses++; }
 int AddScore() { return score; }
 void AddScore(int input) { score = input; }
+void Lives(int input) { Live = input; }
+int Lives() { return Live; }
 void initPuzPtr(Console &input) { ptrPuzCon = &input; }
 
 void initCurrentAnswer()	// Run this function once. It will set the current puzzle and current answer
@@ -120,7 +123,10 @@ void random_number_game()
 		else if (Guesses < 10)
 			score += 50;
 		else
+		{
 			score += 0;
+			Live = 1;
+		}
 
 		IsPuzzleFinished = true;
 
@@ -175,8 +181,10 @@ void random_alphabet()
 		else if (Guesses < 10)
 			score += 50;
 		else
+		{
 			score += 0;
-
+			Live = 1;
+		}
 		IsPuzzleFinished = true;
 
 		clock_t startTime = clock();
@@ -226,8 +234,10 @@ void random_pattern()
 		else if (Guesses < 10)
 			score += 50;
 		else
+		{
 			score += 0;
-
+			Live = 1;
+		}
 		IsPuzzleFinished = true;
 
 		clock_t startTime = clock();
@@ -346,15 +356,10 @@ void Riddles()
 
 	c.Y += 3;
 
-	if (Guesses >= 5)
-	{
-		//c = { 1, 5 };
-		display = getriddledata[Pattern][1];
-		ptrPuzCon->writeToBuffer(c, display, 0x0F);
-	}
-	else if (Guesses == 10)
+	if (Guesses == 10)
 	{
 		score = 0;
+		Live = 1;
 		IsPuzzleFinished = true;
 
 		clock_t startTime = clock();
@@ -369,6 +374,12 @@ void Riddles()
 			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 			ptrPuzCon->flushBufferToConsole();
 		}
+	}
+	else if (Guesses >= 5)
+	{
+		//c = { 1, 5 };
+		display = getriddledata[Pattern][1];
+		ptrPuzCon->writeToBuffer(c, display, 0x0F);
 	}
 
 	c.Y += 3;
