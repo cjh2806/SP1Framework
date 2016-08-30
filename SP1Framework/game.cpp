@@ -9,10 +9,12 @@
 const WORD bgColor = 0x0F;
 const double DelayCharBlink = 0.5;
 const unsigned int PlayerHealth = 3;
+const double LiveDelay = 60.0;
 char* CharacterType = CharacterSelection();
 
 CharState charState;
 
+clock_t LiveTimer;
 EGAMESTATES previousGameState;
 string Input;
 double t_charBlink;
@@ -21,6 +23,10 @@ int highscore;
 int Score;
 double timer;
 double StartTime;
+double LiveDuration;
+double PreviousLiveDuration;
+double ResumeTime;
+double Difference;
 
 double  g_dElapsedTime;
 double  g_dDeltaTime;
@@ -65,6 +71,8 @@ void init(void)
 	playerHealth = PlayerHealth;
 	Score = 0;
 	highscore = Highscore(Score);
+	PreviousLiveDuration = 0;
+	Difference = 0;
 
 	initPicCon(g_Console);
 	initPuzPtr(g_Console);
@@ -185,7 +193,6 @@ void update(double dt)
 {	// get the delta time
 	g_dElapsedTime += dt;
 	g_dDeltaTime = dt;
-
 	switch (g_eGameState)
 	{
 	case S_SPLASHSCREEN: splashScreen(); // game logic for the splash screen
@@ -265,7 +272,7 @@ void splashScreenWait()    // waits for time to pass in splash screen
 			switch (StartMenuSelection())
 			{
 			case MENUSELECT::M_STARTGAME: g_eGameState = S_GAME;
-				StartTime = g_dElapsedTime;
+				//StartTime = g_dElapsedTime;
 				break;
 			case MENUSELECT::M_INSTRUCTION: g_eGameState = S_INSTRUCTIONS;
 				break;
@@ -284,6 +291,8 @@ void splashScreenWait()    // waits for time to pass in splash screen
 				(IsStartMenu()) ?
 					(g_eGameState = S_SPLASHSCREEN) :
 					(g_eGameState = previousGameState);
+
+				Difference += ((clock() - LiveTimer) / (double)CLOCKS_PER_SEC) - PreviousLiveDuration;
 			}
 			else if (SettingSelection() == SETTINGSELECT::SET_QUITGAME)
 				g_eGameState = S_QUIT;
@@ -306,7 +315,12 @@ void gameplay()            // gameplay logic
 {
 	processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
 	moveCharacter();    // moves the character, collision detection, physics, etc
-			            // sound can be played here too.
+	LiveTime();		            // sound can be played here too.
+	if (playerHealth <= 0)
+	{
+		g_eGameState = S_ENDMENU;
+	}
+
 	if (IsStartMenu())
 		IsStartMenu(false);
 
@@ -471,6 +485,7 @@ void processUserInput()
 	{
 		previousGameState = g_eGameState;
 		g_eGameState = S_SETTING;
+		PreviousLiveDuration = LiveDuration;
 	}
 		//g_bQuitGame = true;
 }
@@ -496,7 +511,9 @@ void renderMap()
 	if (!IsMazeGenerated())
 	{
 		generateMaze();
-
+		LiveTimer = clock();
+		PreviousLiveDuration = 0;
+		Difference = 0;
 		g_sChar.m_cLocation = getStartPosition();
 
 		IsMazeGenerated(true);
@@ -543,18 +560,8 @@ void renderFramerate()
 	c.Y = 0;
 	g_Console.writeToBuffer(c, ss.str(), 0x09);
 
-	if (g_dElapsedTime > (1 + timer + StartTime) && g_dElapsedTime < (1.01 + timer + StartTime) && playerHealth>0)
-	{
-		timer = timer + 60;
-		playerHealth--;
-	}
-	if (playerHealth <= 0)
-	{
-		g_eGameState = S_ENDMENU;
-	}
-
 	ss.str("");		// displays the elapsed time
-	ss << g_dElapsedTime << "secs";
+	ss << (LiveDuration - Difference) << "secs";
 	c.X = 0;
 	c.Y = 0;
 	g_Console.writeToBuffer(c, ss.str(), 0x09);
@@ -914,5 +921,15 @@ void PictureControl()
 	if (bSomethingHappened)
 	{	// set the bounce time to some time in the future to prevent accidental triggers
 		g_dBounceTime = g_dElapsedTime + 0.25; // 125ms should be enough
+	}
+}
+
+void LiveTime()
+{
+	LiveDuration = (clock() - Difference - LiveTimer) / (double)CLOCKS_PER_SEC;
+	if (LiveDuration > LiveDelay)
+	{
+		playerHealth--;
+		LiveTimer = clock();
 	}
 }
