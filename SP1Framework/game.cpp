@@ -9,7 +9,7 @@
 const WORD bgColor = 0x0F;
 const double DelayCharBlink = 0.5;
 const unsigned int PlayerHealth = 3;
-const char CharacterType = 64;
+char* CharacterType = CharacterSelection();
 
 CharState charState;
 
@@ -295,7 +295,10 @@ void moveCharacter()
 		switch (g_eGameState)
 		{
 			case S_SETTING:
-				MusicSelection(true);
+				if (SettingSelection() == 1)
+					MusicSelection(true);
+				else if (SettingSelection() == 2)
+					CharacterSelection(-1);
 				break;
 
 			case S_GAME:
@@ -342,7 +345,10 @@ void moveCharacter()
 		switch (g_eGameState)
 		{
 			case S_SETTING:
-				MusicSelection(false);
+				if (SettingSelection() == 1)
+					MusicSelection(false);
+				else if (SettingSelection() == 2)
+					CharacterSelection(1);
 				break;
 
 			case S_GAME:
