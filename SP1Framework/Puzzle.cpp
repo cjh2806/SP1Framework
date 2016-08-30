@@ -318,7 +318,7 @@ void logic_game()
 	}
 	else if (confirmUserInput == getlogicdata[Pattern][6] && confirmUserInput != getlogicdata[15][2])
 	{
-		score = 10;
+		score = 50;
 		IsPuzzleFinished = true;
 
 		clock_t startTime = clock();
