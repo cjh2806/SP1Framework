@@ -12,6 +12,7 @@
 #include "Puzzle.h"
 #include "riddlestorage.h"
 #include "logicstorage.h"
+#include "picture_storage.h"
 #include "endMenu.h"
 
 extern CStopWatch g_swTimer;

@@ -90,6 +90,7 @@
     <ClCompile Include="Menu\startMenu.cpp" />
     <ClCompile Include="pattern_storage.cpp" />
     <ClCompile Include="Pictures.cpp" />
+    <ClCompile Include="picture_storage.cpp" />
     <ClCompile Include="Puzzle.cpp" />
     <ClCompile Include="riddlestorage.cpp" />
     <ClCompile Include="sound.cpp" />
@@ -107,6 +108,7 @@
     <ClInclude Include="Menu\startMenu.h" />
     <ClInclude Include="pattern_storage.h" />
     <ClInclude Include="Pictures.h" />
+    <ClInclude Include="picture_storage.h" />
     <ClInclude Include="Puzzle.h" />
     <ClInclude Include="riddlestorage.h" />
     <ClInclude Include="sound.h" />
