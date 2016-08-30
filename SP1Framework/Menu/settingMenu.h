@@ -19,6 +19,7 @@ int SettingSelection();
 bool MusicSelection();
 void MusicSelection(bool input);
 char* CharacterSelection();
+bool IsStartMenu();
 void IsStartMenu(bool input);
 void SettingSelection(int input);
 void CharacterSelection(int input);

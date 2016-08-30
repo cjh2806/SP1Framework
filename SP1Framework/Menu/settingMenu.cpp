@@ -15,6 +15,7 @@ int SettingSelection() { return settingSelection; }
 bool MusicSelection() { return musicSetting; }
 void MusicSelection(bool input) { musicSetting = input; }
 char* CharacterSelection() { return &characterSetting; }
+bool IsStartMenu() { return isStartMenu; }
 void IsStartMenu(bool input) { isStartMenu = input; }
 
 void SettingSelection(int input)

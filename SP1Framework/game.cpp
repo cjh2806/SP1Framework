@@ -276,8 +276,14 @@ void splashScreenWait()    // waits for time to pass in splash screen
 		}
 		else if (IsSettingSelectionMade())
 		{
-			if (SettingSelection() == 0)
-				g_eGameState = S_SPLASHSCREEN;
+			if (SettingSelection() == SETTINGSELECT::SET_BACK)
+			{
+				(IsStartMenu()) ?
+					(g_eGameState = S_SPLASHSCREEN) :
+					(g_eGameState = previousGameState);
+			}
+			else if (SettingSelection() == SETTINGSELECT::SET_QUITGAME)
+				g_eGameState = S_QUIT;
 
 			IsSettingSelectionMade(false);
 		}
@@ -287,7 +293,7 @@ void splashScreenWait()    // waits for time to pass in splash screen
 		if (QuitSelection() && ConfirmQuit())
 			g_bQuitGame = true;
 		else if (ConfirmQuit())
-			g_eGameState = previousGameState;
+			g_eGameState = S_SETTING;
 
 		ConfirmQuit(false);
 	}
@@ -298,6 +304,8 @@ void gameplay()            // gameplay logic
 	processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
 	moveCharacter();    // moves the character, collision detection, physics, etc
 			            // sound can be played here too.
+	if (IsStartMenu())
+		IsStartMenu(false);
 
 	detectMazeEnd();
 }
@@ -456,10 +464,10 @@ void moveCharacter()
 }
 void processUserInput()
 {
-	if (g_abKeyPressed[K_ESCAPE] && g_eGameState != S_QUIT)	// quits the game if player hits the escape key
+	if (g_abKeyPressed[K_ESCAPE] && g_eGameState != S_QUIT && g_eGameState != S_SETTING)	// quits the game if player hits the escape key
 	{
 		previousGameState = g_eGameState;
-		g_eGameState = S_QUIT;
+		g_eGameState = S_SETTING;
 	}
 		//g_bQuitGame = true;
 }
