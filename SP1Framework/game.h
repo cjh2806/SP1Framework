@@ -178,4 +178,5 @@ void numbers();
 void Typing();
 void PictureControl();
 void TypingNumbers();
+void LiveTime();
 #endif // _GAME_H
