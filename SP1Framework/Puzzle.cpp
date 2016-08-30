@@ -49,7 +49,8 @@ void initCurrentAnswer()	// Run this function once. It will set the current puzz
 		break;
 	case eGame::GAME_TWO: currentRandomAnswer = rand() % 26 + 97;
 		break;
-	case eGame::GAME_THREE: Pattern = rand() % TOTALPATTERNS;
+	case eGame::GAME_THREE:
+		Pattern = rand() % TOTALPATTERNS;
 		currentRandomAnswer = rand() % 101 + 1;
 		Gametype = true;
 		break;
@@ -126,12 +127,12 @@ void random_number_game()
 		clock_t startTime = clock();
 		double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 		double delay = 2.0;
+		display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
 
 		while (duration < delay)
 		{
 			duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 
-			display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
 			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 			ptrPuzCon->flushBufferToConsole();
 		}
@@ -182,12 +183,12 @@ void random_alphabet()
 		double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 		double delay = 2.0;
 		c.Y += 3;
+		display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
 
 		while (duration < delay)
 		{
 			duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 
-			display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
 			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 			ptrPuzCon->flushBufferToConsole();
 		}
@@ -197,10 +198,10 @@ void random_alphabet()
 void random_pattern()
 {
 	COORD c = ptrPuzCon->getConsoleSize();
+	display = "Enter the next number in the pattern";
 	c.X = (c.X / 2) - (display.length() / 2);
 	c.Y = (c.Y / 2) - 5;
-	display = "Enter the next number in the pattern",
-		ptrPuzCon->writeToBuffer(c, display, 0x0F);
+	ptrPuzCon->writeToBuffer(c, display, 0x0F);
 
 	c.Y += 3;
 	COORD d = c;
@@ -232,12 +233,12 @@ void random_pattern()
 		clock_t startTime = clock();
 		double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 		double delay = 2.0;
+		display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
 
 		while (duration < delay)
 		{
 			duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 
-			display = "Correct! It only took you " + to_string(Guesses) + " times to guess!";
 			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 			ptrPuzCon->flushBufferToConsole();
 		}
@@ -290,11 +291,11 @@ void logic_game()
 		double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 		double delay = 2.0;
 		display = getlogicdata[Pattern][5];
+		vector<string> tempDisplay = splitString(display, '\n');
 		while (duration < delay)
 		{
 			duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 
-			vector<string> tempDisplay = splitString(display, '\n');
 			for (unsigned int i = 0; i < tempDisplay.size(); i++)
 			{
 				ptrPuzCon->writeToBuffer(c, tempDisplay[i], 0x0F);
@@ -313,12 +314,12 @@ void logic_game()
 		clock_t startTime = clock();
 		double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 		double delay = 2.0;
+		display = getlogicdata[15][1];
 
 		while (duration < delay)
 		{
 			duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 
-			display = getlogicdata[15][1];
 			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 			ptrPuzCon->flushBufferToConsole();
 		}
@@ -359,12 +360,12 @@ void Riddles()
 		clock_t startTime = clock();
 		double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 		double delay = 3.0;
+		display = getriddledata[15][2];
 
 		while (duration < delay)
 		{
 			duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 
-			display = getriddledata[15][2];
 			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 			ptrPuzCon->flushBufferToConsole();
 		}
@@ -386,12 +387,12 @@ void Riddles()
 		clock_t startTime = clock();
 		double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 		double delay = 2.0;
+		display = getriddledata[15][0] + to_string(Guesses) + getriddledata[15][1];
 
 		while (duration < delay)
 		{
 			duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 
-			display = getriddledata[15][0] + to_string(Guesses) + getriddledata[15][1];
 			ptrPuzCon->writeToBuffer(c, display, 0x0F);
 			ptrPuzCon->flushBufferToConsole();
 		}
