@@ -13,12 +13,14 @@ char* CharacterType = CharacterSelection();
 
 CharState charState;
 
+EGAMESTATES previousGameState;
+string Input;
 double t_charBlink;
 int playerHealth;
 int highscore;
 int Score;
 int timer;
-string Input;
+
 double  g_dElapsedTime;
 double  g_dDeltaTime;
 bool    g_abKeyPressed[K_COUNT];
@@ -194,6 +196,8 @@ void update(double dt)
 		break;
 	case S_PICTURES: RunPictures();
 		break;
+	case S_QUIT: splashScreen();
+		break;
 	}
 }
 //--------------------------------------------------------------
@@ -209,20 +213,22 @@ void render()
 	clearScreen();      // clears the current screen and draw from scratch 
 	switch (g_eGameState)
 	{
-	case S_SPLASHSCREEN: renderSplashScreen();
-		break;
-	case S_INSTRUCTIONS: instructionScreen();
-		break;
-	case S_SETTING: renderSettingMenu(g_Console);
-		break;
-	case S_GAME: renderGame();
-		break;
-	case S_PUZZLE: Puzzle();
-		break;
-	case S_PICTURES: Picture_Puzzle();
-		break;
-	case S_ENDMENU: endScreen();
-		break;
+		case S_SPLASHSCREEN: renderSplashScreen();
+			break;
+		case S_INSTRUCTIONS: instructionScreen();
+			break;
+		case S_SETTING: renderSettingMenu(g_Console);
+			break;
+		case S_GAME: renderGame();
+			break;
+		case S_PUZZLE: Puzzle();
+			break;
+		case S_PICTURES: Picture_Puzzle();
+			break;
+		case S_ENDMENU: endScreen();
+			break;
+		case S_QUIT: renderQuitMenu(g_Console);
+			break;
 	}
 	renderFramerate();  // renders debug information, frame rate, elapsed time, etc
 	renderToScreen();   // dump the contents of the buffer to the screen, one frame worth of game
@@ -241,33 +247,49 @@ void splashScreen()
 		moveCharacter();
 		settingScreen();
 		break;
+	case S_QUIT:
+		splashScreenWait();
+		moveCharacter();
+		break;
 	}
 }
 
 void splashScreenWait()    // waits for time to pass in splash screen
 {
-	if (IsStartSelectionMade())
+	if (g_eGameState != S_QUIT)
 	{
-		switch (StartMenuSelection())
+		if (IsStartSelectionMade())
 		{
-		case MENUSELECT::M_STARTGAME: g_eGameState = S_GAME;
-			break;
-		case MENUSELECT::M_INSTRUCTION: g_eGameState = S_INSTRUCTIONS;
-			break;
-		case MENUSELECT::M_SETTING: g_eGameState = S_SETTING;
-			break;
-		case MENUSELECT::M_QUITGAME: g_bQuitGame = true;
-			break;
+			switch (StartMenuSelection())
+			{
+			case MENUSELECT::M_STARTGAME: g_eGameState = S_GAME;
+				break;
+			case MENUSELECT::M_INSTRUCTION: g_eGameState = S_INSTRUCTIONS;
+				break;
+			case MENUSELECT::M_SETTING: g_eGameState = S_SETTING;
+				break;
+			case MENUSELECT::M_QUITGAME: g_bQuitGame = true;
+				break;
+			}
+
+			IsStartSelectionMade(false);
 		}
+		else if (IsSettingSelectionMade())
+		{
+			if (SettingSelection() == 0)
+				g_eGameState = S_SPLASHSCREEN;
 
-		IsStartSelectionMade(false);
+			IsSettingSelectionMade(false);
+		}
 	}
-	else if (IsSettingSelectionMade())
+	else
 	{
-		if (SettingSelection() == 0)
-			g_eGameState = S_SPLASHSCREEN;
+		if (QuitSelection() && ConfirmQuit())
+			g_bQuitGame = true;
+		else if (ConfirmQuit())
+			g_eGameState = previousGameState;
 
-		IsSettingSelectionMade(false);
+		ConfirmQuit(false);
 	}
 }
 
@@ -333,6 +355,11 @@ void moveCharacter()
 				if (g_sChar.m_cLocation.X > OffsetBoundary && !checkMazeDisplay(g_sChar.m_cLocation, '*', (-1)))
 					g_sChar.m_cLocation.X--;
 				break;
+
+			case S_QUIT:
+				if (!QuitSelection())
+					QuitSelection(true);
+				break;
 		}
 
 		bSomethingHappened = true;
@@ -383,6 +410,11 @@ void moveCharacter()
 				if (g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 2 && !checkMazeDisplay(g_sChar.m_cLocation, '*', 1))
 					g_sChar.m_cLocation.X++;
 				break;
+
+			case S_QUIT:
+				if (QuitSelection())
+					QuitSelection(false);
+				break;
 		}
 
 		bSomethingHappened = true;
@@ -398,6 +430,9 @@ void moveCharacter()
 				break;
 
 			case S_INSTRUCTIONS: g_eGameState = S_SPLASHSCREEN;
+				break;
+
+			case S_QUIT: ConfirmQuit(true);
 				break;
 		}
 
@@ -421,8 +456,12 @@ void moveCharacter()
 }
 void processUserInput()
 {
-	if (g_abKeyPressed[K_ESCAPE])	// quits the game if player hits the escape key
-		g_bQuitGame = true;
+	if (g_abKeyPressed[K_ESCAPE] && g_eGameState != S_QUIT)	// quits the game if player hits the escape key
+	{
+		previousGameState = g_eGameState;
+		g_eGameState = S_QUIT;
+	}
+		//g_bQuitGame = true;
 }
 
 void clearScreen()
@@ -560,6 +599,7 @@ void RunPuzzle()
 		TypingNumbers();
 	}
 
+	processUserInput();
 	t_charBlink = g_dElapsedTime;
 }
 
@@ -573,7 +613,7 @@ void RunPictures()
 	}
 
 	PictureControl();
-
+	processUserInput();
 	t_charBlink = g_dElapsedTime;
 }
 

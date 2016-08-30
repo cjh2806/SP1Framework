@@ -84,6 +84,9 @@
     <ClCompile Include="picture_storage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Menu\quitMenu.cpp">
+      <Filter>Source Files\Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\console.h">
@@ -133,6 +136,9 @@
     </ClInclude>
     <ClInclude Include="picture_storage.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\quitMenu.h">
+      <Filter>Header Files\Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

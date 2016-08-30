@@ -6,6 +6,7 @@
 #include "Menu\startMenu.h"
 #include "instructions.h"
 #include "Menu\settingMenu.h"
+#include "Menu\quitMenu.h"
 #include "Maze\maze.h"
 #include "Highscore.h"
 #include "Pictures.h"
@@ -129,7 +130,8 @@ enum EGAMESTATES
 	S_COUNT,
 	S_PUZZLE,
 	S_PICTURES,
-	S_ENDMENU
+	S_ENDMENU,
+	S_QUIT
 };
 
 enum CharState

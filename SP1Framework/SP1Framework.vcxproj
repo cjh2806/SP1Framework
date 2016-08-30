@@ -86,6 +86,7 @@
     <ClCompile Include="logicstorage.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Maze\maze.cpp" />
+    <ClCompile Include="Menu\quitMenu.cpp" />
     <ClCompile Include="Menu\settingMenu.cpp" />
     <ClCompile Include="Menu\startMenu.cpp" />
     <ClCompile Include="pattern_storage.cpp" />
@@ -104,6 +105,7 @@
     <ClInclude Include="instructions.h" />
     <ClInclude Include="logicstorage.h" />
     <ClInclude Include="Maze\maze.h" />
+    <ClInclude Include="Menu\quitMenu.h" />
     <ClInclude Include="Menu\settingMenu.h" />
     <ClInclude Include="Menu\startMenu.h" />
     <ClInclude Include="pattern_storage.h" />
