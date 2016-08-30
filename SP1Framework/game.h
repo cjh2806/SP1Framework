@@ -175,5 +175,5 @@ void instructionScreen();
 void numbers();
 void Typing();
 void PictureControl();
-
+void TypingNumbers();
 #endif // _GAME_H

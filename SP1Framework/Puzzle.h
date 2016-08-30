@@ -36,6 +36,8 @@ void initPuzPtr(Console &input);
 void initCurrentAnswer();
 bool isPuzzleFinished();
 void isPuzzleFinished(bool input);
+bool GameType();
+void GameType(bool input);
 void CurrentUserInput(string input);
 void transferUserInput(string input);
 void AddGuesses();

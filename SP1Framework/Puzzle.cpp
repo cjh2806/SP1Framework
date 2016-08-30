@@ -11,12 +11,15 @@ int score;
 int Minigames;
 int Guesses;
 bool IsPuzzleFinished;
+bool Gametype;
 int Pattern;
 int Correct;
 
 void transferUserInput(string input) { confirmUserInput = input; }
 bool isPuzzleFinished() { return IsPuzzleFinished; }
 void isPuzzleFinished(bool input) { IsPuzzleFinished = input; }
+bool GameType() { return Gametype; }
+void GameType(bool input) { Gametype = input; }
 void CurrentUserInput(string input) { currentUserInput = input; }
 void AddGuesses() { Guesses++; }
 int AddScore() { return score; }
@@ -35,19 +38,23 @@ void initCurrentAnswer()	// Run this function once. It will set the current puzz
 	Minigames = rand();
 	Minigames %= GAME_TOTAL;
 	IsPuzzleFinished = false;
+	Gametype = false;
 	Guesses = 0;
 	Correct = 0;
 
 	switch (Minigames)	// Checks minigame state and sets the answer according to the minigame state to the currentRandomAnswer variable
 	{
 	case eGame::GAME_ONE: currentRandomAnswer = rand() % 100 + 1;
+		Gametype = true;
 		break;
 	case eGame::GAME_TWO: currentRandomAnswer = rand() % 26 + 97;
 		break;
 	case eGame::GAME_THREE: Pattern = rand() % TOTALPATTERNS;
 		currentRandomAnswer = rand() % 101 + 1;
+		Gametype = true;
 		break;
 	case eGame::GAME_FOUR: Pattern = rand() % LOGIC;
+		Gametype = true;
 		break;
 	case eGame::GAME_FIVE: Pattern = rand() % RIDDLES;
 		break;

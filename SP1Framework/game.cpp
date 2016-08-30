@@ -552,8 +552,14 @@ void RunPuzzle()
 		AddScore(0);
 		g_eGameState = S_GAME;
 	}
-
-	Typing();
+	if (!GameType())
+	{
+		Typing();
+	}
+	else
+	{
+		TypingNumbers();
+	}
 
 	t_charBlink = g_dElapsedTime;
 }
@@ -739,7 +745,33 @@ void Typing()
 		Input += "z";
 		bSomethingHappened = true;
 	}
-	else if (g_abKeyPressed[K_1] || g_abKeyPressed[K_NUM1])
+	else if (g_abKeyPressed[K_BACK] && (Input.length() != 0))
+	{
+		Input.erase(Input.length() - 1, 1);
+		bSomethingHappened = true;
+	}
+	else if (g_abKeyPressed[K_RETURN])
+	{
+		if (Input != "")
+		{
+			transferUserInput(Input);
+			Input = "";
+			AddGuesses();
+		}
+	}
+	if (bSomethingHappened)
+	{	// set the bounce time to some time in the future to prevent accidental triggers
+		g_dBounceTime = g_dElapsedTime + 0.175; // 125ms should be enough
+	}
+	CurrentUserInput(Input);
+}
+
+void TypingNumbers()
+{
+	bool bSomethingHappened = false;
+	if (g_dBounceTime > g_dElapsedTime)
+		return;
+	if (g_abKeyPressed[K_1] || g_abKeyPressed[K_NUM1])
 	{
 		Input += "1";
 		bSomethingHappened = true;
@@ -803,11 +835,6 @@ void Typing()
 			AddGuesses();
 		}
 	}
-	if (bSomethingHappened)
-	{	// set the bounce time to some time in the future to prevent accidental triggers
-		g_dBounceTime = g_dElapsedTime + 0.175; // 125ms should be enough
-	}
-	CurrentUserInput(Input);
 }
 
 void PictureControl()
