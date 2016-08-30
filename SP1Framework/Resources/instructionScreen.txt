@@ -1,10 +1,10 @@
-                             -Arrow Keys to move                                                    
-                             -Score for completing Maze                                             
-                             -50 Points                                                             
-                             -Score for completing Puzzles                                          
-                             -100 Points (less than 5 tries)                                        
-                             -50 Points (more than 5 tries)                                         
-                             -Puzzles will appear at the end of every maze                          
-							 -You have 3 lives (- 1 life every 1 minute)                            
-                             -Complete mazes and puzzles to train your brain                        
-                             -ESC to quit the game at anytime                                       
+-Arrow Keys to move                                                    
+-Score for completing Maze                                             
+-50 Points                                                             
+-Score for completing Puzzles                                          
+-100 Points (less than 5 tries)                                        
+-50 Points (more than 5 tries)                                         
+-Puzzles will appear at the end of every maze                          
+-You have 3 lives (- 1 life every 1 minute)                            
+-Complete mazes and puzzles to train your brain                        
+-ESC to quit the game at anytime                                       
