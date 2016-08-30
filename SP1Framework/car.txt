@@ -1,41 +1,39 @@
-1)              ````````..````````                
-            ```.:+ooo+//:o///////:-.``            
-         ```:oso:.     `.o.     `.:///-.`         
-       ``-oy+.         ``+/         `-/+:-.       
-     ``-sy-            .`+o            `:+/:.     
-    ``+y:              .`+s`             `+o/:`   
-   `.so`              ```+s:               :s+/`  
-  `.y+                .``/o+                -y++  
- ``so                 . `/os`                :yo/ 
- `/y`                `. `/oy.                 yss.
-`.o+                 .. `/oy/                 -mo/
-.+y-                `-.``/ss/.                `doo
-oys.             `..` `.-:-```..`             `:+o
-/ho-           `.```-/ohmshyo:.``.`           `.+o
--m++        ````.:oshhdhs/shddhs/-`..`        `.y/
- sos.     ``.-/shhys+-`    `.:+shdyo:..``    ``-h`
- .h+o` ``.:oyyo/-`              `./oyhs/-.`  `.y/ 
-  -s++-/oo/-`                        `-/oo+:.`ss  
-   -o/s-                                  `-.so`  
-    `//+:`                               ``:h/    
-      -///-`                           ``-ss.     
-       `-///:.`                     ```:ss-       
-         `.://:-.``            ````.:os/.         
-            `.:////:-...`````.--/oo+:`            
-                ``-:/+++++++++/:.`                
+                               1)              ````````..````````                
+                                           ```.:+ooo+//:o///////:-.``            
+                                        ```:oso:.     `.o.     `.:///-.`         
+                                      ``-oy+.         ``+/         `-/+:-.       
+                                    ``-sy-            .`+o            `:+/:.     
+                                   ``+y:              .`+s`             `+o/:`   
+                                  `.so`              ```+s:               :s+/`  
+                                 `.y+                .``/o+                -y++  
+                                ``so                 . `/os`                :yo/ 
+                                `/y`                `. `/oy.                 yss.
+                               `.o+                 .. `/oy/                 -mo/
+                               .+y-                `-.``/ss/.                `doo
+                               oys.             `..` `.-:-```..`             `:+o
+                               /ho-           `.```-/ohmshyo:.``.`           `.+o
+                               -m++        ````.:oshhdhs/shddhs/-`..`        `.y/
+                                sos.     ``.-/shhys+-`    `.:+shdyo:..``    ``-h`
+                                .h+o` ``.:oyyo/-`              `./oyhs/-.`  `.y/ 
+                                 -s++-/oo/-`                        `-/oo+:.`ss  
+                                  -o/s-                                  `-.so`  
+                                   `//+:`                               ``:h/    
+                                     -///-`                           ``-ss.     
+                                      `-///:.`                     ```:ss-       
+                                        `.://:-.``            ````.:os/.         
+                                           `.:////:-...`````.--/oo+:`            
+                                               ``-:/+++++++++/:.`                
  
-2)                                                   
-    .-:///::-` .-:///::.``.::///:-. `-::///:-.    
-  -//:-.``.-:://:..`..-:://-..`..::///-..`.-://-  
-`//-`      `//::-     .//:/.     -//:/`      `-//`
-:/:        //.`//.   `//``//`   .//`.//        -/:
-//.       `/+` :/-   .//  //.   -/:  +/`       .//
-:/-        //.`//.   `//``//`   .//`.//        -/:
-`//-       `/://-     ./://.     -/://`      `-//`
-  -//:..``.-///:-..``.-///:-.``..://::-.``..://-  
-    .-:///::-` .-:///::.``.::///:-.``-::///:-.    
- 
- 
+                               2)                                                   
+                                   .-:///::-` .-:///::.``.::///:-. `-::///:-.    
+                                 -//:-.``.-:://:..`..-:://-..`..::///-..`.-://-  
+                               `//-`      `//::-     .//:/.     -//:/`      `-//`
+                               :/:        //.`//.   `//``//`   .//`.//        -/:
+                               //.       `/+` :/-   .//  //.   -/:  +/`       .//
+                               :/-        //.`//.   `//``//`   .//`.//        -/:
+                               `//-       `/://-     ./://.     -/://`      `-//`
+                                 -//:..``.-///:-..``.-///:-.``..://::-.``..://-  
+                                   .-:///::-` .-:///::.``.::///:-.``-::///:-.    
  
  
  
@@ -50,24 +48,26 @@ oys.             `..` `.-:-```..`             `:+o
  
  
  
-3)                                    
-                 `.---::::::---.`                 
-           .-/+oso++////oo+///+osso+/:.           
-       .:+sso/-`     `/ssss+`    `.-/oss+:.       
-    `:ossso-        `oso//oso.        .ossso:`    
-  `/ssossso`        +s+    /so`       `osssoss/`  
- .oss.`ossss+:.`   -ss`     os:    `-/sssso`.sso. 
-.sss-   :osssssso+/os+------+so/+osssssso:`  -sss`
-+sso      `:/ossssssssssssssssssssss+/-`      oss/
-osso           `..:ss////////ss:..`           +sso
-/sss`              ss.      .ss`             `sss+
-`oss+              os/      /ss              +sss.
- `oss+.            /ss`    .ss+            .+sso. 
-   :sss/`          .sso-  .oss-          ./sss/`  
-    `:oss+-`        /ssssosss/        `:+sso:`    
-       .:+sso/-.     /ssssss/    `.-/osso/.       
-           .:/osso+/::+ssss+::/+osso/:.`          
-                `..-::::::::::--.`
+ 
+ 
+                               3)                                    
+                                                `.---::::::---.`                 
+                                          .-/+oso++////oo+///+osso+/:.           
+                                      .:+sso/-`     `/ssss+`    `.-/oss+:.       
+                                   `:ossso-        `oso//oso.        .ossso:`    
+                                 `/ssossso`        +s+    /so`       `osssoss/`  
+                                .oss.`ossss+:.`   -ss`     os:    `-/sssso`.sso. 
+                               .sss-   :osssssso+/os+------+so/+osssssso:`  -sss`
+                               +sso      `:/ossssssssssssssssssssss+/-`      oss/
+                               osso           `..:ss////////ss:..`           +sso
+                               /sss`              ss.      .ss`             `sss+
+                               `oss+              os/      /ss              +sss.
+                                `oss+.            /ss`    .ss+            .+sso. 
+                                  :sss/`          .sso-  .oss-          ./sss/`  
+                                   `:oss+-`        /ssssosss/        `:+sso:`    
+                                      .:+sso/-.     /ssssss/    `.-/osso/.       
+                                          .:/osso+/::+ssss+::/+osso/:.`          
+                                               `..-::::::::::--.`
  
  
  
@@ -76,20 +76,20 @@ osso           `..:ss////////ss:..`           +sso
  
  
  
-4)
-            .-/+oosyyyyyyyyyysoo+/-.             
-        -/oydhyosdddddo-.....--:/+oshdys/-        
-    `/shyo:-`  :hdddh.              `/ddddds/`    
-  -sds:`     `oddddd-            ./sdddddh::sds-  
- ods.       .ydddddy        `-/shdddddddd-   .sd+ 
-+do        -hddddddd+:-:/+shdddddddddddd-      od+
-yd-       -dddddddddddddddddddddddddddd:       -dh
-+do      -ddddddddddddhso/:::+hddddddh-        odo
- +ds.   -hdddddddhs+-`        sdddddy.       .sdo 
-  -sds::hddddds/.            .dddddo`     `:sds-  
-    ./sddddd+`              .hdddh:  `.:oyhs/.    
-       `-/shdhso+/:---....-+dddddsoshdhs/-`       
-             .-/+ossyyyyyyyyyyso+/:-.`            
+                               4)
+                                           .-/+oosyyyyyyyyyysoo+/-.             
+                                       -/oydhyosdddddo-.....--:/+oshdys/-        
+                                   `/shyo:-`  :hdddh.              `/ddddds/`    
+                                 -sds:`     `oddddd-            ./sdddddh::sds-  
+                                ods.       .ydddddy        `-/shdddddddd-   .sd+ 
+                               +do        -hddddddd+:-:/+shdddddddddddd-      od+
+                               yd-       -dddddddddddddddddddddddddddd:       -dh
+                               +do      -ddddddddddddhso/:::+hddddddh-        odo
+                                +ds.   -hdddddddhs+-`        sdddddy.       .sdo 
+                                 -sds::hddddds/.            .dddddo`     `:sds-  
+                                   ./sddddd+`              .hdddh:  `.:oyhs/.    
+                                      `-/shdhso+/:---....-+dddddsoshdhs/-`       
+                                            .-/+ossyyyyyyyyyyso+/:-.`            
  
  
  
@@ -102,4 +102,4 @@ yd-       -dddddddddddddddddddddddddddd:       -dh
  
  
  
-Which of these 4 companies are the richest?
+                                   Which of these 4 companies are the richest?

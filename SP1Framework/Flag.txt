@@ -1,89 +1,89 @@
-1)                   
-.osoooooooooooooooooooooooooooooooooooooooooooos+ 
-+s++++++++++++++++++++++/++++++++++++++++++++++os.
-+sooooooooooooooooooooo/-+oooooooooooooooooooooos.
-+soooooooooooooooooooo+-.:oooooooooooooooooooooos.
-+soooooooooooooooooooo:.../ooooooooooooooooooooos.
-+sooooooooooooooooooo/....-ooooooooooooooooooooss.
-+sooooooooooooooooooo-.....:oooooooooooooooooooss.
-+soooooo+:::::::::::-.......:::::::::::/ooooossss.
-+soooooooo+:........................-:+oooooossss.
-+sooooooooooo/-...................:+ooooooooossss.
-+ssooooooooooooo/-.............-/oooooooooooossss.
-+ssooooooooooooooo-...........-oooooooooooooossss.
-+sssooooooooooooo:.............:ooooooooooooossss.
-+soooooooooooooo/......:/:....../ooooooooooooooss.
-/oooooooooooooo+-...-/oooo+/-...-+oooooooooooooos.
-/oooooooo++++o+:.-:+oo++++++o+:-.:++++++ooooooooo.
-/o++++++++++++/:/+++++++++++++++/:/+++++++++++++o.
-/++++++++++++++++++++++++++++++++++++++++++++++++.
-:++++++++++++++++++++++++++++++++++++++++++++++++`
-`-::::::::::::::::::::::::::::::::::::::::::::::. 
+                                1)                   
+                                .osoooooooooooooooooooooooooooooooooooooooooooos+ 
+                                +s++++++++++++++++++++++/++++++++++++++++++++++os.
+                                +sooooooooooooooooooooo/-+oooooooooooooooooooooos.
+                                +soooooooooooooooooooo+-.:oooooooooooooooooooooos.
+                                +soooooooooooooooooooo:.../ooooooooooooooooooooos.
+                                +sooooooooooooooooooo/....-ooooooooooooooooooooss.
+                                +sooooooooooooooooooo-.....:oooooooooooooooooooss.
+                                +soooooo+:::::::::::-.......:::::::::::/ooooossss.
+                                +soooooooo+:........................-:+oooooossss.
+                                +sooooooooooo/-...................:+ooooooooossss.
+                                +ssooooooooooooo/-.............-/oooooooooooossss.
+                                +ssooooooooooooooo-...........-oooooooooooooossss.
+                                +sssooooooooooooo:.............:ooooooooooooossss.
+                                +soooooooooooooo/......:/:....../ooooooooooooooss.
+                                /oooooooooooooo+-...-/oooo+/-...-+oooooooooooooos.
+                                /oooooooo++++o+:.-:+oo++++++o+:-.:++++++ooooooooo.
+                                /o++++++++++++/:/+++++++++++++++/:/+++++++++++++o.
+                                /++++++++++++++++++++++++++++++++++++++++++++++++.
+                                :++++++++++++++++++++++++++++++++++++++++++++++++`
+                                `-::::::::::::::::::::::::::::::::::::::::::::::. 
  
-2)                                 
-````````````````````````````````````````````````` 
-.`                                              `.
-.`                .:+oosssso+/-`                `.
-.`            `-+syyyyyyyyyyyyyys/.             `.
-.`           :syyyyyyyyyyyyyyyyyyyy+.           `.
-.`         `oyyyyyyyyyyyyyyyyyyyyyyyy:          `.
-.`        `syyyyyyyyyyyyyyyyyyyyyyyyyy/         `.
-.`        oyyyyyyyyyyyyyyyyyyyyyyyyyyyy-        `.
-.`       .yyyyyyyyyyyyyyyyyyyyyyyyyyyyyo        `.
-.`       :yyyyyyyyyyyyyyyyyyyyyyyyyyyyys        `.
-.`       -yyyyyyyyyyyyyyyyyyyyyyyyyyyyyo        `.
-.`       `syyyyyyyyyyyyyyyyyyyyyyyyyyyy:        `.
-.`        -yyyyyyyyyyyyyyyyyyyyyyyyyyyo         `.
-.`         -syyyyyyyyyyyyyyyyyyyyyyyy+`         `.
-.`          .+ssssssssssssssssssssso:           `.
-.`            ./ooooooooooooooooo+:`            `.
-.`               .:/+++++++++/:-`               `.
-.`                   ```````                    `.
--.``````````````````````````````````````````````-`
-`-:::::::::::::::::::::::::::::::::::::::::::::-. 
+                                 2)                                 
+                                 ````````````````````````````````````````````````` 
+                                 .`                                              `.
+                                 .`                .:+oosssso+/-`                `.
+                                 .`            `-+syyyyyyyyyyyyyys/.             `.
+                                 .`           :syyyyyyyyyyyyyyyyyyyy+.           `.
+                                 .`         `oyyyyyyyyyyyyyyyyyyyyyyyy:          `.
+                                 .`        `syyyyyyyyyyyyyyyyyyyyyyyyyy/         `.
+                                 .`        oyyyyyyyyyyyyyyyyyyyyyyyyyyyy-        `.
+                                 .`       .yyyyyyyyyyyyyyyyyyyyyyyyyyyyyo        `.
+                                 .`       :yyyyyyyyyyyyyyyyyyyyyyyyyyyyys        `.
+                                 .`       -yyyyyyyyyyyyyyyyyyyyyyyyyyyyyo        `.
+                                 .`       `syyyyyyyyyyyyyyyyyyyyyyyyyyyy:        `.
+                                 .`        -yyyyyyyyyyyyyyyyyyyyyyyyyyyo         `.
+                                 .`         -syyyyyyyyyyyyyyyyyyyyyyyy+`         `.
+                                 .`          .+ssssssssssssssssssssso:           `.
+                                 .`            ./ooooooooooooooooo+:`            `.
+                                 .`               .:/+++++++++/:-`               `.
+                                 .`                   ```````                    `.
+                                 -.``````````````````````````````````````````````-`
+                                 `-:::::::::::::::::::::::::::::::::::::::::::::-. 
  
-3)                                               
--sysssssssssssssssssssssssssssssssssssssssssssyy+ 
-+ysssssssssssssssssssssssssssssssssssssssssssssyy.
-+yyyyyyyyysssssysysysssyssssssssssssssyssyyyyyyyy.
-+yyyyyyssssssssso+:------/+sssssssssssssssyyyyyyy.
-+yyyyyssysssso:`     .-::::::/osssssssssyssyyyyyy.
-+yyyyyysysso-     -+syssssssssoossssssssyyyyyyyyy.
-+yyyyyyyyy+`    .ossssyyyyyyyyyyyyyyyyyyyyyyyyyyy.
-+yyyyyyyyo     -syyyyyyyyyyyyyyyyyyosyyyyyyyyyyyy.
-+yyyyyyyy.    `syyyyyyyyyyyyyyyyyyy:.++/oyyyyyyyy.
-+yyyyyyys`    -yyyyyyyyyyyyyyyyyo/.`  `oyyyyyyyyy.
-+yyyyyyys`    .yyyyyyyyyyyyyyyyyyys- ---syyyyyyyy.
-+yyyyyyyy:     +yyyyyyyyyyyyyyyyyyy/oyyyyyyyyyyyy.
-+yyyyyyyys.    `+yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy.
-+ysssssssss-     -+ssssssssssssosssssssssssssssyy.
-+sssssssssss+-     `-/+ooooo+:/osssssssssssssssss.
-/ooooooooooooo+:-`       ``-/+ooooooooooooooooooo.
-/o+++++++++++++++++/////++++++++++++++++++++++++o.
-/+++++++++/////////////////////////////++++++++++.
-:+//////////////////////////////////////////////+`
-`-:::::::::::::::::::::::::::::::::::::::::::::-. 
+                                 3)                                               
+                                 -sysssssssssssssssssssssssssssssssssssssssssssyy+ 
+                                 +ysssssssssssssssssssssssssssssssssssssssssssssyy.
+                                 +yyyyyyyyysssssysysysssyssssssssssssssyssyyyyyyyy.
+                                 +yyyyyyssssssssso+:------/+sssssssssssssssyyyyyyy.
+                                 +yyyyyssysssso:`     .-::::::/osssssssssyssyyyyyy.
+                                 +yyyyyysysso-     -+syssssssssoossssssssyyyyyyyyy.
+                                 +yyyyyyyyy+`    .ossssyyyyyyyyyyyyyyyyyyyyyyyyyyy.
+                                 +yyyyyyyyo     -syyyyyyyyyyyyyyyyyyosyyyyyyyyyyyy.
+                                 +yyyyyyyy.    `syyyyyyyyyyyyyyyyyyy:.++/oyyyyyyyy.
+                                 +yyyyyyys`    -yyyyyyyyyyyyyyyyyo/.`  `oyyyyyyyyy.
+                                 +yyyyyyys`    .yyyyyyyyyyyyyyyyyyys- ---syyyyyyyy.
+                                 +yyyyyyyy:     +yyyyyyyyyyyyyyyyyyy/oyyyyyyyyyyyy.
+                                 +yyyyyyyys.    `+yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy.
+                                 +ysssssssss-     -+ssssssssssssosssssssssssssssyy.
+                                 +sssssssssss+-     `-/+ooooo+:/osssssssssssssssss.
+                                 /ooooooooooooo+:-`       ``-/+ooooooooooooooooooo.
+                                 /o+++++++++++++++++/////++++++++++++++++++++++++o.
+                                 /+++++++++/////////////////////////////++++++++++.
+                                 :+//////////////////////////////////////////////+`
+                                 `-:::::::::::::::::::::::::::::::::::::::::::::-. 
                                     
-4)
-.osooooooooooooooo-````````````+ooooooooooooooos+ 
-+so+++++++++++++++.            /+++++++++++++++ss.
-+soooooooooooooooo.            +oooooooooooooooss.
-+soooooooooooooooo.            +oooooooooooooooss.
-+soooooooooooooooo.            +oooooooooooooooss.
-+soooooooooooooooo.            +oooooooooooooooss.
-+sooo:............`            .............oooss.
-+sooo-                                      ossss.
-+sooo-                                      ossss.
-+sooo-                                      ossss.
-+ssso-                                      ossss.
-+ssss:                                      ossss.
-+ssss/............`            ............-ossss.
-/soooooooooooooooo.            +oooooooooooooooos.
-/ooooooooooooooooo.            +ooooooooooooooooo.
-/oooo+++++++++++++.            /+++++++++++++oooo.
-/+++++++++++++++++.            /+++++++++++++++++.
-/+++++++++++++++++.            ///+++++++++++++++.
-:++///////////////.````````````////////////////++`
-`-:::::::::::::::::::::::::::::::::::::::::::::-. 
+                                 4)
+                                 .osooooooooooooooo-````````````+ooooooooooooooos+ 
+                                 +so+++++++++++++++.            /+++++++++++++++ss.
+                                 +soooooooooooooooo.            +oooooooooooooooss.
+                                 +soooooooooooooooo.            +oooooooooooooooss.
+                                 +soooooooooooooooo.            +oooooooooooooooss.
+                                 +soooooooooooooooo.            +oooooooooooooooss.
+                                 +sooo:............`            .............oooss.
+                                 +sooo-                                      ossss.
+                                 +sooo-                                      ossss.
+                                 +sooo-                                      ossss.
+                                 +ssso-                                      ossss.
+                                 +ssss:                                      ossss.
+                                 +ssss/............`            ............-ossss.
+                                 /soooooooooooooooo.            +oooooooooooooooos.
+                                 /ooooooooooooooooo.            +ooooooooooooooooo.
+                                 /oooo+++++++++++++.            /+++++++++++++oooo.
+                                 /+++++++++++++++++.            /+++++++++++++++++.
+                                 /+++++++++++++++++.            ///+++++++++++++++.
+                                 :++///////////////.````````````////////////////++`
+                                 `-:::::::::::::::::::::::::::::::::::::::::::::-. 
 
-Which one of these four countries are communist?
+                                 Which one of these four countries are communist?

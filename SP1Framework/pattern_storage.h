@@ -6,4 +6,4 @@
 using namespace std;
 
 string* getpatterndata();
-void pattern_Storage();
+string CreatePattern(int Answer, int Pattern);

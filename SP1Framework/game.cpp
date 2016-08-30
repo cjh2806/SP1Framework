@@ -66,8 +66,6 @@ void init(void)
 	initPuzPtr(g_Console);
 	riddlestorage();
 	logicstorage();
-	pattern_Storage();
-
 	openMusic();
 	playMusic();
 }
@@ -458,8 +456,7 @@ void renderMap()
 }
 
 void renderCharacter()
-{
-	// Draw the location of the character
+{	// Draw the location of the character
 	WORD charColor[] = { 0x0A, 0xAA };
 
 	if (t_charBlink < g_dElapsedTime)
@@ -534,7 +531,6 @@ void TriggerMiniGames()
 {
 	srand((unsigned)time(NULL));
 	int i = rand();
-	//i = 1;
 	if (i % 2 == 1)
 	{
 		g_eGameState = S_PUZZLE;
@@ -807,8 +803,7 @@ void Typing()
 		}
 	}
 	if (bSomethingHappened)
-	{
-		// set the bounce time to some time in the future to prevent accidental triggers
+	{	// set the bounce time to some time in the future to prevent accidental triggers
 		g_dBounceTime = g_dElapsedTime + 0.175; // 125ms should be enough
 	}
 	CurrentUserInput(Input);
