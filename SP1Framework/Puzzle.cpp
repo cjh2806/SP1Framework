@@ -38,7 +38,7 @@ void initCurrentAnswer()	// Run this function once. It will set the current puzz
 	Guesses = 0;
 	Correct = 0;
 
-	switch (Minigames)	// Checks minigame state and sets the answer according to the minigame state to the currentRandomAnswer variable
+	switch (/*Minigames*/3)	// Checks minigame state and sets the answer according to the minigame state to the currentRandomAnswer variable
 	{
 		case eGame::GAME_ONE: currentRandomAnswer = rand() % 100 + 1;
 			break;
@@ -56,7 +56,7 @@ void initCurrentAnswer()	// Run this function once. It will set the current puzz
 
 void Puzzle()	// Function will be called to run in game.cpp (somewhere that is able to connect to render function)
 {
-	switch (Minigames) // These will transfer to initCurrentAnswer(). Some tweaking is required to make it work.
+	switch (/*Minigames*/3) // These will transfer to initCurrentAnswer(). Some tweaking is required to make it work.
 	{
 		case eGame::GAME_ONE: random_number_game();
 			break;
