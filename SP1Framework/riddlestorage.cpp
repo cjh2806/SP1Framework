@@ -28,7 +28,7 @@ const string jokeRef[16][4] = { { "What is black when you buy it, red when you u
 "" },
 
 { "If I have it, I don't share it. If I share it, I don't have it. What is it?",
-"Hint: It's something that you want to hide from other and mostly written inside a diary.",
+"Hint: It's something that you want to hide from others and mostly written inside a diary.",
 "secret",
 "" },
 

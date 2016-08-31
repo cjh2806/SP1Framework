@@ -48,7 +48,7 @@ const string logicRef[16][7] = { { "There are 12 pens on the table, you took 3, 
 "3) HKVI",
 "4) GKUJ",
 "Wrong! In the code, the first letter is the second alphabet,\nthe second letter is the third alphabet, the third letter is the fourth alphabet and\nso on after the corresponding letter in the word.",
-"2" },
+"1" },
 
 { "Banks is related to Money in the same way as Transport is the related to ____?",
 "1) Traffic",

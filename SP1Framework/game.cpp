@@ -288,11 +288,12 @@ void splashScreenWait()    // waits for time to pass in splash screen
 		{
 			if (SettingSelection() == SETTINGSELECT::SET_BACK)
 			{
+				Difference += ((clock() - LiveTimer) / (double)CLOCKS_PER_SEC) - PreviousLiveDuration;
+				//LiveDuration = ((clock() - LiveTimer) / (double)CLOCKS_PER_SEC) - Difference;
+
 				(IsStartMenu()) ?
 					(g_eGameState = S_SPLASHSCREEN) :
 					(g_eGameState = previousGameState);
-
-				Difference += ((clock() - LiveTimer) / (double)CLOCKS_PER_SEC) - PreviousLiveDuration;
 			}
 			else if (SettingSelection() == SETTINGSELECT::SET_QUITGAME)
 				g_eGameState = S_QUIT;
@@ -315,7 +316,7 @@ void gameplay()            // gameplay logic
 {
 	processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
 	moveCharacter();    // moves the character, collision detection, physics, etc
-	LiveTime();		            // sound can be played here too.
+			            // sound can be played here too.
 	if (playerHealth <= 0)
 	{
 		g_eGameState = S_ENDMENU;
@@ -324,6 +325,7 @@ void gameplay()            // gameplay logic
 	if (IsStartMenu())
 		IsStartMenu(false);
 
+	LiveTime();
 	detectMazeEnd();
 }
 
@@ -928,8 +930,10 @@ void PictureControl()
 
 void LiveTime()
 {
-	LiveDuration = (clock() - Difference - LiveTimer) / (double)CLOCKS_PER_SEC;
-	if (LiveDuration > LiveDelay)
+	LiveDuration = ((clock() - LiveTimer) / (double)CLOCKS_PER_SEC);
+	//LiveDuration = (clock() - Difference - LiveTimer) / (double)CLOCKS_PER_SEC;
+
+	if (LiveDuration - Difference > LiveDelay && g_eGameState == S_GAME)
 	{
 		playerHealth--;
 		LiveTimer = clock();
