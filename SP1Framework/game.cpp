@@ -63,6 +63,7 @@ void init(void)
 	g_Console.setConsoleFont(0, 16, L"Raster Consolas");
 
 	initMenuTitle();
+	initInstruction();
 	Input = "";
 	SetOffsetBuffer(g_Console);
 
@@ -371,9 +372,14 @@ void moveCharacter()
 				if (StartMenuSelection() > 0)
 					StartMenuSelection(-1);
 				break;
+
 			case S_SETTING:
 				if (SettingSelection() > 0)
 					SettingSelection(-1);
+				break;
+
+			case S_INSTRUCTIONS:
+				InstructSelection(-1);
 				break;
 
 			case S_GAME:
@@ -429,6 +435,10 @@ void moveCharacter()
 
 			case S_SETTING:
 				SettingSelection(1);
+				break;
+
+			case S_INSTRUCTIONS:
+				InstructSelection(1);
 				break;
 
 			case S_GAME:

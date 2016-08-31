@@ -1,21 +1,52 @@
 #include "instructions.h"
 
+string instructionManual[7][7];
+int instructSelection = 0;
+
+void InstructSelection(int input)
+{
+	if (instructSelection + input > -1 && instructSelection + input < 7)
+		instructSelection += input;
+}
+
+void initInstruction()
+{
+	ifstream instructionFile("Resources/instructionScreen.txt");
+
+	for (int i = 0; i < 7; i++)
+	{
+		for (int j = 0; j < 7; j++)
+		{
+			getline(instructionFile, instructionManual[i][j]);
+		}
+	}
+
+	instructionFile.close();
+}
+
 void instructions(Console &refCon)
 {
 	COORD c = refCon.getConsoleSize();
-	c.X = (c.X / 2) - 24;
+	c.X = (c.X / 2) - (instructionManual[0][0].length() / 2);
 	c.Y = (c.Y / 2) - 5;
 
-	ifstream endFile("Resources/instructionScreen.txt");
-	string endTitle;
-
-	while (getline(endFile, endTitle))
+	for (int i = 0; i < 7; i++, c.Y++)
 	{
-		refCon.writeToBuffer(c, endTitle, 0x0F);
-		c.Y += 1;
+		refCon.writeToBuffer(c, instructionManual[instructSelection][i], 0x0F);
 	}
 
+	c.X = refCon.getConsoleSize().X / 2;
+	c.Y += 2;
+
+	c.X += 4;
+	if (instructSelection < 6)
+		refCon.writeToBuffer(c, (char)16, 0x0F);
+
+	c.X -= 8;
+	if (instructSelection > 0)
+		refCon.writeToBuffer(c, (char)17, 0x0F);
+
 	c.X = (refCon.getConsoleSize().X / 2) - 2;
-	c.Y += 3;
+	c.Y += 4;
 	refCon.writeToBuffer(c, "Back", 0x0F);
 }

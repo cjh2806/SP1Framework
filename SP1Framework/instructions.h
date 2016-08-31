@@ -11,4 +11,6 @@ enum INSTRUCTIONSELECT
 	BACK
 };
 
+void InstructSelection(int input);
+void initInstruction();
 void instructions(Console &refCon);

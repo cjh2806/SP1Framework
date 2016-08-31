@@ -1,10 +1,49 @@
--Arrow Keys to move                                                    
--Score for completing Maze                                             
--50 Points                                                             
--Score for completing Puzzles                                          
--100 Points (less than 5 tries)                                        
--50 Points (more than 5 tries)                                         
--Puzzles will appear at the end of every maze                          
--You have 3 lives (- 1 life every 1 minute)                            
--Complete mazes and puzzles to train your brain                        
--ESC to quit the game at anytime                                       
+========================== Maze Game ==========================
+- Your Character is blinking in 'Green'                        
+- Use 'Up', 'Down', 'Left' and 'Right' Keys to move            
+- Try to get to the 'Pink' coloured end point within 30 seconds
+- Take more than 30 seconds and you'll lose a life             
+- Score 50 points for completing the game                      
+                                                               
+================= Random Number Guessing Game =================
+- Guess the Number by typing into the input                    
+- Press the 'Enter' key to confirm your input                  
+- Score 100 points for completing the game in less than 5 tries
+- Score 50 points for completing the game in more than 5 tries 
+- More than 10 tries and you'll lose a life                    
+                                                               
+================ Random Alphabet Guessing Game ================
+- Guess the Number by typing into the input                    
+- Press the 'Enter' key to confirm your input                  
+- Score 100 points for completing the game in less than 5 tries
+- Score 50 points for completing the game in more than 5 tries 
+- More than 10 tries and you'll lose a life                    
+                                                               
+===================== Random Pattern Game =====================
+- Figure out what comes next at the end of the pattern         
+- Key in your answer by typing into the input                  
+- Press the 'Enter' key to confirm your input                  
+- Score 100 points for completing the game in less than 5 tries
+- Score 50 points for completing the game in more than 5 tries 
+- More than 10 tries and you'll lose a life                    
+====================== Random Riddle Game =====================
+- Figure out the answer to the riddle                          
+- Key in your answer by typing into the input                  
+- Press the 'Enter' key to confirm your input                  
+- Score 100 points for completing the game in less than 5 tries
+- Score 50 points for completing the game in more than 5 tries 
+- More than 10 tries and you'll lose a life                    
+===================== Random Picture Game =====================
+- Figure out which picture the question is describing          
+- Use 'Left' and 'Right' keys to select the picture            
+- Press the 'Enter' key to confirm your answer                 
+- Score 50 points for getting the correct answer               
+- Score 0 points for getting the wrong answer                  
+                                                               
+======================= Random Quiz Game ======================
+- Figure out the answer to the quiz                            
+- Key in your answer by typing the number into the input       
+- Press the 'Enter' key to confirm your input                  
+- Score 50 points for getting the correct answer               
+- Score 0 points for getting the wrong answer                  
+                                                               
