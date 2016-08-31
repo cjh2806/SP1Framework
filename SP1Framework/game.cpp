@@ -471,7 +471,8 @@ void moveCharacter()
 				break;
 		}
 
-		bSomethingHappened = true;	//g_sChar.m_bActive = !g_sChar.m_bActive;
+		bSomethingHappened = true;
+		//g_sChar.m_bActive = !g_sChar.m_bActive;
 	}
 
 	if (bSomethingHappened)

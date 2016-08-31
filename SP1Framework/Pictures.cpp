@@ -61,10 +61,8 @@ void Picture_Puzzle()
 		ptrPicCon->writeToBuffer(c, PicDisplay[curSelection][i], 0x0F);
 	}
 
-	//c = { 1, 34 };
 	c.Y += 2;
 	ptrPicCon->writeToBuffer(c, PicDisplay[4][0], 0x0F);
-	//c = { 1, 35 };
 	c.Y += 2;
 	renderPicKey();
 
