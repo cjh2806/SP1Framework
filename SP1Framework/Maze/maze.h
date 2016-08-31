@@ -1,10 +1,12 @@
 #include "..\Framework\console.h"
 #include <ctime>
+#include <string>
 #include <stack>
 
 
 using std::time;
 using std::stack;
+using std::string;
 
 #define XSIZE 63
 #define YSIZE 33

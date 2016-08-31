@@ -69,17 +69,19 @@ void Puzzle()	// Function will be called to run in game.cpp (somewhere that is a
 {
 	switch (Minigames) // These will transfer to initCurrentAnswer(). Some tweaking is required to make it work.
 	{
-	case eGame::GAME_ONE: random_number_game();
-		break;
-	case eGame::GAME_TWO: random_alphabet();
-		break;
-	case eGame::GAME_THREE: random_pattern();
-		break;
-	case eGame::GAME_FOUR: logic_game();
-		break;
-	case eGame::GAME_FIVE: Riddles();
-		break;
+		case eGame::GAME_ONE: random_number_game();
+			break;
+		case eGame::GAME_TWO: random_alphabet();
+			break;
+		case eGame::GAME_THREE: random_pattern();
+			break;
+		case eGame::GAME_FOUR: logic_game();
+			break;
+		case eGame::GAME_FIVE: Riddles();
+			break;
 	}
+
+	renderPuzKey(*ptrPuzCon);
 }
 
 void random_number_game()
@@ -427,4 +429,48 @@ vector<string> splitString(const string &s, char delim) {
 	vector<string> elems;
 	splitString(s, delim, elems);
 	return elems;
+}
+
+void renderPuzKey(Console &refCon)
+{
+	COORD c;
+	string str;
+
+	switch (Minigames)
+	{
+		case eGame::GAME_ONE:
+			str = "Use '0' to '9' keys to key in your answer. Press 'Enter' to confirm your answer.";
+			c.X = (refCon.getConsoleSize().X / 2) - (str.length() / 2);
+			c.Y = refCon.getConsoleSize().Y - 2;
+			refCon.writeToBuffer(c, str, 0x0F);
+			break;
+
+		case eGame::GAME_TWO:
+			str = "Use 'a' to 'z' keys to key in your answer. Press 'Enter' to confirm your answer.";
+			c.X = (refCon.getConsoleSize().X / 2) - (str.length() / 2);
+			c.Y = refCon.getConsoleSize().Y - 2;
+			refCon.writeToBuffer(c, str, 0x0F);
+			break;
+
+		case eGame::GAME_THREE:
+			str = "Use '0' to '9' keys to key in your answer. Press 'Enter' to confirm your answer.";
+			c.X = (refCon.getConsoleSize().X / 2) - (str.length() / 2);
+			c.Y = refCon.getConsoleSize().Y - 2;
+			refCon.writeToBuffer(c, str, 0x0F);
+			break;
+
+		case eGame::GAME_FOUR:
+			str = "Use '1' to '4' keys to key in your answer. Press 'Enter' to confirm your answer.";
+			c.X = (refCon.getConsoleSize().X / 2) - (str.length() / 2);
+			c.Y = refCon.getConsoleSize().Y - 2;
+			refCon.writeToBuffer(c, str, 0x0F);
+			break;
+
+		case eGame::GAME_FIVE:
+			str = "Use 'a' to 'z' keys to key in your answer. Press 'Enter' to confirm your answer.";
+			c.X = (refCon.getConsoleSize().X / 2) - (str.length() / 2);
+			c.Y = refCon.getConsoleSize().Y - 2;
+			refCon.writeToBuffer(c, str, 0x0F);
+			break;
+	}
 }

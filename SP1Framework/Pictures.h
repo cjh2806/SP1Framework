@@ -23,3 +23,4 @@ int AddScores();
 void TransferUserInput(string input);
 void splitString(const string &s, char delim, vector<string> &elems);
 vector<string> splitString(const string &s, char delim);
+void renderPicKey();

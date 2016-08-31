@@ -27,6 +27,7 @@ void initInstruction()
 void instructions(Console &refCon)
 {
 	COORD c = refCon.getConsoleSize();
+	string display;
 	c.X = (c.X / 2) - (instructionManual[0][0].length() / 2);
 	c.Y = (c.Y / 2) - 5;
 
@@ -46,7 +47,13 @@ void instructions(Console &refCon)
 	if (instructSelection > 0)
 		refCon.writeToBuffer(c, (char)17, 0x0F);
 
+	display = "Back";
 	c.X = (refCon.getConsoleSize().X / 2) - 2;
 	c.Y += 4;
-	refCon.writeToBuffer(c, "Back", 0x0F);
+	refCon.writeToBuffer(c, display, 0x0F);
+
+	display = "Use 'Left' and 'Right' keys to switch the pages. 'Space Bar' to select 'Back'.";
+	c.X = (refCon.getConsoleSize().X / 2) - (display.length() / 2);
+	c.Y = refCon.getConsoleSize().Y - 2;
+	refCon.writeToBuffer(c, display, 0x0F);
 }

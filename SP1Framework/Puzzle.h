@@ -53,3 +53,4 @@ void Riddles();
 void logic_game();
 void splitString(const string &s, char delim, vector<string> &elems);
 vector<string> splitString(const string &s, char delim);
+void renderPuzKey(Console &refCon);

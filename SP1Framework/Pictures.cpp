@@ -36,7 +36,7 @@ void initPictures()	// Run this function once. It will set the current puzzle an
 
 void Picture_Puzzle()
 {
-	COORD c = { 1, 1 };
+	COORD c = { 1, 6 };
 	string *Picturedata = getPicturedata();
 	string **getpicturedata = (string **)Picturedata;
 	ifstream endFile(getpicturedata[Pictures][0]);
@@ -54,15 +54,20 @@ void Picture_Puzzle()
 			PicDisplay[4][i] = "";
 	}
 
-	int test = atoi(CurrentUserInput.c_str());
-	string test2 = CurrentUserInput;
+	int curSelection = atoi(CurrentUserInput.c_str());
+
 	for (int i = 0; i < 29; i++, c.Y++)
 	{
-		ptrPicCon->writeToBuffer(c, PicDisplay[/*atoi(CurrentUserInput.c_str()) - 1*/test][i], 0x0F);
+		ptrPicCon->writeToBuffer(c, PicDisplay[curSelection][i], 0x0F);
 	}
-	c = { 1, 34 };
+
+	//c = { 1, 34 };
+	c.Y += 2;
 	ptrPicCon->writeToBuffer(c, PicDisplay[4][0], 0x0F);
-	c = { 1, 35 };
+	//c = { 1, 35 };
+	c.Y += 2;
+	renderPicKey();
+
 	if (ConfirmUserInput != getpicturedata[Pictures][2] && ConfirmUserInput != "")
 	{
 		c.X = (ptrPicCon->getConsoleSize().X / 2) - 35;
@@ -72,15 +77,16 @@ void Picture_Puzzle()
 		double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 		double delay = 2.0;
 		Display = getpicturedata[Pictures][1];
+		vector<string> tempDisplay = splitString(Display, '\n');
+
 		while (duration < delay)
 		{
 			duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 
-			vector<string> tempDisplay = splitString(Display, '\n');
 			for (unsigned int i = 0; i < tempDisplay.size(); i++)
 			{
 				ptrPicCon->writeToBuffer(c, tempDisplay[i], 0x0F);
-				c.Y += 1;
+				c.Y += 2;
 			}
 
 			c.Y -= tempDisplay.size();
@@ -94,18 +100,25 @@ void Picture_Puzzle()
 		IsPictureFinished = true;
 		clock_t startTime = clock();
 		double duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-		double delay = 1.0;
+		double delay = 2.0;
+		Display = getpicturedata[Pictures][3];
 
 		while (duration < delay)
 		{
 			duration = (clock() - startTime) / (double)CLOCKS_PER_SEC;
-			Display = getpicturedata[Pictures][3];
 			ptrPicCon->writeToBuffer(c, Display, 0x0F);
 			ptrPicCon->flushBufferToConsole();
 		}
 	}
 
 	endFile.close();
-	//c = { 1,45 };
-	//ptrPicCon->writeToBuffer(c, CurrentUserInput, 0x0F);
+}
+
+void renderPicKey()
+{
+	COORD c;
+	string str = "Use 'Left' and 'Right' keys to change selections, 'Enter' to confirm selection.";
+	c.X = (ptrPicCon->getConsoleSize().X / 2) - (str.length() / 2 );
+	c.Y = ptrPicCon->getConsoleSize().Y - 2;
+	ptrPicCon->writeToBuffer(c, str, 0x0F);
 }

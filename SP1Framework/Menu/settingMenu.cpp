@@ -52,6 +52,7 @@ void renderSettingMenu(Console &refCon)
 		c.X = (c.X / 2) - (display[0].length() / 2);
 		c.Y = c.Y / 2;
 		refCon.writeToBuffer(c, display[0], 0x0F);
+		renderKeys(refCon);
 		break;
 	case SETTINGSELECT::SET_MUSIC: renderMusicSetting(refCon, c, display[1]);
 		break;
@@ -62,6 +63,7 @@ void renderSettingMenu(Console &refCon)
 		c.X = (c.X / 2) - (display[3].length() / 2);
 		c.Y = c.Y / 2;
 		refCon.writeToBuffer(c, display[3], 0x0F);
+		renderKeys(refCon);
 		break;
 	}
 }
@@ -92,6 +94,8 @@ void renderMusicSetting(Console &refCon, COORD &c, string str)
 
 	c.X = c.X - (str.length() / 2);
 	refCon.writeToBuffer(c, str, 0x0F);
+
+	renderKeys(refCon);
 }
 
 void renderCharacterSetting(Console &refCon, COORD &c, string str)
@@ -112,4 +116,19 @@ void renderCharacterSetting(Console &refCon, COORD &c, string str)
 
 	c.Y += 2;
 	refCon.writeToBuffer(c, characterSetting, 0x0F);
+
+	renderKeys(refCon);
+}
+
+void renderKeys(Console &refCon)
+{
+	COORD c = refCon.getConsoleSize();
+	string str = "Use 'Left' and 'Right' keys to switch between settings, 'Up' and 'Down' to change settings.";
+	c.X = (c.X / 2) - (str.length() / 2);
+	c.Y -= 3;
+	refCon.writeToBuffer(c, str, 0x0F);
+	str = "Use 'Space Bar' to confirm selection. Changes are applied directly on selection.";
+	c.X = (refCon.getConsoleSize().X / 2) - (str.length() / 2);
+	c.Y += 1;
+	refCon.writeToBuffer(c, str, 0x0F);
 }

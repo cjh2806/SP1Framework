@@ -19,4 +19,9 @@ void renderQuitMenu(Console &refQuitCon)
 	c.X = (refQuitCon.getConsoleSize().X / 2) - 4;
 	c.Y += 3;
 	(quitSelection) ? (refQuitCon.writeToBuffer(c, "  Y E S >", 0x0F)) : (refQuitCon.writeToBuffer(c, "<  N O   ", 0x0F));
+
+	str = "Use 'Left' and 'Right' keys to change selection. 'Space Bar' to confirm selection.";
+	c.X = (refQuitCon.getConsoleSize().X / 2) - (str.length() / 2);
+	c.Y = refQuitCon.getConsoleSize().Y - 2;
+	refQuitCon.writeToBuffer(c, str, 0x0F);
 }

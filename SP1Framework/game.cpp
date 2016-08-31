@@ -273,7 +273,6 @@ void splashScreenWait()    // waits for time to pass in splash screen
 			switch (StartMenuSelection())
 			{
 			case MENUSELECT::M_STARTGAME: g_eGameState = S_GAME;
-				//StartTime = g_dElapsedTime;
 				break;
 			case MENUSELECT::M_INSTRUCTION: g_eGameState = S_INSTRUCTIONS;
 				break;
@@ -290,7 +289,6 @@ void splashScreenWait()    // waits for time to pass in splash screen
 			if (SettingSelection() == SETTINGSELECT::SET_BACK)
 			{
 				Difference += ((clock() - LiveTimer) / (double)CLOCKS_PER_SEC) - PreviousLiveDuration;
-				//LiveDuration = ((clock() - LiveTimer) / (double)CLOCKS_PER_SEC) - Difference;
 
 				(IsStartMenu()) ?
 					(g_eGameState = S_SPLASHSCREEN) :
@@ -493,13 +491,19 @@ void moveCharacter()
 }
 void processUserInput()
 {
-	if (g_abKeyPressed[K_ESCAPE] && g_eGameState != S_QUIT && g_eGameState != S_SETTING)	// quits the game if player hits the escape key
+	if (g_abKeyPressed[K_ESCAPE])	// quits the game if player hits the escape key
 	{
-		previousGameState = g_eGameState;
-		g_eGameState = S_SETTING;
-		PreviousLiveDuration = LiveDuration;
+		if (g_eGameState == S_ENDMENU)
+		{
+			g_bQuitGame = true;
+		}
+		else if (g_eGameState != S_QUIT && g_eGameState != S_SETTING)
+		{
+			previousGameState = g_eGameState;
+			g_eGameState = S_SETTING;
+			PreviousLiveDuration = LiveDuration;
+		}
 	}
-		//g_bQuitGame = true;
 }
 
 void clearScreen()
@@ -568,15 +572,15 @@ void renderFramerate()
 
 	ss.str("");
 	ss << playerHealth << " Lives";
-	c.X = 15;
+	c.X = (g_Console.getConsoleSize().X / 2) - 3;
 	c.Y = 0;
-	g_Console.writeToBuffer(c, ss.str(), 0x09);
+	g_Console.writeToBuffer(c, ss.str(), 0x0A);
 
 	ss.str("");		// displays the elapsed time
-	ss << (LiveDuration - Difference) << "secs";
+	ss << "Maze Timer: " << (LiveDuration - Difference) << " secs / 30 secs";
 	c.X = 0;
 	c.Y = 0;
-	g_Console.writeToBuffer(c, ss.str(), 0x09);
+	g_Console.writeToBuffer(c, ss.str(), 0x0A);
 
 	ScoreDisplay();
 }
@@ -941,7 +945,6 @@ void PictureControl()
 void LiveTime()
 {
 	LiveDuration = ((clock() - LiveTimer) / (double)CLOCKS_PER_SEC);
-	//LiveDuration = (clock() - Difference - LiveTimer) / (double)CLOCKS_PER_SEC;
 
 	if (LiveDuration - Difference > LiveDelay && g_eGameState == S_GAME)
 	{

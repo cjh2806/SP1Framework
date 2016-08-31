@@ -27,3 +27,4 @@ void settingScreen();
 void renderSettingMenu(Console &refCon);
 void renderMusicSetting(Console &refCon, COORD &c, string str);
 void renderCharacterSetting(Console &refCon, COORD &c, string str);
+void renderKeys(Console &refCon);

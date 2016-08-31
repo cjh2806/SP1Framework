@@ -52,6 +52,15 @@ void bufferMaze(Console &refCon)
 				refCon.writeToBuffer(c, Level[i][j].display, 0x0F);
 		}
 	}
+
+	string str = "Use 'Up', 'Down', 'Left' and 'Right' keys to move the BLINKING green character.";
+	c.X = (refCon.getConsoleSize().X / 2) - (str.length() / 2);
+	c.Y = refCon.getConsoleSize().Y - 3;
+	refCon.writeToBuffer(c, str, 0x0F);
+	str = "Try to reach the PINK end point within 30 seconds.";
+	c.X = (refCon.getConsoleSize().X / 2) - (str.length() / 2);
+	c.Y += 1;
+	refCon.writeToBuffer(c, str, 0x0F);
 }
 
 void generateMaze()
