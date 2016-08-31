@@ -84,7 +84,7 @@ void Picture_Puzzle()
 			for (unsigned int i = 0; i < tempDisplay.size(); i++)
 			{
 				ptrPicCon->writeToBuffer(c, tempDisplay[i], 0x0F);
-				c.Y += 2;
+				c.Y += 1;
 			}
 
 			c.Y -= tempDisplay.size();
