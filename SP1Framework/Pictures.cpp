@@ -26,7 +26,7 @@ void AddScores(int input) { Scores = input; }
 void initPictures()	// Run this function once. It will set the current puzzle and current answer
 {
 	// Set which minigame to run first
-	srand(time(NULL));
+	srand((unsigned)time(NULL));
 	ConfirmUserInput = "";
 	CurrentUserInput = "0";
 	Scores = 0;

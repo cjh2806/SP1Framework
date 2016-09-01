@@ -20,7 +20,7 @@ void IsStartMenu(bool input) { isStartMenu = input; }
 
 void SettingSelection(int input)
 {
-	if (settingSelection + input > -1 && settingSelection + input < ((isStartMenu) ? (sizeof(display) / sizeof(display[0]) - 1) : (sizeof(display) / sizeof(display[0]))))
+	if (settingSelection + input > -1 && (unsigned)(settingSelection + input) < ((isStartMenu) ? (sizeof(display) / sizeof(display[0]) - 1) : (sizeof(display) / sizeof(display[0]))))
 		settingSelection += input;
 }
 
