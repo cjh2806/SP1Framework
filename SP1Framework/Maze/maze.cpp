@@ -45,7 +45,7 @@ void bufferMaze(Console &refCon)
 			c.Y = j + OffsetBuffer[1];
 
 			if (Level[i][j].display == '*')
-				refCon.writeToBuffer(c, Level[i][j].display, 0xFF);
+				refCon.writeToBuffer(c, Level[i][j].display, 0x88);
 			else if (Level[i][j].display == 'E')
 				refCon.writeToBuffer(c, Level[i][j].display, 0xDD);
 			else
