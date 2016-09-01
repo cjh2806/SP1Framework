@@ -196,18 +196,18 @@ void update(double dt)
 	g_dDeltaTime = dt;
 	switch (g_eGameState)
 	{
-	case S_SPLASHSCREEN: splashScreen(); // game logic for the splash screen
-		break;
-	case S_SETTING: splashScreen();
-		break;
-	case S_GAME: gameplay(); // gameplay logic when we are in the game
-		break;
-	case S_PUZZLE: RunPuzzle();
-		break;
-	case S_PICTURES: RunPictures();
-		break;
-	case S_QUIT: splashScreen();
-		break;
+		case S_SPLASHSCREEN: splashScreen(); // game logic for the splash screen
+			break;
+		case S_SETTING: splashScreen();
+			break;
+		case S_GAME: gameplay(); // gameplay logic when we are in the game
+			break;
+		case S_PUZZLE: RunPuzzle();
+			break;
+		case S_PICTURES: RunPictures();
+			break;
+		case S_QUIT: splashScreen();
+			break;
 	}
 }
 //--------------------------------------------------------------
@@ -248,19 +248,19 @@ void splashScreen()
 {
 	switch (g_eGameState)
 	{
-	case S_SPLASHSCREEN:
-		splashScreenWait();
-		moveCharacter();
-		break;
-	case S_SETTING:
-		splashScreenWait();
-		moveCharacter();
-		settingScreen();
-		break;
-	case S_QUIT:
-		splashScreenWait();
-		moveCharacter();
-		break;
+		case S_SPLASHSCREEN:
+			splashScreenWait();
+			moveCharacter();
+			break;
+		case S_SETTING:
+			splashScreenWait();
+			moveCharacter();
+			settingScreen();
+			break;
+		case S_QUIT:
+			splashScreenWait();
+			moveCharacter();
+			break;
 	}
 }
 
@@ -272,14 +272,16 @@ void splashScreenWait()    // waits for time to pass in splash screen
 		{
 			switch (StartMenuSelection())
 			{
-			case MENUSELECT::M_STARTGAME: g_eGameState = S_GAME;
-				break;
-			case MENUSELECT::M_INSTRUCTION: g_eGameState = S_INSTRUCTIONS;
-				break;
-			case MENUSELECT::M_SETTING: g_eGameState = S_SETTING;
-				break;
-			case MENUSELECT::M_QUITGAME: g_bQuitGame = true;
-				break;
+				case MENUSELECT::M_STARTGAME:
+					g_eGameState = S_GAME;
+					t_charBlink = g_dElapsedTime;
+					break;
+				case MENUSELECT::M_INSTRUCTION: g_eGameState = S_INSTRUCTIONS;
+					break;
+				case MENUSELECT::M_SETTING: g_eGameState = S_SETTING;
+					break;
+				case MENUSELECT::M_QUITGAME: g_bQuitGame = true;
+					break;
 			}
 
 			IsStartSelectionMade(false);
@@ -293,6 +295,8 @@ void splashScreenWait()    // waits for time to pass in splash screen
 				(IsStartMenu()) ?
 					(g_eGameState = S_SPLASHSCREEN) :
 					(g_eGameState = previousGameState);
+
+				t_charBlink = g_dElapsedTime;
 			}
 			else if (SettingSelection() == SETTINGSELECT::SET_QUITGAME)
 				g_eGameState = S_QUIT;
